@@ -46,9 +46,9 @@ pre{border-radius:9px;border-color:#2d3948;background:#090d13}
 @media(prefers-reduced-motion:reduce){.orb{animation:none}}
 
 /* REDESIGN V2 — visibly stronger layout and contrast */
-body{background:#080a0f!important;background-image:linear-gradient(#ffffff06 1px,transparent 1px),linear-gradient(90deg,#ffffff06 1px,transparent 1px),radial-gradient(ellipse at 78% 4%,#7b68ff24,transparent 34%),radial-gradient(ellipse at 8% 30%,#b7f36b0d,transparent 30%)!important;background-size:42px 42px,42px 42px,auto,auto!important}
+body{background:#031d19!important;background-image:linear-gradient(rgba(2,12,11,.24),rgba(2,12,11,.38)),url("./0_hero.webp"),linear-gradient(#ffffff06 1px,transparent 1px),linear-gradient(90deg,#ffffff06 1px,transparent 1px)!important;background-position:center,center,0 0,0 0!important;background-size:cover,cover,42px 42px,42px 42px!important;background-attachment:fixed,fixed,scroll,scroll!important;background-repeat:no-repeat,no-repeat,repeat,repeat!important}
 .topbar{position:sticky!important;background:#080a0ff5!important;border-bottom:1px solid #b7f36b35!important}
-.hero{max-width:1320px!important;margin:0 auto!important;min-height:690px!important;padding:95px max(6vw,35px) 75px!important;border:1px solid #ffffff10!important;border-top:0!important;border-radius:0 0 24px 24px!important;background:linear-gradient(110deg,#0d121b 0%,#0d121beF 50%,#141225 100%)!important;overflow:hidden!important}
+.hero{max-width:1320px!important;margin:0 auto!important;min-height:690px!important;padding:95px max(6vw,35px) 75px!important;border:1px solid #ffffff10!important;border-top:0!important;border-radius:0 0 24px 24px!important;background:linear-gradient(110deg,rgba(4,16,15,.48) 0%,rgba(4,16,15,.28) 50%,rgba(10,16,20,.38) 100%)!important;overflow:hidden!important}
 .hero:before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 82% 45%,#9a8cff20,transparent 31%),linear-gradient(90deg,transparent 49.9%,#ffffff08 50%,transparent 50.1%)!important}
 .hero>div:first-child{position:relative;z-index:1}
 .hero h1{font-size:clamp(64px,8vw,108px)!important;letter-spacing:-6px!important;text-shadow:0 8px 45px #0008}
@@ -82,7 +82,7 @@ footer{border-top:1px solid #b7f36b25!important}
 
 
 /* Shared forest background — fixed, darkened for readable content */
-body{background-color:#031d19!important;background-image:linear-gradient(180deg,rgba(2,12,11,.76),rgba(2,12,11,.88)),url("0_hero.webp")!important;background-position:center center!important;background-size:cover!important;background-attachment:fixed!important;background-repeat:no-repeat!important}
+body{background-color:#031d19!important;background-image:linear-gradient(180deg,rgba(2,12,11,.20),rgba(2,12,11,.36)),url("./0_hero.webp")!important;background-position:center center!important;background-size:cover!important;background-attachment:fixed!important;background-repeat:no-repeat!important}
 body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:rgba(1,18,15,.18)}
 .topbar,footer{background:rgba(3,12,12,.88)!important;backdrop-filter:blur(14px)}
 .hero,.section,.closing,.key-panel{background-color:rgba(4,16,15,.76)!important;backdrop-filter:blur(5px)}
