@@ -35,3 +35,10 @@ If email confirmation is enabled, new users must click the confirmation email be
 - Supabase Row Level Security policies
 
 Comments and richer profile pages can be added in a later iteration.
+
+
+## 4. Enable script screenshots and photos
+
+For an already deployed site, open **Supabase → SQL Editor**, create a query, paste the complete contents of `script-image-upload-migration.sql`, and click **Run** once. This adds the image field and the `script-images` storage bucket with policies that allow public viewing but restrict uploads to signed-in users' own folders. Do this before trying to publish scripts with images. Fresh database installations can use the updated `supabase-setup.sql` instead.
+
+When publishing a script, users can attach up to four JPG, PNG, WEBP or GIF images (5 MB per image). The first image appears on the library card; all images appear in the script details.
