@@ -125,3 +125,15 @@ body{background-color:#042b2b!important;background-image:linear-gradient(180deg,
 body:before{background:rgba(0,35,35,.04)!important}
 .topbar,footer{background:rgba(1,22,27,.70)!important;border-color:rgba(74,255,232,.20)!important;backdrop-filter:blur(18px)!important}
 .section,.closing,.key-panel{background:rgba(0,25,29,.48)!important;border-color:#6bffed1e!important;backdrop-filter:blur(7px)!important}
+
+
+/* Account state: show the signed-in name and Roblox headshot without shifting the header */
+.account{display:flex;align-items:center;gap:8px}
+#user-label:empty{display:none}
+.user-profile{display:inline-flex;align-items:center;gap:9px;margin-right:5px;max-width:240px;color:#efffff;font-size:12px;font-weight:600;letter-spacing:.2px}
+.roblox-avatar-wrap{position:relative;display:inline-grid;place-items:center;flex:0 0 36px;width:36px;height:36px;border:1px solid rgba(53,240,208,.7);border-radius:50%;overflow:hidden;background:rgba(30,211,185,.14);box-shadow:0 0 17px rgba(53,240,208,.16)}
+.roblox-avatar-fallback{display:grid;place-items:center;width:100%;height:100%;color:#9dfff0;font-size:13px;font-weight:700}
+.roblox-avatar{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%;opacity:0;transition:opacity .18s}
+.roblox-avatar.loaded{opacity:1}
+.user-profile-name{max-width:135px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:680px){.user-profile{gap:6px;max-width:130px;font-size:10px}.roblox-avatar-wrap{width:32px;height:32px;flex-basis:32px}.user-profile-name{max-width:72px}.account{gap:5px}}
