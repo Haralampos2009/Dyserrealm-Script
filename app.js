@@ -20,6 +20,7 @@ function niceDate(value) {
 function displayName(user) {
   return user?.user_metadata?.display_name || user?.email?.split("@")[0] || "Realm member";
 }
+function robloxName(user) { return user?.user_metadata?.roblox_username || ""; }
 function showToast(message) {
   const toast = $("#toast");
   toast.textContent = message;
@@ -55,6 +56,9 @@ function setAuthMode(mode) {
   $("#name-label").classList.toggle("hidden", !signup);
   $("#auth-name").classList.toggle("hidden", !signup);
   $("#auth-name").required = signup;
+  $("#roblox-label").classList.toggle("hidden", !signup);
+  $("#auth-roblox").classList.toggle("hidden", !signup);
+  $("#auth-roblox").required = signup;
   $("#auth-submit").innerHTML = signup ? 'Create account <span>↗</span>' : 'Log in <span>↗</span>';
   $("#switch-copy").textContent = signup ? "Already have an account?" : "New to the realm?";
   $("#auth-switch").textContent = signup ? "Log in" : "Create an account";
@@ -101,6 +105,48 @@ async function loadSales() {
  grid.classList.toggle("hidden",!data?.length);
  $("#sales-empty").classList.toggle("hidden",!!data?.length);
 }
+let activeScriptFilter = "All";
+let favouriteScriptIds = new Set();
+function scriptCard(item) {
+ const author = item.author_name || "Realm member";
+ const fav = favouriteScriptIds.has(String(item.id));
+ const code = escapeHTML(item.code || "");
+ return `<article class="post-card script-card"><div class="post-meta"><span class="category-tag">${escapeHTML(item.category || "Other")}</span><span class="post-date">${escapeHTML(niceDate(item.created_at))}</span></div><h3>${escapeHTML(item.title)}</h3><p class="post-excerpt">${escapeHTML(item.description)}</p><div class="script-code-preview"><code>${code.slice(0,260)}${code.length>260?"…":""}</code></div><div class="post-footer"><div class="author"><span class="author-avatar">${escapeHTML(author.slice(0,1).toUpperCase())}</span><span>${escapeHTML(author)}${item.roblox_username ? " · @" + escapeHTML(item.roblox_username) : ""}</span></div><button class="favorite-button ${fav?"is-favorite":""}" data-favorite-script="${escapeHTML(item.id)}" aria-label="${fav?"Remove from":"Add to"} favourites" title="${fav?"Remove from":"Add to"} favourites">${fav?"♥":"♡"} <span>${fav?"Saved":"Save"}</span></button></div></article>`;
+}
+async function loadScripts() {
+ const grid=$("#scripts-grid"), empty=$("#scripts-empty");
+ if(activeScriptFilter==="Favorites" && !currentUser){grid.innerHTML="";grid.classList.add("hidden");empty.classList.remove("hidden");empty.querySelector("h3").textContent="Log in to see favourites.";empty.querySelector("p").textContent="Your saved scripts are linked to your account.";return;}
+ if(currentUser){
+  const {data,error}=await db.from("script_favorites").select("script_id").eq("user_id",currentUser.id);
+  if(!error) favouriteScriptIds=new Set((data||[]).map(row=>String(row.script_id)));
+ }
+ const {data,error}=await db.from("scripts").select("id,title,description,code,category,author_id,author_name,roblox_username,created_at").order("created_at",{ascending:false}).limit(100);
+ if(error){grid.innerHTML="";grid.classList.add("hidden");empty.classList.remove("hidden");empty.querySelector("h3").textContent="Script library setup needed";empty.querySelector("p").textContent="Run the latest supabase-setup.sql in Supabase SQL Editor to enable scripts and favourites.";$("#scripts-notice").textContent=friendlyError(error);$("#scripts-notice").classList.remove("hidden");return;}
+ $("#scripts-notice").classList.add("hidden");
+ let rows=data||[];
+ if(activeScriptFilter==="Favorites") rows=rows.filter(item=>favouriteScriptIds.has(String(item.id)));
+ else if(activeScriptFilter!=="All") rows=rows.filter(item=>item.category===activeScriptFilter);
+ grid.innerHTML=rows.map(scriptCard).join("");grid.classList.toggle("hidden",!rows.length);empty.classList.toggle("hidden",!!rows.length);
+ if(!rows.length){empty.querySelector("h3").textContent=activeScriptFilter==="Favorites"?"No favourites saved yet.":"No scripts published yet.";empty.querySelector("p").textContent=activeScriptFilter==="Favorites"?"Tap the heart on a script to keep it here.":"Be the first to publish a script for the community.";}
+}
+async function toggleFavourite(scriptId) {
+ if(!currentUser){setAuthMode("signup");openModal("#auth-modal");$("#auth-message").textContent="Create an account or log in to save favourites.";return;}
+ const id=Number(scriptId);
+ if(favouriteScriptIds.has(String(id))){
+  const {error}=await db.from("script_favorites").delete().eq("script_id",id).eq("user_id",currentUser.id);
+  if(error){showToast(friendlyError(error));return;}
+  favouriteScriptIds.delete(String(id));showToast("Removed from favourites.");
+ } else {
+  const {error}=await db.from("script_favorites").insert({script_id:id,user_id:currentUser.id});
+  if(error){showToast(friendlyError(error));return;}
+  favouriteScriptIds.add(String(id));showToast("Added to favourites.");
+ }
+ await loadScripts();
+}
+function openScript() {
+ if(!currentUser){setAuthMode("signup");openModal("#auth-modal");$("#auth-message").textContent="Create an account or log in to publish a script.";return;}
+ $("#script-message").textContent="";openModal("#script-modal");
+}
 function openSale() {
  if(!currentUser){setAuthMode("signup");openModal("#auth-modal");$("#auth-message").textContent="Create an account or log in to publish a listing.";return;}
  $("#sale-message").textContent="";openModal("#sale-modal");
@@ -145,6 +191,10 @@ $("#hero-write").addEventListener("click", openWrite);
 $("#write-open").addEventListener("click", openWrite);
 $("#empty-write").addEventListener("click", openWrite);
 $("#sale-open").addEventListener("click", openSale);
+$("#script-open").addEventListener("click", openScript);
+$("#scripts-empty-open").addEventListener("click", openScript);
+$("#scripts-grid").addEventListener("click", event => { const button=event.target.closest("[data-favorite-script]"); if(button) toggleFavourite(button.dataset.favoriteScript); });
+$("[data-script-filter]").forEach(button=>button.addEventListener("click",()=>{ $(".script-filters .filter").forEach(b=>b.classList.toggle("active",b===button)); activeScriptFilter=button.dataset.scriptFilter; loadScripts(); }));
 $("#sales-empty-open").addEventListener("click", openSale);
 $("#generate-key").addEventListener("click", () => { $("#generated-key").textContent=randomKey(); $("#key-message").textContent="New random key generated."; });
 $("#copy-key").addEventListener("click", async () => {
@@ -156,8 +206,8 @@ $("#copy-key").addEventListener("click", async () => {
 $("#key-groups").addEventListener("change", () => { $("#key-message").textContent="Press Generate key to create a key in this format."; });
 
 $("#auth-switch").addEventListener("click", () => setAuthMode(authMode === "signup" ? "login" : "signup"));
-$("[data-close]").forEach(el => el.addEventListener("click", () => closeModal(el.dataset.close === "auth" ? "#auth-modal" : el.dataset.close === "sale" ? "#sale-modal" : "#post-modal")));
-document.addEventListener("keydown", e => { if (e.key === "Escape") { closeModal("#auth-modal"); closeModal("#post-modal"); closeModal("#sale-modal"); } });
+$("[data-close]").forEach(el => el.addEventListener("click", () => closeModal(el.dataset.close === "auth" ? "#auth-modal" : el.dataset.close === "sale" ? "#sale-modal" : el.dataset.close === "script" ? "#script-modal" : "#post-modal")));
+document.addEventListener("keydown", e => { if (e.key === "Escape") { closeModal("#auth-modal"); closeModal("#post-modal"); closeModal("#sale-modal"); closeModal("#script-modal"); } });
 $$(".filter").forEach(button => button.addEventListener("click", () => {
   $$(".filter").forEach(b => b.classList.toggle("active", b === button));
   activeCategory = button.dataset.category;
@@ -173,7 +223,9 @@ $("#auth-form").addEventListener("submit", async (event) => {
   let result;
   if (authMode === "signup") {
     const name = $("#auth-name").value.trim();
-    result = await db.auth.signUp({email, password, options:{data:{display_name:name}, emailRedirectTo: location.origin + location.pathname}});
+    const robloxUsername = $("#auth-roblox").value.trim();
+    if(!/^[A-Za-z0-9_]{3,32}$/.test(robloxUsername)){submit.disabled=false;submit.innerHTML='Create account <span>↗</span>';message.textContent="Enter a Roblox username of 3–32 letters, numbers, or underscores.";message.classList.add("error");return;}
+    result = await db.auth.signUp({email, password, options:{data:{display_name:name,roblox_username:robloxUsername}, emailRedirectTo: location.origin + location.pathname}});
   } else {
     result = await db.auth.signInWithPassword({email, password});
   }
@@ -233,4 +285,15 @@ $("#post-form").addEventListener("submit", async event => {
   db.auth.onAuthStateChange((_event, session) => updateHeader(session?.user || null));
   await loadPosts();
   await loadSales();
+  await loadScripts();
 })();
+$("#script-form").addEventListener("submit",async event=>{
+ event.preventDefault();
+ if(!currentUser){closeModal("#script-modal");openScript();return;}
+ const button=$("#script-submit"),message=$("#script-message");button.disabled=true;button.textContent="Publishing…";message.textContent="";message.classList.remove("error");
+ const payload={title:$("#script-name").value.trim(),category:$("#script-category").value,description:$("#script-description").value.trim(),code:$("#script-code").value.trim(),author_id:currentUser.id,author_name:displayName(currentUser),roblox_username:robloxName(currentUser)};
+ const {error}=await db.from("scripts").insert(payload);
+ button.disabled=false;button.textContent="Publish script ↗";
+ if(error){message.textContent=friendlyError(error);message.classList.add("error");return;}
+ $("#script-form").reset();closeModal("#script-modal");activeScriptFilter="All";$("[data-script-filter]").forEach(b=>b.classList.toggle("active",b.dataset.scriptFilter==="All"));await loadScripts();showToast("Your script is published.");
+});
