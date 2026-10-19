@@ -70,3 +70,12 @@ body{background:#080a0f!important;background-image:linear-gradient(#ffffff06 1px
 .btn{border-radius:9px!important}
 footer{border-top:1px solid #b7f36b25!important}
 @media(max-width:680px){.hero{min-height:auto!important;margin:0 12px!important;padding:60px 20px 32px!important;border-radius:0 0 18px 18px!important}.hero h1{font-size:clamp(54px,14vw,76px)!important;letter-spacing:-3px!important}.orb-area{border-radius:16px;min-height:275px!important;margin-top:25px}.section-head{padding-bottom:18px!important}.post-card,.script-card{min-height:0}}
+
+/* Tabs navigation and close-button pointer affordance */
+.tab-hidden{display:none!important}
+.site-tabs a{display:inline-flex;align-items:center;min-height:38px;padding:0 13px;border:1px solid transparent;border-radius:8px;color:#a5b0bf;transition:background .18s,border-color .18s,color .18s}
+.site-tabs a:hover,.site-tabs a.active-tab{color:#caff91;border-color:#b7f36b55;background:#b7f36b12}
+.x,[data-close],.footer-link,.contact-email{cursor:pointer}
+.x{z-index:2;touch-action:manipulation}
+.x:hover{transform:scale(1.06);background:#b7f36b18!important;color:#caff91!important}
+@media(max-width:680px){.site-tabs a{width:100%;min-height:42px;padding:0 12px}.site-tabs a.active-tab{border-color:#b7f36b55}}
