@@ -206,7 +206,7 @@ $("#signup-open").addEventListener("click", () => { setAuthMode("signup"); openM
 $("#hero-write").addEventListener("click", openWrite);
 $("#write-open").addEventListener("click", openWrite);
 $("#empty-write").addEventListener("click", openWrite);
-$("#sale-open").addEventListener("click", openSale);
+$("#sale-open")?.addEventListener("click", openSale);
 $("#script-open").addEventListener("click", openScript);
 $("#scripts-empty-open").addEventListener("click", openScript);
 $("#scripts-grid").addEventListener("click", event => { const fav=event.target.closest("[data-favorite-script]");if(fav){toggleFavourite(fav.dataset.favoriteScript);return;}const script=event.target.closest("[data-open-script]");if(script){openScriptDetails(script.dataset.openScript);return;}const author=event.target.closest("[data-author-id]");if(author)openAuthorProfile(author.dataset.authorId); });
