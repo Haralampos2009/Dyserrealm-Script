@@ -38,6 +38,7 @@ function friendlyError(error) {
   if (/Email not confirmed/i.test(message)) return "Please confirm your email using the link we sent you.";
   if (/User already registered/i.test(message)) return "An account with this email already exists. Try logging in.";
   if (/row-level security|permission denied/i.test(message)) return "The database permissions are not set up yet. Run supabase-setup.sql in the Supabase SQL Editor.";
+  if (/Bucket not found/i.test(message)) return "Image storage is not set up yet. Run the latest supabase-setup.sql file in Supabase SQL Editor.";
   if (/Failed to fetch|NetworkError/i.test(message)) return "Couldn't connect. Check your internet and Supabase project settings.";
   return message;
 }
@@ -75,6 +76,34 @@ function postCard(post) {
     <h3>${escapeHTML(post.title)}</h3><p class="post-excerpt">${escapeHTML(excerpt)}</p>
     <div class="post-footer"><div class="author"><span class="author-avatar">${escapeHTML(name.slice(0,1).toUpperCase())}</span><span>${escapeHTML(name)}</span></div><span class="read-label">Realm post ↗</span></div>
   </article>`;
+}
+function safeFileName(name) { return String(name).toLowerCase().replace(/[^a-z0-9._-]+/g, "-").slice(-90) || "image"; }
+function randomKey() {
+  const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  const bytes = new Uint8Array(Number($("#key-groups").value) * 4);
+  crypto.getRandomValues(bytes);
+  const chars = [...bytes].map(b => alphabet[b % alphabet.length]);
+  const groups = [];
+  for (let i=0; i<chars.length; i+=4) groups.push(chars.slice(i,i+4).join(""));
+  return "DS-" + groups.join("-");
+}
+function makeSaleCard(item) {
+  const seller = item.seller_name || "Realm seller";
+  const image = item.image_url ? `<img class="sale-image" src="${escapeHTML(item.image_url)}" alt="${escapeHTML(item.title)}" loading="lazy">` : '<div class="sale-image-placeholder">◇</div>';
+  return `<article class="post-card sale-card">${image}<div class="sale-card-content"><div class="post-meta"><span class="category-tag">FOR SALE</span><span class="post-date">${escapeHTML(niceDate(item.created_at))}</span></div><h3>${escapeHTML(item.title)}</h3><p class="post-excerpt">${escapeHTML(item.description)}</p><div class="sale-price">${escapeHTML(item.price)}</div><div class="post-footer"><div class="author"><span class="author-avatar">${escapeHTML(seller.slice(0,1).toUpperCase())}</span><span>${escapeHTML(seller)}</span></div><span class="read-label">Marketplace</span></div></div></article>`;
+}
+async function loadSales() {
+ const grid=$("#sales-grid");
+ const {data,error}=await db.from("sales").select("id,title,description,price,image_url,seller_name,created_at").order("created_at",{ascending:false}).limit(40);
+ if(error){grid.innerHTML="";$("#sales-empty").classList.remove("hidden");$("#sales-empty").querySelector("h3").textContent="Marketplace setup needed";$("#sales-empty").querySelector("p").textContent="Run supabase-setup.sql in Supabase SQL Editor to enable listings and image uploads.";$("#sales-notice").textContent=friendlyError(error);$("#sales-notice").classList.remove("hidden");return;}
+ $("#sales-notice").classList.add("hidden");
+ grid.innerHTML=(data||[]).map(makeSaleCard).join("");
+ grid.classList.toggle("hidden",!data?.length);
+ $("#sales-empty").classList.toggle("hidden",!!data?.length);
+}
+function openSale() {
+ if(!currentUser){setAuthMode("signup");openModal("#auth-modal");$("#auth-message").textContent="Create an account or log in to publish a listing.";return;}
+ $("#sale-message").textContent="";openModal("#sale-modal");
 }
 async function loadPosts() {
   const grid = $("#posts-grid");
@@ -115,9 +144,20 @@ $("#signup-open").addEventListener("click", () => { setAuthMode("signup"); openM
 $("#hero-write").addEventListener("click", openWrite);
 $("#write-open").addEventListener("click", openWrite);
 $("#empty-write").addEventListener("click", openWrite);
+$("#sale-open").addEventListener("click", openSale);
+$("#sales-empty-open").addEventListener("click", openSale);
+$("#generate-key").addEventListener("click", () => { $("#generated-key").textContent=randomKey(); $("#key-message").textContent="New random key generated."; });
+$("#copy-key").addEventListener("click", async () => {
+ const value=$("#generated-key").textContent;
+ if(value.includes("•")) { $("#key-message").textContent="Generate a key first."; return; }
+ try { await navigator.clipboard.writeText(value); $("#key-message").textContent="Copied to clipboard."; }
+ catch { $("#key-message").textContent="Select and copy the key manually."; }
+});
+$("#key-groups").addEventListener("change", () => { $("#key-message").textContent="Press Generate key to create a key in this format."; });
+
 $("#auth-switch").addEventListener("click", () => setAuthMode(authMode === "signup" ? "login" : "signup"));
-$$("[data-close]").forEach(el => el.addEventListener("click", () => closeModal(el.dataset.close === "auth" ? "#auth-modal" : "#post-modal")));
-document.addEventListener("keydown", e => { if (e.key === "Escape") { closeModal("#auth-modal"); closeModal("#post-modal"); } });
+$("[data-close]").forEach(el => el.addEventListener("click", () => closeModal(el.dataset.close === "auth" ? "#auth-modal" : el.dataset.close === "sale" ? "#sale-modal" : "#post-modal")));
+document.addEventListener("keydown", e => { if (e.key === "Escape") { closeModal("#auth-modal"); closeModal("#post-modal"); closeModal("#sale-modal"); } });
 $$(".filter").forEach(button => button.addEventListener("click", () => {
   $$(".filter").forEach(b => b.classList.toggle("active", b === button));
   activeCategory = button.dataset.category;
@@ -155,6 +195,23 @@ $("#logout-button").addEventListener("click", async () => {
   const {error} = await db.auth.signOut();
   if (error) showToast(friendlyError(error)); else showToast("You have logged out.");
 });
+$("#sale-form").addEventListener("submit", async event => {
+ event.preventDefault();
+ if(!currentUser){closeModal("#sale-modal");openSale();return;}
+ const file=$("#sale-image").files[0], message=$("#sale-message"), button=$("#sale-submit");
+ message.textContent="";message.classList.remove("error");
+ if(!file){message.textContent="Choose an image first.";message.classList.add("error");return;}
+ if(file.size>5*1024*1024){message.textContent="Image must be 5 MB or smaller.";message.classList.add("error");return;}
+ button.disabled=true;button.textContent="Uploading…";
+ const objectPath=currentUser.id+"/"+Date.now()+"-"+safeFileName(file.name);
+ const upload=await db.storage.from("product-images").upload(objectPath,file,{cacheControl:"3600",upsert:false,contentType:file.type});
+ if(upload.error){button.disabled=false;button.textContent="Publish listing ↗";message.textContent=friendlyError(upload.error);message.classList.add("error");return;}
+ const {data:publicData}=db.storage.from("product-images").getPublicUrl(objectPath);
+ const {error}=await db.from("sales").insert({title:$("#sale-name").value.trim(),price:$("#sale-price").value.trim(),description:$("#sale-description").value.trim(),image_url:publicData.publicUrl,image_path:objectPath,seller_id:currentUser.id,seller_name:displayName(currentUser)});
+ button.disabled=false;button.textContent="Publish listing ↗";
+ if(error){message.textContent=friendlyError(error);message.classList.add("error");return;}
+ $("#sale-form").reset();closeModal("#sale-modal");await loadSales();showToast("Your listing is published.");
+});
 $("#post-form").addEventListener("submit", async event => {
   event.preventDefault();
   if (!currentUser) { closeModal("#post-modal"); openWrite(); return; }
@@ -175,4 +232,5 @@ $("#post-form").addEventListener("submit", async event => {
   updateHeader(data.session?.user || null);
   db.auth.onAuthStateChange((_event, session) => updateHeader(session?.user || null));
   await loadPosts();
+  await loadSales();
 })();
