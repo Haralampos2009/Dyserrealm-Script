@@ -107,11 +107,14 @@ async function loadSales() {
 }
 let activeScriptFilter = "All";
 let favouriteScriptIds = new Set();
+let activeAuthorId = null;
+let activeDetailScript = null;
+let cachedScripts = [];
 function scriptCard(item) {
  const author = item.author_name || "Realm member";
  const fav = favouriteScriptIds.has(String(item.id));
  const code = escapeHTML(item.code || "");
- return `<article class="post-card script-card"><div class="post-meta"><span class="category-tag">${escapeHTML(item.category || "Other")}</span><span class="post-date">${escapeHTML(niceDate(item.created_at))}</span></div><h3>${escapeHTML(item.title)}</h3><p class="post-excerpt">${escapeHTML(item.description)}</p><div class="script-code-preview"><code>${code.slice(0,260)}${code.length>260?"…":""}</code></div><div class="post-footer"><div class="author"><span class="author-avatar">${escapeHTML(author.slice(0,1).toUpperCase())}</span><span>${escapeHTML(author)}${item.roblox_username ? " · @" + escapeHTML(item.roblox_username) : ""}</span></div><button class="favorite-button ${fav?"is-favorite":""}" data-favorite-script="${escapeHTML(item.id)}" aria-label="${fav?"Remove from":"Add to"} favourites" title="${fav?"Remove from":"Add to"} favourites">${fav?"♥":"♡"} <span>${fav?"Saved":"Save"}</span></button></div></article>`;
+ return `<article class="post-card script-card"><div class="post-meta"><span class="category-tag">${escapeHTML(item.category || "Other")}</span><span class="post-date">${escapeHTML(niceDate(item.created_at))}</span></div><button class="script-card-title" data-open-script="${escapeHTML(item.id)}">${escapeHTML(item.title)} <span>↗</span></button><p class="post-excerpt">${escapeHTML(item.description)}</p><div class="script-code-preview"><code>${code.slice(0,260)}${code.length>260?"…":""}</code></div><div class="post-footer"><button class="author script-author-link" data-author-id="${escapeHTML(item.author_id)}" data-author-name="${escapeHTML(author)}"><span class="author-avatar">${escapeHTML(author.slice(0,1).toUpperCase())}</span><span>${escapeHTML(author)}${item.roblox_username ? " · @" + escapeHTML(item.roblox_username) : ""}</span></button><button class="favorite-button ${fav?"is-favorite":""}" data-favorite-script="${escapeHTML(item.id)}" aria-label="${fav?"Remove from":"Add to"} favourites" title="${fav?"Remove from":"Add to"} favourites">${fav?"♥":"♡"} <span>${fav?"Saved":"Save"}</span></button></div><button class="script-view-button" data-open-script="${escapeHTML(item.id)}">View script details <span>→</span></button></article>`;
 }
 async function loadScripts() {
  const grid=$("#scripts-grid"), empty=$("#scripts-empty");
@@ -123,11 +126,17 @@ async function loadScripts() {
  const {data,error}=await db.from("scripts").select("id,title,description,code,category,author_id,author_name,roblox_username,created_at").order("created_at",{ascending:false}).limit(100);
  if(error){grid.innerHTML="";grid.classList.add("hidden");empty.classList.remove("hidden");empty.querySelector("h3").textContent="Script library setup needed";empty.querySelector("p").textContent="Run the latest supabase-setup.sql in Supabase SQL Editor to enable scripts and favourites.";$("#scripts-notice").textContent=friendlyError(error);$("#scripts-notice").classList.remove("hidden");return;}
  $("#scripts-notice").classList.add("hidden");
- let rows=data||[];
+ cachedScripts=data||[];
+ let rows=cachedScripts;
  if(activeScriptFilter==="Favorites") rows=rows.filter(item=>favouriteScriptIds.has(String(item.id)));
  else if(activeScriptFilter!=="All") rows=rows.filter(item=>item.category===activeScriptFilter);
+ if(activeAuthorId) rows=rows.filter(item=>String(item.author_id)===String(activeAuthorId));
+ const search=($("#script-search")?.value||"").trim().toLowerCase();
+ if(search) rows=rows.filter(item=>[item.title,item.description,item.author_name,item.roblox_username,item.category].some(value=>(value||"").toLowerCase().includes(search)));
+ $("#script-result-count").textContent=rows.length+" script"+(rows.length===1?"":"s");
  grid.innerHTML=rows.map(scriptCard).join("");grid.classList.toggle("hidden",!rows.length);empty.classList.toggle("hidden",!!rows.length);
- if(!rows.length){empty.querySelector("h3").textContent=activeScriptFilter==="Favorites"?"No favourites saved yet.":"No scripts published yet.";empty.querySelector("p").textContent=activeScriptFilter==="Favorites"?"Tap the heart on a script to keep it here.":"Be the first to publish a script for the community.";}
+ if(!rows.length){empty.querySelector("h3").textContent=activeAuthorId?"This creator has no scripts yet.":activeScriptFilter==="Favorites"?"No favourites saved yet.":search?"No matching scripts.":"No scripts published yet.";empty.querySelector("p").textContent=activeAuthorId?"Check back later for new releases.":activeScriptFilter==="Favorites"?"Tap the heart on a script to keep it here.":search?"Try another search phrase.":"Be the first to publish a script for the community.";}
+ if(activeAuthorId){$("#scripts .section-heading h2").innerHTML=`Creator profile<span class="green-period">.</span>`;$("#scripts .section-copy").textContent="Scripts published by "+(cachedScripts.find(item=>String(item.author_id)===String(activeAuthorId))?.author_name||"this creator");}else{$("#scripts .section-heading h2").innerHTML=`Script library<span class="green-period">.</span>`;$("#scripts .section-copy").textContent="Browse community scripts, save favourites, and publish your own."}
 }
 async function toggleFavourite(scriptId) {
  if(!currentUser){setAuthMode("signup");openModal("#auth-modal");$("#auth-message").textContent="Create an account or log in to save favourites.";return;}
@@ -143,6 +152,13 @@ async function toggleFavourite(scriptId) {
  }
  await loadScripts();
 }
+function openScriptDetails(scriptId) {
+ const item=cachedScripts.find(script=>String(script.id)===String(scriptId));if(!item)return;activeDetailScript=item;
+ $("#script-detail-title").textContent=item.title;$("#script-detail-description").textContent=item.description;$("#script-detail-code").textContent=item.code;$("#script-detail-meta").innerHTML=`<span class="category-tag">${escapeHTML(item.category)}</span><span class="post-date">${escapeHTML(niceDate(item.created_at))}</span>`;$("#script-detail-date").textContent=niceDate(item.created_at);$("#script-detail-author").textContent=(item.author_name||"Realm member")+(item.roblox_username?" · @"+item.roblox_username:"");
+ const fav=favouriteScriptIds.has(String(item.id));$("#detail-favourite").textContent=fav?"♥ Saved to favourites":"♡ Save to favourites";openModal("#script-detail-modal");
+}
+async function copyActiveScript(){if(!activeDetailScript)return;try{await navigator.clipboard.writeText(activeDetailScript.code);$("#script-detail-message").textContent="Code copied to clipboard.";}catch{$("#script-detail-message").textContent="Clipboard access is blocked by your browser. Select the code and copy it manually.";}}
+function openAuthorProfile(authorId){activeAuthorId=String(authorId);activeScriptFilter="All";$("#script-search").value="";$(".script-filters .filter").forEach(b=>b.classList.toggle("active",b.dataset.scriptFilter==="All"));loadScripts();location.hash="#scripts";}
 function openScript() {
  if(!currentUser){setAuthMode("signup");openModal("#auth-modal");$("#auth-message").textContent="Create an account or log in to publish a script.";return;}
  $("#script-message").textContent="";openModal("#script-modal");
@@ -193,9 +209,14 @@ $("#empty-write").addEventListener("click", openWrite);
 $("#sale-open").addEventListener("click", openSale);
 $("#script-open").addEventListener("click", openScript);
 $("#scripts-empty-open").addEventListener("click", openScript);
-$("#scripts-grid").addEventListener("click", event => { const button=event.target.closest("[data-favorite-script]"); if(button) toggleFavourite(button.dataset.favoriteScript); });
+$("#scripts-grid").addEventListener("click", event => { const fav=event.target.closest("[data-favorite-script]");if(fav){toggleFavourite(fav.dataset.favoriteScript);return;}const script=event.target.closest("[data-open-script]");if(script){openScriptDetails(script.dataset.openScript);return;}const author=event.target.closest("[data-author-id]");if(author)openAuthorProfile(author.dataset.authorId); });
+$("#script-search").addEventListener("input",()=>loadScripts());
+$("#copy-script-code").addEventListener("click",copyActiveScript);
+$("#detail-favourite").addEventListener("click",()=>{if(activeDetailScript)toggleFavourite(activeDetailScript.id);});
+$("#script-detail-author").addEventListener("click",()=>{if(activeDetailScript){closeModal("#script-detail-modal");openAuthorProfile(activeDetailScript.author_id);}});
+$("#nav-store-placeholder");
 $("[data-script-filter]").forEach(button=>button.addEventListener("click",()=>{ $(".script-filters .filter").forEach(b=>b.classList.toggle("active",b===button)); activeScriptFilter=button.dataset.scriptFilter; loadScripts(); }));
-$("#sales-empty-open").addEventListener("click", openSale);
+
 $("#generate-key").addEventListener("click", () => { $("#generated-key").textContent=randomKey(); $("#key-message").textContent="New random key generated."; });
 $("#copy-key").addEventListener("click", async () => {
  const value=$("#generated-key").textContent;
@@ -206,8 +227,8 @@ $("#copy-key").addEventListener("click", async () => {
 $("#key-groups").addEventListener("change", () => { $("#key-message").textContent="Press Generate key to create a key in this format."; });
 
 $("#auth-switch").addEventListener("click", () => setAuthMode(authMode === "signup" ? "login" : "signup"));
-$("[data-close]").forEach(el => el.addEventListener("click", () => closeModal(el.dataset.close === "auth" ? "#auth-modal" : el.dataset.close === "sale" ? "#sale-modal" : el.dataset.close === "script" ? "#script-modal" : "#post-modal")));
-document.addEventListener("keydown", e => { if (e.key === "Escape") { closeModal("#auth-modal"); closeModal("#post-modal"); closeModal("#sale-modal"); closeModal("#script-modal"); } });
+$("[data-close]").forEach(el => el.addEventListener("click", () => closeModal(el.dataset.close === "auth" ? "#auth-modal" : el.dataset.close === "sale" ? "#sale-modal" : el.dataset.close === "script" ? "#script-modal" : el.dataset.close === "script-detail" ? "#script-detail-modal" : "#post-modal")));
+document.addEventListener("keydown", e => { if (e.key === "Escape") { closeModal("#auth-modal"); closeModal("#post-modal"); closeModal("#sale-modal"); closeModal("#script-modal"); closeModal("#script-detail-modal"); } });
 $$(".filter").forEach(button => button.addEventListener("click", () => {
   $$(".filter").forEach(b => b.classList.toggle("active", b === button));
   activeCategory = button.dataset.category;
@@ -295,5 +316,5 @@ $("#script-form").addEventListener("submit",async event=>{
  const {error}=await db.from("scripts").insert(payload);
  button.disabled=false;button.textContent="Publish script ↗";
  if(error){message.textContent=friendlyError(error);message.classList.add("error");return;}
- $("#script-form").reset();closeModal("#script-modal");activeScriptFilter="All";$("[data-script-filter]").forEach(b=>b.classList.toggle("active",b.dataset.scriptFilter==="All"));await loadScripts();showToast("Your script is published.");
+ $("#script-form").reset();closeModal("#script-modal");activeScriptFilter="All";activeAuthorId=null;$("#script-search").value="";$("[data-script-filter]").forEach(b=>b.classList.toggle("active",b.dataset.scriptFilter==="All"));await loadScripts();showToast("Your script is published.");
 });
