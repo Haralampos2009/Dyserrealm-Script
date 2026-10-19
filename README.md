@@ -1,0 +1,37 @@
+# Dyserrealm Script
+
+A responsive community feed for sharing ideas, guides, technology notes, and updates. Built with HTML, CSS, JavaScript, and Supabase Auth/Postgres.
+
+## 1. Set up the database
+
+1. Open your Supabase project.
+2. Go to **SQL Editor** and create a new query.
+3. Copy all of `supabase-setup.sql` into the editor and click **Run**.
+
+The SQL enables row-level security. Posts are publicly readable; only signed-in users can create posts, and users can only edit/delete their own posts.
+
+## 2. Configure Supabase Auth
+
+In Supabase, open **Authentication → URL Configuration** and set:
+
+- **Site URL:** `https://haralampos2009.github.io/Dyserrealm-Script/`
+- **Redirect URLs:** add `https://haralampos2009.github.io/Dyserrealm-Script/**`
+
+If email confirmation is enabled, new users must click the confirmation email before logging in. Never put a Supabase `service_role` or secret key in frontend files. The publishable key in `app.js` is designed for browser use with Row Level Security enabled.
+
+## 3. Publish with GitHub Pages
+
+1. Open the repository **Settings → Pages**.
+2. Under **Build and deployment**, choose **Deploy from a branch**.
+3. Choose branch `main` and folder `/ (root)`, then save.
+4. Wait a minute or two and open: https://haralampos2009.github.io/Dyserrealm-Script/
+
+## Included
+
+- Responsive dark UI with green accents
+- Email/password sign-up and login
+- Create and browse posts
+- Category filters
+- Supabase Row Level Security policies
+
+Comments and richer profile pages can be added in a later iteration.
