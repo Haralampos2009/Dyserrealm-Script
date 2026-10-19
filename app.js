@@ -165,7 +165,7 @@ function openScriptDetails(scriptId) {
  const fav=favouriteScriptIds.has(String(item.id));$("#detail-favourite").textContent=fav?"♥ Saved to favourites":"♡ Save to favourites";openModal("#script-detail-modal");
 }
 async function copyActiveScript(){if(!activeDetailScript)return;try{await navigator.clipboard.writeText(activeDetailScript.code);$("#script-detail-message").textContent="Code copied to clipboard.";}catch{$("#script-detail-message").textContent="Clipboard access is blocked by your browser. Select the code and copy it manually.";}}
-function openAuthorProfile(authorId){activeAuthorId=String(authorId);activeScriptFilter="All";$("#script-search").value="";$(".script-filters .filter").forEach(b=>b.classList.toggle("active",b.dataset.scriptFilter==="All"));loadScripts();location.hash="#scripts";}
+function openAuthorProfile(authorId){activeAuthorId=String(authorId);activeScriptFilter="All";$("#script-search").value="";$$(".script-filters .filter").forEach(b=>b.classList.toggle("active",b.dataset.scriptFilter==="All"));loadScripts();location.hash="#scripts";}
 function openScript() {
  if(!currentUser){setAuthMode("signup");openModal("#auth-modal");$("#auth-message").textContent="Create an account or log in to publish a script.";return;}
  $("#script-message").textContent="";openModal("#script-modal");
@@ -222,7 +222,7 @@ $("#copy-script-code").addEventListener("click",copyActiveScript);
 $("#detail-favourite").addEventListener("click",()=>{if(activeDetailScript)toggleFavourite(activeDetailScript.id);});
 $("#script-detail-author").addEventListener("click",()=>{if(activeDetailScript){closeModal("#script-detail-modal");openAuthorProfile(activeDetailScript.author_id);}});
 $("#nav-store-placeholder");
-$("[data-script-filter]").forEach(button=>button.addEventListener("click",()=>{ $(".script-filters .filter").forEach(b=>b.classList.toggle("active",b===button)); activeScriptFilter=button.dataset.scriptFilter; loadScripts(); }));
+$$("[data-script-filter]").forEach(button=>button.addEventListener("click",()=>{ $$(".script-filters .filter").forEach(b=>b.classList.toggle("active",b===button)); activeScriptFilter=button.dataset.scriptFilter; loadScripts(); }));
 
 $("#generate-key")?.addEventListener("click", (event) => { event.preventDefault(); $("#generated-key").textContent=randomKey(); $("#key-message").textContent="New random key generated."; });
 $("#copy-key")?.addEventListener("click", async (event) => {
@@ -237,8 +237,8 @@ $("#key-groups")?.addEventListener("change", () => { $("#key-message").textConte
 $("#auth-switch").addEventListener("click", () => setAuthMode(authMode === "signup" ? "login" : "signup"));
 document.addEventListener("click", event => { const el = event.target.closest("[data-close]"); if (!el) return; event.preventDefault(); const key = el.dataset.close; const modalId = key === "auth" ? "#auth-modal" : key === "sale" ? "#sale-modal" : key === "script" ? "#script-modal" : key === "script-detail" ? "#script-detail-modal" : "#post-modal"; closeModal(modalId); });
 document.addEventListener("keydown", e => { if (e.key === "Escape") { closeModal("#auth-modal"); closeModal("#post-modal"); closeModal("#sale-modal"); closeModal("#script-modal"); closeModal("#script-detail-modal"); } });
-$("[data-category]").forEach(button => button.addEventListener("click", () => {
-  $("[data-category]").forEach(b => b.classList.toggle("active", b === button));
+$$("[data-category]").forEach(button => button.addEventListener("click", () => {
+  $$("[data-category]").forEach(b => b.classList.toggle("active", b === button));
   activeCategory = button.dataset.category;
   loadPosts();
 }));
@@ -324,7 +324,7 @@ $("#post-form").addEventListener("submit", async event => {
   button.disabled = false; button.innerHTML = 'Publish post <span>↗</span>';
   if (error) { message.textContent = friendlyError(error); message.classList.add("error"); return; }
   $("#post-form").reset(); closeModal("#post-modal"); activeCategory = "All";
-  $("[data-category]").forEach(b => b.classList.toggle("active", b.dataset.category === "All"));
+  $$("[data-category]").forEach(b => b.classList.toggle("active", b.dataset.category === "All"));
   await loadPosts(); showToast("Your post is live.");
 });
 (async function init() {
@@ -351,5 +351,5 @@ $("#script-form").addEventListener("submit",async event=>{
  const {error}=await db.from("scripts").insert(payload);
  button.disabled=false;button.textContent="Publish script ↗";
  if(error){message.textContent=friendlyError(error);message.classList.add("error");return;}
- $("#script-form").reset();closeModal("#script-modal");activeScriptFilter="All";activeAuthorId=null;$("#script-search").value="";$("[data-script-filter]").forEach(b=>b.classList.toggle("active",b.dataset.scriptFilter==="All"));await loadScripts();showToast("Your script is published.");
+ $("#script-form").reset();closeModal("#script-modal");activeScriptFilter="All";activeAuthorId=null;$("#script-search").value="";$$("[data-script-filter]").forEach(b=>b.classList.toggle("active",b.dataset.scriptFilter==="All"));await loadScripts();showToast("Your script is published.");
 });
