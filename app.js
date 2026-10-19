@@ -229,8 +229,8 @@ $("#key-groups").addEventListener("change", () => { $("#key-message").textConten
 $("#auth-switch").addEventListener("click", () => setAuthMode(authMode === "signup" ? "login" : "signup"));
 $("[data-close]").forEach(el => el.addEventListener("click", () => closeModal(el.dataset.close === "auth" ? "#auth-modal" : el.dataset.close === "sale" ? "#sale-modal" : el.dataset.close === "script" ? "#script-modal" : el.dataset.close === "script-detail" ? "#script-detail-modal" : "#post-modal")));
 document.addEventListener("keydown", e => { if (e.key === "Escape") { closeModal("#auth-modal"); closeModal("#post-modal"); closeModal("#sale-modal"); closeModal("#script-modal"); closeModal("#script-detail-modal"); } });
-$$(".filter").forEach(button => button.addEventListener("click", () => {
-  $$(".filter").forEach(b => b.classList.toggle("active", b === button));
+$("[data-category]").forEach(button => button.addEventListener("click", () => {
+  $("[data-category]").forEach(b => b.classList.toggle("active", b === button));
   activeCategory = button.dataset.category;
   loadPosts();
 }));
@@ -297,7 +297,7 @@ $("#post-form").addEventListener("submit", async event => {
   button.disabled = false; button.innerHTML = 'Publish post <span>↗</span>';
   if (error) { message.textContent = friendlyError(error); message.classList.add("error"); return; }
   $("#post-form").reset(); closeModal("#post-modal"); activeCategory = "All";
-  $$(".filter").forEach(b => b.classList.toggle("active", b.dataset.category === "All"));
+  $("[data-category]").forEach(b => b.classList.toggle("active", b.dataset.category === "All"));
   await loadPosts(); showToast("Your post is live.");
 });
 (async function init() {
