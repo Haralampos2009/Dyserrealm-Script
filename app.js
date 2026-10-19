@@ -101,6 +101,10 @@ function makeSaleCard(item) {
 }
 async function loadSales() {
  const grid=$("#sales-grid");
+ const empty=$("#sales-empty");
+ const notice=$("#sales-notice");
+ // The Store is currently a "Coming Soon" page; skip the retired marketplace UI.
+ if (!grid || !empty || !notice) return;
  const {data,error}=await db.from("sales").select("id,title,description,price,image_url,seller_name,created_at").order("created_at",{ascending:false}).limit(40);
  if(error){grid.innerHTML="";$("#sales-empty").classList.remove("hidden");$("#sales-empty").querySelector("h3").textContent="Marketplace setup needed";$("#sales-empty").querySelector("p").textContent="Run supabase-setup.sql in Supabase SQL Editor to enable listings and image uploads.";$("#sales-notice").textContent=friendlyError(error);$("#sales-notice").classList.remove("hidden");return;}
  $("#sales-notice").classList.add("hidden");
@@ -324,12 +328,20 @@ $("#post-form").addEventListener("submit", async event => {
   await loadPosts(); showToast("Your post is live.");
 });
 (async function init() {
-  const {data} = await db.auth.getSession();
-  updateHeader(data.session?.user || null);
-  db.auth.onAuthStateChange((_event, session) => updateHeader(session?.user || null));
-  await loadPosts();
-  await loadSales();
-  await loadScripts();
+  try {
+    const {data, error} = await db.auth.getSession();
+    if (error) console.error("Supabase session check failed:", error);
+    updateHeader(data?.session?.user || null);
+    db.auth.onAuthStateChange((_event, session) => updateHeader(session?.user || null));
+  } catch (error) {
+    console.error("Authentication initialization failed:", error);
+    updateHeader(null);
+  }
+  // Load each section independently so one failed request cannot stop the others.
+  for (const [name, loader] of [["community", loadPosts], ["store", loadSales], ["scripts", loadScripts]]) {
+    try { await loader(); }
+    catch (error) { console.error("Failed to load " + name + " section:", error); }
+  }
 })();
 $("#script-form").addEventListener("submit",async event=>{
  event.preventDefault();
