@@ -43,10 +43,11 @@ function friendlyError(error) {
   if (/Failed to fetch|NetworkError/i.test(message)) return "Couldn't connect. Check your internet and Supabase project settings.";
   return message;
 }
-function openModal(id) { $(id).classList.remove("hidden"); document.body.style.overflow = "hidden"; }
+function openModal(id) { const modal = $(id); if (!modal) return; modal.classList.remove("hidden"); document.body.style.overflow = "hidden"; }
 function closeModal(id) {
-  $(id).classList.add("hidden");
-  if ($$(".modal:not(.hidden)").length === 0) document.body.style.overflow = "";
+  const modal = $(id); if (!modal) return;
+  modal.classList.add("hidden");
+  if ($(".modal:not(.hidden)").length === 0) document.body.style.overflow = "";
 }
 function setAuthMode(mode) {
   authMode = mode;
@@ -84,8 +85,10 @@ function postCard(post) {
 function safeFileName(name) { return String(name).toLowerCase().replace(/[^a-z0-9._-]+/g, "-").slice(-90) || "image"; }
 function randomKey() {
   const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  const bytes = new Uint8Array(Number($("#key-groups").value) * 4);
-  crypto.getRandomValues(bytes);
+  const count = Math.max(4, Math.min(6, Number($("#key-groups")?.value) || 4)) * 4;
+  const bytes = new Uint8Array(count);
+  if (window.crypto?.getRandomValues) window.crypto.getRandomValues(bytes);
+  else for (let i = 0; i < count; i++) bytes[i] = Math.floor(Math.random() * 256);
   const chars = [...bytes].map(b => alphabet[b % alphabet.length]);
   const groups = [];
   for (let i=0; i<chars.length; i+=4) groups.push(chars.slice(i,i+4).join(""));
@@ -217,17 +220,18 @@ $("#script-detail-author").addEventListener("click",()=>{if(activeDetailScript){
 $("#nav-store-placeholder");
 $("[data-script-filter]").forEach(button=>button.addEventListener("click",()=>{ $(".script-filters .filter").forEach(b=>b.classList.toggle("active",b===button)); activeScriptFilter=button.dataset.scriptFilter; loadScripts(); }));
 
-$("#generate-key").addEventListener("click", () => { $("#generated-key").textContent=randomKey(); $("#key-message").textContent="New random key generated."; });
-$("#copy-key").addEventListener("click", async () => {
+$("#generate-key")?.addEventListener("click", (event) => { event.preventDefault(); $("#generated-key").textContent=randomKey(); $("#key-message").textContent="New random key generated."; });
+$("#copy-key")?.addEventListener("click", async (event) => {
+ event.preventDefault();
  const value=$("#generated-key").textContent;
  if(value.includes("•")) { $("#key-message").textContent="Generate a key first."; return; }
  try { await navigator.clipboard.writeText(value); $("#key-message").textContent="Copied to clipboard."; }
  catch { $("#key-message").textContent="Select and copy the key manually."; }
 });
-$("#key-groups").addEventListener("change", () => { $("#key-message").textContent="Press Generate key to create a key in this format."; });
+$("#key-groups")?.addEventListener("change", () => { $("#key-message").textContent="Press Generate key to create a key in this format."; });
 
 $("#auth-switch").addEventListener("click", () => setAuthMode(authMode === "signup" ? "login" : "signup"));
-$("[data-close]").forEach(el => el.addEventListener("click", () => closeModal(el.dataset.close === "auth" ? "#auth-modal" : el.dataset.close === "sale" ? "#sale-modal" : el.dataset.close === "script" ? "#script-modal" : el.dataset.close === "script-detail" ? "#script-detail-modal" : "#post-modal")));
+document.addEventListener("click", event => { const el = event.target.closest("[data-close]"); if (!el) return; event.preventDefault(); const key = el.dataset.close; const modalId = key === "auth" ? "#auth-modal" : key === "sale" ? "#sale-modal" : key === "script" ? "#script-modal" : key === "script-detail" ? "#script-detail-modal" : "#post-modal"; closeModal(modalId); });
 document.addEventListener("keydown", e => { if (e.key === "Escape") { closeModal("#auth-modal"); closeModal("#post-modal"); closeModal("#sale-modal"); closeModal("#script-modal"); closeModal("#script-detail-modal"); } });
 $("[data-category]").forEach(button => button.addEventListener("click", () => {
   $("[data-category]").forEach(b => b.classList.toggle("active", b === button));
