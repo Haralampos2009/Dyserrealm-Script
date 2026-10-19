@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080b0a">
+  <meta name="description" content="Dyserrealm Script — a community for ideas, technology, guides and updates.">
+  <title>Dyserrealm Script — Ideas become real</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Dyserrealm Script home"><span class="brand-mark">D<span>/</span></span><span>dyserrealm<span class="brand-light">.script</span></span></a>
+    <nav class="nav-links"><a href="#explore">Explore</a><a href="#about">About</a></nav>
+    <div class="header-actions"><span id="user-label" class="user-label"></span><button id="login-open" class="button button-quiet">Log in</button><button id="signup-open" class="button button-primary">Join the realm <span>↗</span></button><button id="logout-button" class="button button-quiet hidden">Log out</button></div>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="eyebrow"><span class="pulse-dot"></span> A SPACE FOR CREATORS & CURIOUS MINDS</div>
+      <h1>Ideas become<br><span class="gradient-text">something real.</span></h1>
+      <p class="hero-copy">A place to share what you're building, what you've learned, and what you're imagining next.</p>
+      <div class="hero-actions"><a href="#explore" class="button button-primary button-large">Explore topics <span>↓</span></a><button id="hero-write" class="button button-outline button-large">Share an idea <span>＋</span></button></div>
+      <div class="hero-foot"><div class="mini-avatars"><span>D</span><span>✳</span><span>⌘</span></div><span>A small corner of the internet for big ideas.</span><span class="hero-line"></span></div>
+      <div class="hero-orbit orbit-one"></div><div class="hero-orbit orbit-two"></div>
+    </section>
+    <section id="explore" class="content-section">
+      <div class="section-heading"><div><div class="eyebrow muted">THE COMMUNITY FEED</div><h2>Explore the realm<span class="green-period">.</span></h2><p class="section-copy">Fresh thoughts, useful guides, and works in progress.</p></div><button id="write-open" class="button button-primary">＋ Write a post</button></div>
+      <div class="filters" role="group" aria-label="Filter posts">
+        <button class="filter active" data-category="All">Everything <span id="all-count" class="filter-count">—</span></button>
+        <button class="filter" data-category="Technology">Technology</button><button class="filter" data-category="Guides">Guides</button><button class="filter" data-category="Ideas">Ideas</button><button class="filter" data-category="Updates">Updates</button>
+      </div>
+      <div id="notice" class="notice hidden" role="status"></div>
+      <div id="posts-grid" class="posts-grid">
+        <article class="post-card skeleton"><div class="skeleton-line short"></div><div class="skeleton-line"></div><div class="skeleton-line medium"></div></article>
+        <article class="post-card skeleton"><div class="skeleton-line short"></div><div class="skeleton-line"></div><div class="skeleton-line medium"></div></article>
+        <article class="post-card skeleton"><div class="skeleton-line short"></div><div class="skeleton-line"></div><div class="skeleton-line medium"></div></article>
+      </div>
+      <div class="empty-state hidden" id="empty-state"><div class="empty-icon">✳</div><h3>It's quiet in here.</h3><p>Be the first to share something with the realm.</p><button class="button button-primary" id="empty-write">Create the first post</button></div>
+    </section>
+    <section id="about" class="about-section"><div class="about-symbol">D<span>/</span></div><div><div class="eyebrow muted">WHY DYserrealm SCRIPT?</div><h2>Built for the <span class="gradient-text">in-between.</span></h2><p>Not just polished launches. Share the experiments, the lessons, the questions, and the little wins that happen along the way.</p></div><div class="about-stats"><div><strong>01</strong><span>Share ideas</span></div><div><strong>02</strong><span>Learn together</span></div><div><strong>03</strong><span>Build openly</span></div></div></section>
+  </main>
+  <footer><a class="brand footer-brand" href="#"><span class="brand-mark">D<span>/</span></span><span>dyserrealm<span class="brand-light">.script</span></span></a><span>Made for curious minds. <span class="green-period">●</span></span><a href="#explore">Back to top ↑</a></footer>
+  <div id="auth-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="auth-title"><div class="modal-backdrop" data-close="auth"></div><div class="modal-panel"><button class="modal-close" data-close="auth" aria-label="Close">×</button><div class="modal-logo">D<span>/</span></div><div class="eyebrow muted">YOUR NEXT CHAPTER STARTS HERE</div><h2 id="auth-title">Join the realm.</h2><p id="auth-subtitle" class="modal-copy">Create an account to share your ideas.</p><form id="auth-form"><label for="auth-name" id="name-label">Display name</label><input id="auth-name" type="text" maxlength="32" placeholder="What should we call you?"><label for="auth-email">Email address</label><input id="auth-email" type="email" autocomplete="email" placeholder="you@example.com" required><label for="auth-password">Password</label><input id="auth-password" type="password" minlength="6" autocomplete="current-password" placeholder="At least 6 characters" required><button id="auth-submit" class="button button-primary button-full" type="submit">Create account <span>↗</span></button><p id="auth-message" class="form-message" role="status"></p></form><p class="switch-auth"><span id="switch-copy">Already have an account?</span> <button id="auth-switch" class="text-button">Log in</button></p></div></div>
+  <div id="post-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="post-title"><div class="modal-backdrop" data-close="post"></div><div class="modal-panel modal-panel-wide"><button class="modal-close" data-close="post" aria-label="Close">×</button><div class="eyebrow muted">PUT IT OUT INTO THE WORLD</div><h2 id="post-title">Share an idea<span class="green-period">.</span></h2><p class="modal-copy">A useful note, a question, a guide, or a work in progress.</p><form id="post-form"><label for="post-heading">Title</label><input id="post-heading" maxlength="100" placeholder="Give your post a clear title" required><label for="post-category">Category</label><select id="post-category"><option>Technology</option><option>Guides</option><option>Ideas</option><option>Updates</option></select><label for="post-body">Your post</label><textarea id="post-body" rows="7" maxlength="8000" placeholder="Start writing here..." required></textarea><div class="form-bottom"><span class="form-hint">Be kind. Share what you know.</span><button id="post-submit" type="submit" class="button button-primary">Publish post <span>↗</span></button></div><p id="post-message" class="form-message" role="status"></p></form></div></div>
+  <div id="toast" class="toast hidden" role="status"></div>
+</body>
+</html>
