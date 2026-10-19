@@ -114,3 +114,8 @@ body:before{background:rgba(0,35,35,.04)!important}
 .filter.active{background:#2ce8c5!important;color:#002520!important}
 .modal-card{background:rgba(2,25,31,.96)!important;border-color:#43e8d055!important;backdrop-filter:blur(20px)!important}
 @media(max-width:900px){.hero{margin:18px 12px!important}}
+
+
+/* Remove the opaque hero panel behind BUILD IN THE SHADOWS */
+.hero{background:transparent!important;border-color:rgba(55,244,208,.18)!important;box-shadow:none!important;backdrop-filter:none!important}
+.hero:before{background:radial-gradient(circle at 78% 44%,rgba(37,245,221,.08),transparent 38%)!important}
