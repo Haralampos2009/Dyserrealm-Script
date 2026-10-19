@@ -241,32 +241,51 @@ $("[data-category]").forEach(button => button.addEventListener("click", () => {
 $("#auth-form").addEventListener("submit", async (event) => {
   event.preventDefault();
   const submit = $("#auth-submit"), message = $("#auth-message");
-  submit.disabled = true; submit.textContent = authMode === "signup" ? "Creating account…" : "Logging in…";
-  message.textContent = ""; message.classList.remove("error");
-  const email = $("#auth-email").value.trim();
-  const password = $("#auth-password").value;
-  let result;
-  if (authMode === "signup") {
-    const name = $("#auth-name").value.trim();
-    const robloxUsername = $("#auth-roblox").value.trim();
-    if(!/^[A-Za-z0-9_]{3,32}$/.test(robloxUsername)){submit.disabled=false;submit.innerHTML='Create account <span>↗</span>';message.textContent="Enter a Roblox username of 3–32 letters, numbers, or underscores.";message.classList.add("error");return;}
-    result = await db.auth.signUp({email, password, options:{data:{display_name:name,roblox_username:robloxUsername}, emailRedirectTo: location.origin + location.pathname}});
-  } else {
-    result = await db.auth.signInWithPassword({email, password});
+  const modeAtSubmit = authMode;
+  submit.disabled = true;
+  submit.textContent = modeAtSubmit === "signup" ? "Creating account…" : "Logging in…";
+  message.textContent = "";
+  message.classList.remove("error");
+  try {
+    const email = $("#auth-email").value.trim();
+    const password = $("#auth-password").value;
+    let result;
+    if (modeAtSubmit === "signup") {
+      const name = $("#auth-name").value.trim();
+      const robloxUsername = $("#auth-roblox").value.trim();
+      if (!name) throw new Error("Please enter a display name.");
+      if (!/^[A-Za-z0-9_]{3,32}$/.test(robloxUsername)) {
+        throw new Error("Enter a Roblox username of 3–32 letters, numbers, or underscores.");
+      }
+      if (password.length < 6) throw new Error("Password must be at least 6 characters long.");
+      result = await db.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { display_name: name, roblox_username: robloxUsername },
+          emailRedirectTo: location.origin + location.pathname
+        }
+      });
+    } else {
+      result = await db.auth.signInWithPassword({ email, password });
+    }
+    if (result.error) throw result.error;
+    if (modeAtSubmit === "signup" && !result.data.session) {
+      message.classList.remove("error");
+      message.textContent = "Account request accepted. Check your inbox (and spam folder) for the confirmation email. If no email arrives, the Supabase email settings may need checking.";
+      return;
+    }
+    updateHeader(result.data.user);
+    closeModal("#auth-modal");
+    $("#auth-form").reset();
+    showToast(modeAtSubmit === "signup" ? "Welcome to the realm!" : "You're logged in.");
+  } catch (error) {
+    message.textContent = friendlyError(error);
+    message.classList.add("error");
+  } finally {
+    submit.disabled = false;
+    submit.innerHTML = authMode === "signup" ? 'Create account <span>↗</span>' : 'Log in <span>↗</span>';
   }
-  submit.disabled = false;
-  submit.innerHTML = authMode === "signup" ? 'Create account <span>↗</span>' : 'Log in <span>↗</span>';
-  if (result.error) {
-    message.textContent = friendlyError(result.error); message.classList.add("error"); return;
-  }
-  if (authMode === "signup" && !result.data.session) {
-    message.textContent = "Account created! Check your email for a confirmation link, then come back and log in.";
-    return;
-  }
-  updateHeader(result.data.user);
-  closeModal("#auth-modal");
-  $("#auth-form").reset();
-  showToast(authMode === "signup" ? "Welcome to the realm!" : "You're logged in.");
 });
 $("#logout-button").addEventListener("click", async () => {
   const {error} = await db.auth.signOut();
