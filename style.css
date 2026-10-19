@@ -31,3 +31,20 @@ body{background:radial-gradient(ellipse at 12% 38%,#38204d16,transparent 30%),ra
 .account #user-label:empty{display:none}
 @media(min-width:1200px){.hero{padding-left:max(10vw,70px);padding-right:max(10vw,70px)}}
 @media(max-width:680px){.hero:before{background-size:38px 38px}.section-head .btn{width:100%}.stats{margin-top:38px}}
+
+/* Privacy policy, contact modal, and footer navigation */
+.footer-links{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap}
+.footer-link{border:0;background:transparent;padding:4px 0;color:var(--green);font:9px var(--mono);letter-spacing:.8px;cursor:pointer}
+.footer-link:hover{text-decoration:underline;color:var(--text)}
+.policy-card{width:min(100%,680px);gap:10px}
+.policy-card h2,.contact-card h2{margin:0 0 4px}
+.policy-card h3{font:600 13px var(--mono);letter-spacing:.2px;color:var(--green);margin:9px 0 0}
+.policy-card>p,.contact-card>p{font-size:12px;line-height:1.75;color:#b6a9c4}
+.policy-card .policy-updated,.policy-card .policy-note{font-size:10px;color:#8f819f}
+.policy-email{color:var(--green);text-decoration:underline}
+.contact-card{width:min(100%,460px)}
+.contact-email{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:15px;border:1px solid #baff4944;background:#baff4908;color:var(--green);margin:8px 0}
+.contact-email span{font:10px var(--mono);color:#a99bb9}
+.contact-email strong{font:500 12px var(--mono);overflow-wrap:anywhere}
+.contact-email span:last-child{margin-left:auto}
+@media(max-width:680px){.footer-links{gap:12px}.footer-links>span{width:100%}.policy-card{padding:25px 18px}}
