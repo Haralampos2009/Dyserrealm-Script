@@ -79,3 +79,10 @@ footer{border-top:1px solid #b7f36b25!important}
 .x{z-index:2;touch-action:manipulation}
 .x:hover{transform:scale(1.06);background:#b7f36b18!important;color:#caff91!important}
 @media(max-width:680px){.site-tabs a{width:100%;min-height:42px;padding:0 12px}.site-tabs a.active-tab{border-color:#b7f36b55}}
+
+
+/* Shared forest background — fixed, darkened for readable content */
+body{background-color:#031d19!important;background-image:linear-gradient(180deg,rgba(2,12,11,.76),rgba(2,12,11,.88)),url("realm-background.webp")!important;background-position:center center!important;background-size:cover!important;background-attachment:fixed!important;background-repeat:no-repeat!important}
+body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:rgba(1,18,15,.18)}
+.topbar,footer{background:rgba(3,12,12,.88)!important;backdrop-filter:blur(14px)}
+.hero,.section,.closing,.key-panel{background-color:rgba(4,16,15,.76)!important;backdrop-filter:blur(5px)}
