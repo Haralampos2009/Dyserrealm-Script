@@ -86,3 +86,31 @@ body{background-color:#031d19!important;background-image:linear-gradient(180deg,
 body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:rgba(1,18,15,.18)}
 .topbar,footer{background:rgba(3,12,12,.88)!important;backdrop-filter:blur(14px)}
 .hero,.section,.closing,.key-panel{background-color:rgba(4,16,15,.76)!important;backdrop-filter:blur(5px)}
+
+
+/* 2026 visual pass: luminous teal feather / glass landing */
+body{background-color:#042b2b!important;background-image:linear-gradient(180deg,rgba(0,20,23,.12),rgba(0,19,22,.30)),url("./0_hero.webp")!important;background-position:center center!important;background-size:cover!important;background-attachment:fixed!important;background-repeat:no-repeat!important;color:#f4ffff!important}
+body:before{background:rgba(0,35,35,.04)!important}
+.topbar,footer{background:rgba(1,22,27,.70)!important;border-color:rgba(74,255,232,.20)!important;backdrop-filter:blur(18px)!important}
+.brand b{background:rgba(41,239,210,.12)!important;border-color:#39e9d0!important;color:#54ffe3!important;box-shadow:0 0 22px #20e9d033!important}
+.brand small,.site-tabs a:hover,.site-tabs a.active-tab{color:#35f0d0!important}
+.site-tabs a:hover,.site-tabs a.active-tab{border-color:#35f0d066!important;background:#35f0d012!important}
+.hero{position:relative!important;max-width:1420px!important;min-height:620px!important;margin:34px auto 28px!important;padding:clamp(35px,5vw,76px)!important;gap:38px!important;border:1px solid #37f4d04d!important;border-radius:24px!important;background:linear-gradient(110deg,rgba(0,31,34,.48),rgba(0,32,38,.22) 62%,rgba(0,30,35,.40))!important;box-shadow:0 22px 80px #00191c55,inset 0 0 45px #20d9ce0a!important;backdrop-filter:blur(3px)!important}
+.hero:before{background:radial-gradient(circle at 78% 44%,#25f5dd16,transparent 38%),linear-gradient(90deg,transparent 49.9%,#b4fff00a 50%,transparent 50.1%)!important}
+.hero h1{letter-spacing:-4px!important;text-shadow:0 5px 35px #00181b!important}
+.hero h1 em,.section h2 em,.closing h2 em,.key-panel h2 em{color:#35efd0!important}
+.hero p{color:#d0e5e7!important}
+.kicker,.hero .status-dot{color:#45f4d8!important}
+.status-dot{background:#45f4d8!important;box-shadow:0 0 14px #45f4d8!important}
+.btn.primary{background:linear-gradient(110deg,#25e8b6,#2dd4cf)!important;color:#00231f!important;border-color:transparent!important;box-shadow:0 7px 25px #18d9be22!important}
+.btn.primary:hover{background:linear-gradient(110deg,#5fffd2,#65f6ef)!important;transform:translateY(-2px)}
+.btn.outline,.btn.ghost{border-color:#35e9d088!important;background:rgba(0,30,35,.42)!important;color:#eaffff!important}
+.orb-area{border:1px solid #3cf1d044!important;border-radius:20px!important;background:rgba(0,30,35,.24)!important;box-shadow:inset 0 0 70px #20e9d010!important;backdrop-filter:blur(5px)!important}
+.orb{border-color:#38f1d080!important;color:#aafff0!important;background:radial-gradient(circle at 45% 35%,#2cebd52b,transparent 65%)!important;box-shadow:inset 0 0 75px #20e9d01c,0 0 90px #20e9d01a!important}
+.stats span,.hero-index{color:#c1dddd!important}
+.section,.closing,.key-panel{background:rgba(0,25,29,.66)!important;border-color:#6bffed1e!important;backdrop-filter:blur(12px)!important}
+.post-card,.script-card{background:rgba(0,26,32,.72)!important;border-color:#51f4dc36!important;box-shadow:0 12px 35px #00191c44!important}
+.filter,.search-row input,.key-output,.key-controls input,.key-controls select{background:rgba(0,22,28,.76)!important;border-color:#55ead533!important;color:#efffff!important}
+.filter.active{background:#2ce8c5!important;color:#002520!important}
+.modal-card{background:rgba(2,25,31,.96)!important;border-color:#43e8d055!important;backdrop-filter:blur(20px)!important}
+@media(max-width:900px){.hero{margin:18px 12px!important}}
