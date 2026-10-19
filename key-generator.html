@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#08060e">
+<title>Key Generator // Dyserrealm Script</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=20261019-redesign1">
+<link rel="stylesheet" href="theme.css?v=20261019-redesign2">
+<style>
+.generator-page{min-height:calc(100vh - 160px);display:grid;place-items:center;padding:45px 20px}
+.generator-wrap{width:min(100%,900px)}.generator-top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:24px;flex-wrap:wrap}
+.generator-top a{color:var(--green);text-decoration:none}.generator-wrap .key-panel{width:100%}
+.generator-wrap .key-visual{display:none}.generator-wrap .key-controls{grid-template-columns:repeat(2,minmax(0,1fr))}
+.generator-wrap .key-controls button{grid-column:1/-1;min-height:50px}.generator-wrap .key-output{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+#key-output{overflow-wrap:anywhere;word-break:break-word}.generator-subtitle{color:#a8b3c1;line-height:1.8;max-width:600px}
+@media(max-width:560px){.generator-wrap .key-controls{grid-template-columns:1fr}.generator-wrap .key-output{align-items:flex-start;flex-direction:column}.generator-wrap .key-output .btn{width:100%}}
+</style>
+</head>
+<body>
+<div class="scanlines"></div>
+<header class="topbar">
+<a class="brand" href="index.html"><b>D<span>_</span></b> DYSERREALM<small>/SCRIPT</small></a>
+<nav><a href="index.html">HOME</a><a href="index.html#feed">FEED</a><a href="index.html#library">SCRIPT LIBRARY</a></nav>
+<div class="account"><span class="kicker">KEY LAB / 01</span></div>
+</header>
+<main class="generator-page">
+<div class="generator-wrap">
+<div class="generator-top"><div><div class="kicker"><span class="status-dot"></span> STANDALONE TOOL</div><h1 style="margin:8px 0 0">KEY <em>GENERATOR.</em></h1></div><a href="index.html">← BACK TO DYSERREALM</a></div>
+<p class="generator-subtitle">Generate a random key directly in your browser. This standalone page contains only the key generator; generated keys are not registered or validated by a server.</p>
+<section class="key-panel">
+<div class="kicker">SECURITY WORKBENCH / LOCAL MODE</div>
+<div class="key-controls">
+<label>GROUPS<select id="key-groups"><option value="3">3 × 4</option><option value="4" selected>4 × 4</option><option value="5">5 × 4</option><option value="6">6 × 4</option></select></label>
+<label>PREFIX<input id="key-prefix" maxlength="10" value="DS"></label>
+<button id="generate-key" class="btn primary">GENERATE KEY ↻</button>
+</div>
+<div class="key-output"><code id="key-output">DS-XXXX-XXXX-XXXX-XXXX</code><button id="copy-key" class="btn outline">COPY KEY</button></div>
+<small id="key-message" role="status">LOCAL GENERATION // READY</small>
+</section>
+</div>
+</main>
+<footer><span class="brand"><b>D<span>_</span></b> DYSERREALM <small>/SCRIPT</small></span><span>© 2026 DYSERREALM SCRIPT</span><div class="footer-links"><span>GENERATED LOCALLY.</span></div></footer>
+<script>
+(()=>{"use strict";
+const $=s=>document.querySelector(s);
+function generate(){const n=Math.max(3,Math.min(6,Number($("#key-groups").value)||4));const prefix=$("#key-prefix").value.replace(/[^a-z0-9]/gi,"").slice(0,10).toUpperCase();const alphabet="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";const bytes=new Uint8Array(n*4);if(!window.crypto||!crypto.getRandomValues){$("#key-message").textContent="SECURE RANDOM GENERATOR UNAVAILABLE";return}crypto.getRandomValues(bytes);const parts=[];for(let i=0;i<bytes.length;i+=4)parts.push([...bytes.slice(i,i+4)].map(b=>alphabet[b%alphabet.length]).join(""));$("#key-output").textContent=(prefix?prefix+"-":"")+parts.join("-");$("#key-message").textContent="GENERATED LOCALLY // NOT SERVER-VALIDATED"}
+$("#generate-key").addEventListener("click",generate);
+$("#copy-key").addEventListener("click",async()=>{try{await navigator.clipboard.writeText($("#key-output").textContent);$("#key-message").textContent="COPIED TO CLIPBOARD"}catch{$("#key-message").textContent="CLIPBOARD ACCESS DENIED — SELECT AND COPY MANUALLY"}});
+generate();
+})();
+</script>
+</body></html>
