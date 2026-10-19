@@ -71,8 +71,10 @@ create table if not exists public.scripts (
  author_id uuid not null references auth.users(id) on delete cascade,
  author_name text not null default 'Realm member' check (char_length(author_name) between 1 and 32),
  roblox_username text not null default '' check (char_length(roblox_username) between 0 and 32),
+ images jsonb not null default '[]'::jsonb check (jsonb_typeof(images) = 'array'),
  created_at timestamptz not null default now()
 );
+alter table public.scripts add column if not exists images jsonb not null default '[]'::jsonb;
 alter table public.scripts enable row level security;
 drop policy if exists "Anyone can read scripts" on public.scripts;
 create policy "Anyone can read scripts" on public.scripts for select using (true);
@@ -85,6 +87,20 @@ create policy "Authors can delete own scripts" on public.scripts for delete to a
 grant select on public.scripts to anon, authenticated;
 grant insert, update, delete on public.scripts to authenticated;
 grant usage, select on sequence public.scripts_id_seq to authenticated;
+
+
+-- Public image bucket for script screenshots/photos (max 5 MB per image).
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('script-images', 'script-images', true, 5242880, array['image/png','image/jpeg','image/webp','image/gif'])
+on conflict (id) do update set public = true, file_size_limit = 5242880, allowed_mime_types = array['image/png','image/jpeg','image/webp','image/gif'];
+drop policy if exists "Anyone can view script images" on storage.objects;
+create policy "Anyone can view script images" on storage.objects for select using (bucket_id = 'script-images');
+drop policy if exists "Signed-in users upload own script images" on storage.objects;
+create policy "Signed-in users upload own script images" on storage.objects for insert to authenticated with check (bucket_id = 'script-images' and (storage.foldername(name))[1] = auth.uid()::text);
+drop policy if exists "Users update own script images" on storage.objects;
+create policy "Users update own script images" on storage.objects for update to authenticated using (bucket_id = 'script-images' and (storage.foldername(name))[1] = auth.uid()::text) with check (bucket_id = 'script-images' and (storage.foldername(name))[1] = auth.uid()::text);
+drop policy if exists "Users delete own script images" on storage.objects;
+create policy "Users delete own script images" on storage.objects for delete to authenticated using (bucket_id = 'script-images' and (storage.foldername(name))[1] = auth.uid()::text);
 
 -- Per-user saved scripts. Each account can favourite a script only once.
 create table if not exists public.script_favorites (
