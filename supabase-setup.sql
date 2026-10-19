@@ -72,9 +72,13 @@ create table if not exists public.scripts (
  author_name text not null default 'Realm member' check (char_length(author_name) between 1 and 32),
  roblox_username text not null default '' check (char_length(roblox_username) between 0 and 32),
  images jsonb not null default '[]'::jsonb check (jsonb_typeof(images) = 'array'),
+ price numeric(12,2) not null default 0 check (price >= 0),
+ price_currency text not null default 'Robux' check (price_currency in ('Robux','USD','EUR')),
  created_at timestamptz not null default now()
 );
 alter table public.scripts add column if not exists images jsonb not null default '[]'::jsonb;
+alter table public.scripts add column if not exists price numeric(12,2) not null default 0 check (price >= 0);
+alter table public.scripts add column if not exists price_currency text not null default 'Robux' check (price_currency in ('Robux','USD','EUR'));
 alter table public.scripts enable row level security;
 drop policy if exists "Anyone can read scripts" on public.scripts;
 create policy "Anyone can read scripts" on public.scripts for select using (true);
