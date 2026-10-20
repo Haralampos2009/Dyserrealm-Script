@@ -7,9 +7,11 @@ create table if not exists public.realm_profiles (
   favorite_game text not null default '' check (char_length(favorite_game) <= 80),
   games text not null default '' check (char_length(games) <= 500),
   bio text not null default '' check (char_length(bio) <= 500),
+  avatar_url text not null default '',
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+alter table public.realm_profiles add column if not exists avatar_url text not null default '';
 alter table public.realm_profiles enable row level security;
 drop policy if exists "Profiles are public" on public.realm_profiles;
 create policy "Profiles are public" on public.realm_profiles for select using (true);
