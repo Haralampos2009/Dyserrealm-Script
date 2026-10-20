@@ -48,3 +48,28 @@ body{background:radial-gradient(ellipse at 12% 38%,#38204d16,transparent 30%),ra
 .contact-email strong{font:500 12px var(--mono);overflow-wrap:anywhere}
 .contact-email span:last-child{margin-left:auto}
 @media(max-width:680px){.footer-links{gap:12px}.footer-links>span{width:100%}.policy-card{padding:25px 18px}}
+
+/* Script comments and account settings */
+.user-profile{display:flex;align-items:center;gap:7px}
+.comments-panel{margin-top:28px;padding-top:24px;border-top:1px solid #ffffff18}
+.comments-heading h3{font:600 25px/1.2 var(--display);margin:8px 0}
+.comments-heading p{color:var(--muted);font-size:12px;margin:0 0 18px}
+.comments-list{display:flex;flex-direction:column;gap:10px}
+.comment-item{padding:13px 15px;border:1px solid #ffffff17;background:#ffffff04;overflow-wrap:anywhere}
+.comment-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.comment-top strong{font:500 11px var(--mono);color:var(--green)}
+.comment-top time{font:9px var(--mono);color:var(--muted)}
+.comment-top .comment-delete{margin-left:auto}
+.comment-item p{white-space:pre-wrap;font-size:12px;color:#d4c9df;margin:10px 0 0}
+.comments-empty,.comment-error{font:10px var(--mono);color:var(--muted);padding:17px;border:1px dashed #473553;overflow-wrap:anywhere}
+.comment-error code{color:var(--green)}
+.comment-form{margin-top:18px;display:flex;flex-direction:column;gap:8px}
+.comment-form>label{font:10px var(--mono);color:#b8a9c7}
+.comment-form textarea{width:100%;background:#090710;border:1px solid #3d2d4d;padding:12px;color:var(--text);resize:vertical;font:12px/1.6 var(--display)}
+.comment-form-footer{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.comment-form-footer .form-message{font:10px var(--mono)}
+.comments-signin{margin-top:17px;padding:14px;background:#b071ff0b;border:1px solid #b071ff40;color:#cbbbdc;font-size:12px}
+.comments-signin .mini-btn{margin-left:8px}
+.settings-separator{height:1px;background:#ffffff18;margin:6px 0}
+#settings-open{padding:8px 9px}
+@media(max-width:680px){#settings-open{font-size:8px;padding:7px}.comment-form-footer .btn{width:100%}.comments-signin .mini-btn{margin:9px 0 0}}
