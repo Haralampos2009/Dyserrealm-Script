@@ -146,7 +146,7 @@
       <section class="dya-dialog">
         <h2 id="dya-cookie-settings-title">Cookie settings</h2>
         <p>The preference cookie is always used to remember your choice. Analytics is optional. You can change this choice at any time using the “Cookie settings” button.</p>
-        <label><input id="dya-analytics-toggle" type="checkbox" ${current === "analytics" ? "checked" : ""}> Allow anonymous page analytics</label>
+        <label><input id="dya-analytics-toggle" type="checkbox" ${current === "analytics" ? "checked" : ""}> Allow optional page analytics</label>
         <div class="dya-settings-actions">
           <button type="button" class="dya-save">Save preferences</button>
           <button type="button" class="dya-cancel">Cancel</button>
