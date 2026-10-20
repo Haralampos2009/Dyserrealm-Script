@@ -167,7 +167,7 @@ function setActiveTab(){const current=location.pathname.split("/").pop()||"index
 function events(){
 /* Register close controls first so they still work if a later page-specific handler fails. */
 document.addEventListener("click",e=>{const button=e.target.closest("[data-close]");if(!button)return;const id=button.dataset.close;if(!id||!$("#"+id))return;e.preventDefault();e.stopImmediatePropagation();close(id)},true);
-document.addEventListener("keydown",e=>{if(e.key==="Escape")$(".modal:not(.hidden)").forEach(m=>close(m.id)),true);
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$(".modal:not(.hidden)").forEach(m=>close(m.id))});
 $("#login-open").onclick=()=>{setMode("login");open("auth-modal")};$("#signup-open").onclick=()=>{setMode("signup");open("auth-modal")};$("#footer-signup").onclick=()=>{if(user)return toast("You're already connected.");setMode("signup");open("auth-modal")};
 $("#logout-button").onclick=async()=>{let{error}=await db.auth.signOut();if(error)return toast(errMsg(error));header(null);await refresh();toast("Disconnected from the realm.")};
 $("#auth-switch").onclick=()=>setMode(mode==="signup"?"login":"signup");
