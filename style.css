@@ -233,3 +233,11 @@ body{background:radial-gradient(ellipse at 12% 38%,#38204d16,transparent 30%),ra
 #settings-form .x{position:fixed;top:15px;right:18px;z-index:8;width:38px;height:38px;display:grid;place-items:center;background:#27242e;border:1px solid #ffffff18;border-radius:9px;color:#ddd7e5;font-size:25px}
 #settings-form .x:hover{background:#393341;color:#fff}
 @media(max-width:760px){#settings-form.modal-card{padding-left:0;padding-top:74px}#settings-form .settings-sidebar{top:0;bottom:auto;right:0;width:auto;height:62px;padding:7px 54px 7px 9px;flex-direction:row;align-items:center;overflow-x:auto;border-right:0;border-bottom:1px solid #ffffff12;background:#111015}#settings-form .settings-sidebar-brand{padding:0;margin:0;border:0;flex-shrink:0}.settings-brand-mark{width:38px;height:38px}.settings-sidebar-brand strong{font-size:9px}.settings-sidebar-brand small,.settings-nav-label,.settings-sidebar-bottom{display:none}.settings-nav-item{width:auto;min-width:max-content;min-height:38px;padding:0 10px;font-size:17px}.settings-nav-item span{font-size:10px}#settings-form .settings-workspace{padding:20px 15px 50px}#settings-form .settings-page-heading{padding-right:30px}#settings-form .settings-workspace>.settings-account-card,#settings-form .settings-workspace>.settings-profile-card,#settings-form .settings-workspace>.settings-security-card,#settings-form #settings-role-area{padding:17px}#settings-profile-section{grid-template-columns:1fr}#settings-profile-section>label:nth-of-type(4),#settings-profile-section>label:nth-of-type(5){grid-column:auto}#settings-form .x{top:10px;right:10px}}
+
+
+/* Settings sidebar items are true tabs: show only the selected panel */
+#settings-form .settings-workspace>.settings-anchor,
+#settings-form .settings-workspace>.settings-separator{display:none!important}
+#settings-form .settings-tab-panel{display:none!important}
+#settings-form .settings-tab-panel.active{display:block!important}
+#settings-form #settings-profile-section.settings-tab-panel.active{display:grid!important}
