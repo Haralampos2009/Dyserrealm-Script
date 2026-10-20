@@ -248,7 +248,18 @@ function clearImagePreviews(){imagePreviewUrls.forEach(u=>URL.revokeObjectURL(u)
 function validateScriptImages(files){if(files.length>MAX_SCRIPT_IMAGES)return"Choose up to 4 images.";for(const file of files){if(!["image/jpeg","image/png","image/webp","image/gif"].includes(file.type))return"Use JPG, PNG, WEBP or GIF images only.";if(file.size>MAX_SCRIPT_IMAGE_BYTES)return"Each image must be 5 MB or smaller."}return""}
 function renderImagePreviews(){clearImagePreviews();const input=$("#script-images"),preview=$("#script-image-preview"),files=[...input.files],problem=validateScriptImages(files);if(problem){input.value="";preview.textContent=problem;return}files.forEach(file=>{const url=URL.createObjectURL(file);imagePreviewUrls.push(url);const item=document.createElement("div");item.className="image-preview-item";const img=document.createElement("img");img.src=url;img.alt=file.name;const caption=document.createElement("span");caption.textContent=file.name;item.append(img,caption);preview.append(item)})}
 function setActiveTab(){const current=location.pathname.split("/").pop()||"index.html";$$(".site-tabs a").forEach(a=>{const active=(a.getAttribute("href")||"").split("#")[0]===current;a.classList.toggle("active-tab",active);if(active)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});document.querySelector(".topbar nav")?.classList.remove("open")}
-function events(){
+function initButtonColorSettings(){
+ const defaults={primary:"#b5ff3b",secondary:"#c7a0ff"};
+ const root=document.documentElement;
+ const primary=$("#button-primary-color"),secondary=$("#button-secondary-color"),message=$("#button-colors-message");
+ const read=()=>{try{return JSON.parse(localStorage.getItem("dyserrealm-button-colors")||"{}")}catch{return {}}};
+ const apply=(values)=>{const p=/^#[0-9a-f]{6}$/i.test(values.primary||"")?values.primary:defaults.primary;const s=/^#[0-9a-f]{6}$/i.test(values.secondary||"")?values.secondary:defaults.secondary;root.style.setProperty("--button-primary-color",p);root.style.setProperty("--button-secondary-color",s);root.style.setProperty("--button-secondary-border",s+"88");if(primary)primary.value=p;if(secondary)secondary.value=s};
+ const save=()=>{const values={primary:primary?.value||defaults.primary,secondary:secondary?.value||defaults.secondary};apply(values);try{localStorage.setItem("dyserrealm-button-colors",JSON.stringify(values));if(message)message.textContent="BUTTON COLORS SAVED IN THIS BROWSER."}catch{if(message)message.textContent="COLORS APPLIED, BUT THIS BROWSER BLOCKED LOCAL SAVING."}};
+ apply(read());
+ primary?.addEventListener("input",save);secondary?.addEventListener("input",save);
+ $("#button-colors-reset")?.addEventListener("click",()=>{apply(defaults);try{localStorage.removeItem("dyserrealm-button-colors");if(message)message.textContent="DEFAULT COLORS RESTORED."}catch{save()}});
+}
+function events(){initButtonColorSettings();
 /* Register close controls first so they still work if a later page-specific handler fails. */
 document.addEventListener("click",e=>{const button=e.target.closest("[data-close]");if(!button)return;const id=button.dataset.close;if(!id||!$("#"+id))return;e.preventDefault();e.stopImmediatePropagation();close(id)},true);
 document.addEventListener("keydown",e=>{if(e.key==="Escape")$$(".modal:not(.hidden)").forEach(m=>close(m.id))});
