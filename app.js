@@ -66,10 +66,16 @@ async function saveSettingsProfile(){
    const blob=await response.blob();
    const path=user.id+"/avatar.jpg";
    const{error:uploadError}=await db.storage.from("profile-avatars").upload(path,blob,{upsert:true,contentType:"image/jpeg",cacheControl:"3600"});
-   if(uploadError)throw new Error("Avatar upload failed. Open profiles-setup.sql in Supabase SQL Editor and run it, then retry. "+uploadError.message);
-   const publicResult=db.storage.from("profile-avatars").getPublicUrl(path);
-   avatarUrl=publicResult.data?.publicUrl||"";
-   if(!avatarUrl)throw new Error("Supabase did not return a public avatar URL.");
+   if(uploadError){
+    // Storage may not be configured yet. Fall back to the resized image in the profile row.
+    console.warn("Avatar Storage upload failed; trying database fallback.",uploadError);
+    avatarUrl=profileAvatarData;
+    msg.textContent="AVATAR STORAGE UNAVAILABLE — TRYING DIRECT PROFILE SAVE…";
+   }else{
+    const publicResult=db.storage.from("profile-avatars").getPublicUrl(path);
+    avatarUrl=publicResult.data?.publicUrl||"";
+    if(!avatarUrl)throw new Error("Supabase did not return a public avatar URL.");
+   }
   }
   const row={user_id:user.id,display_name:displayName,roblox_username:$("#settings-profile-roblox").value.trim(),favorite_game:$("#settings-profile-favorite-game").value.trim(),games:$("#settings-profile-games").value.trim(),bio:$("#settings-profile-bio").value.trim(),avatar_url:avatarUrl,updated_at:new Date().toISOString()};
   msg.textContent="SAVING PROFILE…";
