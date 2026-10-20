@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#08060e">
+<meta name="description" content="Dyserrealm Script executors and development tools directory for Roblox and Windows PC.">
+<title>Executors // Dyserrealm Script</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=20261020-executors1">
+<link rel="stylesheet" href="theme.css?v=20261020-schemafallback5">
+<style>body.executors-page main{min-height:calc(100vh - 160px)}body.executors-page .site-tabs a[href="executors.html"]{color:#caff91;border-color:#b7f36b55;background:#b7f36b12}</style>
+</head>
+<body class="executors-page">
+<div class="scanlines"></div>
+<header class="topbar">
+<a class="brand" href="index.html"><b>D<span>_</span></b> DYSERREALM<small>/SCRIPT</small></a>
+<nav class="site-tabs" aria-label="Main navigation"><a href="index.html">HOME</a><a href="feed.html">FEED</a><a href="library.html">SCRIPT LIBRARY</a><a href="key-generator.html">KEY GENERATOR</a><a class="active-tab" aria-current="page" href="executors.html">EXECUTORS</a></nav>
+<div class="account"><a class="btn ghost" href="library.html">SCRIPT LIBRARY ↗</a><button id="mobile-menu" class="btn ghost menu" type="button" aria-label="Toggle navigation">☰</button></div>
+</header>
+<main class="executor-page">
+<section class="executor-hero">
+<div class="kicker"><span class="status-dot"></span> TOOL DIRECTORY // 02 PLATFORMS</div>
+<h1>EXECUTORS<span style="color:var(--purple)">.</span><br><em>RUN YOUR WORK.</em></h1>
+<p>A curated directory of Roblox development tools and Windows / PC script runtimes. Check each official project page for current versions, system requirements and installation instructions.</p>
+</section>
+<div class="section-head"><div><div class="kicker">01 / THE DIRECTORY</div><h2>Find your <em>tool.</em></h2><p>Official project pages only. Version details are maintained by each publisher.</p></div><span class="kicker">7 ENTRIES</span></div>
+<div class="executor-toolbar">
+<input id="executor-search" class="executor-search" type="search" placeholder="SEARCH TOOLS..." aria-label="Search tools">
+<div class="executor-filters" role="group" aria-label="Filter by platform">
+<button class="executor-filter active" data-filter="all" type="button">ALL</button>
+<button class="executor-filter" data-filter="roblox" type="button">ROBLOX</button>
+<button class="executor-filter" data-filter="pc" type="button">WINDOWS / PC</button>
+</div>
+</div>
+<section id="executor-grid" class="executor-grid" aria-live="polite">
+<article class="executor-card" data-platform="roblox" data-search="roblox studio official roblox create test publish games luau">
+<div class="executor-card-top"><div class="executor-mark">RS</div><span class="executor-platform">ROBLOX</span></div><h2>Roblox Studio</h2><p>The official environment for creating, testing and publishing Roblox experiences, with built-in Luau scripting and playtesting tools.</p><div class="executor-meta"><span>OFFICIAL</span><span>FREE</span><span>EDITOR + RUNTIME</span></div><a class="executor-link" href="https://create.roblox.com/" target="_blank" rel="noopener noreferrer">OFFICIAL WEBSITE <span>↗</span></a>
+</article>
+<article class="executor-card" data-platform="roblox" data-search="luau official scripting language runtime documentation open source">
+<div class="executor-card-top"><div class="executor-mark">Lu</div><span class="executor-platform">ROBLOX</span></div><h2>Luau</h2><p>Roblox's open-source scripting language and runtime project. Explore the language, documentation and official source code.</p><div class="executor-meta"><span>OPEN SOURCE</span><span>LANGUAGE / RUNTIME</span></div><a class="executor-link" href="https://luau.org/" target="_blank" rel="noopener noreferrer">OFFICIAL WEBSITE <span>↗</span></a>
+</article>
+<article class="executor-card" data-platform="roblox pc" data-search="visual studio code vscode editor lua luau extensions windows mac linux">
+<div class="executor-card-top"><div class="executor-mark">VS</div><span class="executor-platform">ROBLOX + PC</span></div><h2>Visual Studio Code</h2><p>A lightweight code editor for writing and managing scripts, with extensions, debugging support and source control integration.</p><div class="executor-meta"><span>FREE</span><span>CODE EDITOR</span></div><a class="executor-link" href="https://code.visualstudio.com/" target="_blank" rel="noopener noreferrer">OFFICIAL WEBSITE <span>↗</span></a>
+</article>
+<article class="executor-card" data-platform="pc" data-search="powershell official windows automation command shell scripts runtime">
+<div class="executor-card-top"><div class="executor-mark">PS</div><span class="executor-platform">WINDOWS / PC</span></div><h2>PowerShell</h2><p>A command shell and scripting language for automation, system administration and repeatable Windows workflows.</p><div class="executor-meta"><span>OFFICIAL</span><span>OPEN SOURCE</span><span>SCRIPT RUNTIME</span></div><a class="executor-link" href="https://learn.microsoft.com/powershell/" target="_blank" rel="noopener noreferrer">OFFICIAL DOCUMENTATION <span>↗</span></a>
+</article>
+<article class="executor-card" data-platform="pc" data-search="windows terminal official command line shell powershell cmd">
+<div class="executor-card-top"><div class="executor-mark">WT</div><span class="executor-platform">WINDOWS / PC</span></div><h2>Windows Terminal</h2><p>A modern terminal host for running PowerShell, Command Prompt and other command-line applications in one place.</p><div class="executor-meta"><span>MICROSOFT</span><span>FREE</span><span>TERMINAL</span></div><a class="executor-link" href="https://github.com/microsoft/terminal" target="_blank" rel="noopener noreferrer">OFFICIAL REPOSITORY <span>↗</span></a>
+</article>
+<article class="executor-card" data-platform="pc" data-search="python official interpreter runtime windows automation scripts">
+<div class="executor-card-top"><div class="executor-mark">Py</div><span class="executor-platform">WINDOWS / PC</span></div><h2>Python</h2><p>A widely used programming language and interpreter for automation, utilities, development scripts and learning.</p><div class="executor-meta"><span>FREE</span><span>INTERPRETER</span></div><a class="executor-link" href="https://www.python.org/downloads/" target="_blank" rel="noopener noreferrer">OFFICIAL DOWNLOADS <span>↗</span></a>
+</article>
+<article class="executor-card" data-platform="pc" data-search="node.js javascript runtime official windows scripts">
+<div class="executor-card-top"><div class="executor-mark">JS</div><span class="executor-platform">WINDOWS / PC</span></div><h2>Node.js</h2><p>A JavaScript runtime for running scripts and building command-line tools and applications outside the browser.</p><div class="executor-meta"><span>FREE</span><span>JAVASCRIPT RUNTIME</span></div><a class="executor-link" href="https://nodejs.org/en/download" target="_blank" rel="noopener noreferrer">OFFICIAL DOWNLOADS <span>↗</span></a>
+</article>
+</section>
+<div class="executor-note"><strong style="color:var(--text)">Safety note:</strong> This directory links to official development tools and runtimes. It does not distribute third-party Roblox exploit/injection executors. Download software only from its verified publisher and check the current release/version on its official page.</div>
+</main>
+<footer class="footer"><a class="brand" href="index.html"><b>D<span>_</span></b> DYSERREALM<small>/SCRIPT</small></a><span class="kicker">TOOLS FOR CREATORS // DYserrealm</span></footer>
+<script>
+(()=>{const search=document.querySelector("#executor-search"),cards=[...document.querySelectorAll(".executor-card")],filters=[...document.querySelectorAll(".executor-filter")];let filter="all";function render(){const q=search.value.trim().toLowerCase();let count=0;cards.forEach(card=>{const okPlatform=filter==="all"||card.dataset.platform.split(" ").includes(filter);const okText=(card.dataset.search+" "+card.innerText).toLowerCase().includes(q);card.hidden=!(okPlatform&&okText);if(!card.hidden)count++});let empty=document.querySelector(".executor-empty");if(!count&&!empty){empty=document.createElement("div");empty.className="executor-empty";empty.textContent="NO MATCHING TOOLS FOUND.";document.querySelector("#executor-grid").append(empty)}if(empty)empty.hidden=count>0}search.addEventListener("input",render);filters.forEach(btn=>btn.addEventListener("click",()=>{filter=btn.dataset.filter;filters.forEach(x=>x.classList.toggle("active",x===btn));render()}));const menu=document.querySelector("#mobile-menu");menu.addEventListener("click",()=>document.querySelector(".topbar nav").classList.toggle("open"));document.querySelectorAll(".topbar nav a").forEach(a=>a.addEventListener("click",()=>document.querySelector(".topbar nav").classList.remove("open")))})();
+</script>
+</body>
+</html>
