@@ -247,3 +247,20 @@ body{background:radial-gradient(ellipse at 12% 38%,#38204d16,transparent 30%),ra
 
 /* Public profile avatars */
 .profile-avatar.has-avatar{overflow:hidden;padding:0;border-radius:50%}.profile-avatar.has-avatar img{display:block;width:100%;height:100%;object-fit:cover}.profile-detail-top .profile-avatar.has-avatar{flex:0 0 80px}
+
+
+/* User-customizable button colors */
+:root{--button-primary-color:#b5ff3b;--button-primary-ink:#111006;--button-secondary-color:#c7a0ff;--button-secondary-border:#c7a0ff66}
+.btn.primary{background:var(--button-primary-color,var(--green));color:var(--button-primary-ink,#111006)}
+.btn.primary:hover{background:color-mix(in srgb,var(--button-primary-color,var(--green)) 78%,white)}
+.btn.outline,.btn.ghost{color:var(--button-secondary-color,#c7a0ff);border-color:var(--button-secondary-border,#c7a0ff66)}
+#settings-form .settings-workspace .button-color-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:22px 0}
+#settings-form .settings-workspace .button-color-option{display:flex;align-items:center;justify-content:space-between;gap:15px;min-width:0;padding:16px;border:1px solid #ffffff16;border-radius:9px;background:#111015}
+.button-color-option span{display:grid;gap:6px}
+.button-color-option strong{color:#f2f3f5;font:600 12px var(--display);letter-spacing:0}
+.button-color-option small{color:#aaa6b2;font:11px/1.5 var(--display);letter-spacing:0}
+#settings-form .settings-workspace .button-color-option input[type=color]{width:52px;height:44px;flex:0 0 52px;padding:4px;border-radius:8px;cursor:pointer}
+.button-color-preview{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:16px;margin:0 0 14px;border:1px dashed #ffffff20;border-radius:9px}
+.button-color-preview>span{margin-right:auto;color:#8f879a;font:9px var(--mono);letter-spacing:1px}
+#button-colors-reset{margin-top:3px}
+@media(max-width:560px){#settings-form .settings-workspace .button-color-controls{grid-template-columns:1fr}.button-color-preview{align-items:stretch}.button-color-preview>span{width:100%}}
