@@ -8,7 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css?v=20261019-redesign1">
-<link rel="stylesheet" href="theme.css?v=20261019-forestphoto">
+<link rel="stylesheet" href="theme.css?v=20261019-scriptprice2">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 .generator-page{min-height:calc(100vh - 160px);display:grid;place-items:center;padding:45px 20px}
 .generator-wrap{width:min(100%,900px)}.generator-top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:24px;flex-wrap:wrap}
@@ -16,7 +17,28 @@
 .generator-wrap .key-visual{display:none}.generator-wrap .key-controls{grid-template-columns:repeat(2,minmax(0,1fr))}
 .generator-wrap .key-controls button{grid-column:1/-1;min-height:50px}.generator-wrap .key-output{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 #key-output{overflow-wrap:anywhere;word-break:break-word}.generator-subtitle{color:#a8b3c1;line-height:1.8;max-width:600px}
-@media(max-width:560px){.generator-wrap .key-controls{grid-template-columns:1fr}.generator-wrap .key-output{align-items:flex-start;flex-direction:column}.generator-wrap .key-output .btn{width:100%}}
+#generator-app.hidden,#key-locked.hidden,#key-auth-modal.hidden{display:none!important}
+.key-locked{width:min(100%,720px);padding:clamp(28px,6vw,58px);text-align:center;border:1px solid rgba(53,240,208,.3);border-radius:22px;background:linear-gradient(145deg,rgba(0,31,35,.93),rgba(5,13,21,.96));box-shadow:0 26px 75px rgba(0,0,0,.38),inset 0 1px rgba(255,255,255,.04)}
+.key-lock-icon{width:88px;height:88px;margin:0 auto 20px;display:grid;place-items:center;border:1px solid rgba(53,240,208,.45);border-radius:24px;background:rgba(53,240,208,.08);font-size:44px;box-shadow:0 0 38px rgba(53,240,208,.12)}
+.key-locked h1{font-size:clamp(30px,5vw,46px);line-height:1.1;margin:0 0 14px}
+.key-locked p{max-width:490px;margin:0 auto 24px;color:#afc7c8;line-height:1.8;font-size:14px}
+.key-lock-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.key-lock-actions .btn{min-width:155px;min-height:46px}
+#key-user-status{max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#key-auth-modal{position:fixed;inset:0;z-index:2000;display:grid;place-items:center;padding:18px}
+.key-auth-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.77);backdrop-filter:blur(8px)}
+.key-auth-card{position:relative;z-index:1;width:min(100%,480px);max-height:calc(100vh - 36px);overflow:auto;padding:30px;border:1px solid rgba(53,240,208,.34);border-radius:18px;background:#06171b;box-shadow:0 30px 100px rgba(0,0,0,.55)}
+.key-auth-card h2{margin:8px 45px 10px 0;font-size:28px}
+.key-auth-card>p{color:#a8bfc0;line-height:1.65;font-size:13px}
+.key-auth-card label{display:block;margin:14px 0;color:#dff6f4;font-size:11px;letter-spacing:.8px}
+.key-auth-card input{display:block;width:100%;margin-top:7px;padding:12px;border:1px solid #335054;border-radius:8px;background:#041013;color:#f4ffff;outline:none}
+.key-auth-card input:focus{border-color:#35f0d0;box-shadow:0 0 0 3px rgba(53,240,208,.09)}
+.key-auth-card .key-auth-close{position:absolute;right:18px;top:18px;width:36px;height:36px;border:1px solid #315054;border-radius:8px;background:#0b2529;color:white;font-size:22px;cursor:pointer}
+.key-auth-card .key-auth-submit{width:100%;margin-top:7px}
+.key-auth-message{min-height:20px;color:#a4f4e3;font-size:12px;line-height:1.6}
+.key-auth-switch{margin:15px 0 0!important;text-align:center}
+.key-auth-switch button{border:0;background:none;color:#60f3d7;text-decoration:underline;cursor:pointer}
+@media(max-width:560px){.generator-wrap .key-controls{grid-template-columns:1fr}.generator-wrap .key-output{align-items:flex-start;flex-direction:column}.generator-wrap .key-output .btn{width:100%}.key-locked{padding:30px 20px}.key-auth-card{padding:25px 20px}.account{gap:6px}}
 </style>
 </head>
 <body>
@@ -24,32 +46,100 @@
 <header class="topbar">
 <a class="brand" href="index.html"><b>D<span>_</span></b> DYSERREALM<small>/SCRIPT</small></a>
 <nav class="site-tabs"><a href="index.html">HOME</a><a href="feed.html">FEED</a><a href="library.html">SCRIPT LIBRARY</a><a class="active-tab" aria-current="page" href="key-generator.html">KEY GENERATOR</a></nav>
-<div class="account"><span class="kicker">KEY LAB / 01</span></div>
+<div class="account"><span id="key-user-status" class="kicker">CHECKING SESSION…</span><button id="key-logout" class="btn ghost hidden" type="button">LOG OUT</button></div>
 </header>
 <main class="generator-page">
-<div class="generator-wrap">
-<div class="generator-top"><div><div class="kicker"><span class="status-dot"></span> STANDALONE TOOL</div><h1 style="margin:8px 0 0">KEY <em>GENERATOR.</em></h1></div><a href="index.html">← BACK TO DYSERREALM</a></div>
-<p class="generator-subtitle">Generate a random key directly in your browser. This standalone page contains only the key generator; generated keys are not registered or validated by a server.</p>
+<section id="key-locked" class="key-locked" aria-labelledby="key-lock-title">
+<div class="key-lock-icon" aria-hidden="true">🔒</div>
+<div class="kicker"><span class="status-dot"></span> ACCESS RESTRICTED / KEY LAB</div>
+<h1 id="key-lock-title">KEY GENERATOR <em>LOCKED.</em></h1>
+<p>Create an account or log in before generating keys. This tool is available to registered members only.</p>
+<div class="key-lock-actions">
+<button id="key-signup-open" class="btn primary" type="button">CREATE ACCOUNT ↗</button>
+<button id="key-login-open" class="btn outline" type="button">LOG IN</button>
+</div>
+</section>
+<div id="generator-app" class="generator-wrap hidden">
+<div class="generator-top"><div><div class="kicker"><span class="status-dot"></span> MEMBER TOOL / UNLOCKED</div><h1 style="margin:8px 0 0">KEY <em>GENERATOR.</em></h1></div><a href="index.html">← BACK TO DYSERREALM</a></div>
+<p class="generator-subtitle">Generate a random key directly in your browser. Generated keys are not registered or validated by a server.</p>
 <section class="key-panel">
 <div class="kicker">SECURITY WORKBENCH / LOCAL MODE</div>
 <div class="key-controls">
 <label>GROUPS<select id="key-groups"><option value="3">3 × 4</option><option value="4" selected>4 × 4</option><option value="5">5 × 4</option><option value="6">6 × 4</option></select></label>
 <label>PREFIX<input id="key-prefix" maxlength="10" value="DS"></label>
-<button id="generate-key" class="btn primary">GENERATE KEY ↻</button>
+<button id="generate-key" class="btn primary" type="button">GENERATE KEY ↻</button>
 </div>
-<div class="key-output"><code id="key-output">DS-XXXX-XXXX-XXXX-XXXX</code><button id="copy-key" class="btn outline">COPY KEY</button></div>
+<div class="key-output"><code id="key-output">DS-XXXX-XXXX-XXXX-XXXX</code><button id="copy-key" class="btn outline" type="button">COPY KEY</button></div>
 <small id="key-message" role="status">LOCAL GENERATION // READY</small>
 </section>
 </div>
 </main>
 <footer><span class="brand"><b>D<span>_</span></b> DYSERREALM <small>/SCRIPT</small></span><span>© 2026 DYSERREALM SCRIPT</span><div class="footer-links"><span>GENERATED LOCALLY.</span></div></footer>
+
+<div id="key-auth-modal" class="hidden" role="dialog" aria-modal="true" aria-labelledby="key-auth-title">
+<div class="key-auth-backdrop" data-close-key-auth></div>
+<form id="key-auth-form" class="key-auth-card">
+<button type="button" class="key-auth-close" aria-label="Close" data-close-key-auth>×</button>
+<div class="kicker">DYSERREALM / MEMBER ACCESS</div>
+<h2 id="key-auth-title">CREATE ACCOUNT.</h2>
+<p id="key-auth-subtitle">Join the realm to unlock the Key Generator.</p>
+<label id="key-auth-name-label">DISPLAY NAME<input id="key-auth-name" maxlength="32" autocomplete="nickname"></label>
+<label id="key-auth-roblox-label">ROBLOX USERNAME (OPTIONAL)<input id="key-auth-roblox" maxlength="32" autocomplete="off"></label>
+<label>EMAIL<input id="key-auth-email" type="email" required autocomplete="email"></label>
+<label>PASSWORD<input id="key-auth-password" type="password" minlength="6" required autocomplete="current-password"></label>
+<p id="key-auth-message" class="key-auth-message" role="status"></p>
+<button id="key-auth-submit" class="btn primary key-auth-submit" type="submit">CREATE ACCOUNT ↗</button>
+<p class="key-auth-switch"><span id="key-auth-switch-copy">Already have an account?</span> <button type="button" id="key-auth-switch">LOG IN</button></p>
+</form>
+</div>
+
 <script>
 (()=>{"use strict";
+const URL="https://krractyhrblivsejrpdm.supabase.co",KEY="sb_publishable_tFu5Dd07GWrVAS7p6_rcFQ_rgKhNqSg";
 const $=s=>document.querySelector(s);
-function generate(){const n=Math.max(3,Math.min(6,Number($("#key-groups").value)||4));const prefix=$("#key-prefix").value.replace(/[^a-z0-9]/gi,"").slice(0,10).toUpperCase();const alphabet="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";const bytes=new Uint8Array(n*4);if(!window.crypto||!crypto.getRandomValues){$("#key-message").textContent="SECURE RANDOM GENERATOR UNAVAILABLE";return}crypto.getRandomValues(bytes);const parts=[];for(let i=0;i<bytes.length;i+=4)parts.push([...bytes.slice(i,i+4)].map(b=>alphabet[b%alphabet.length]).join(""));$("#key-output").textContent=(prefix?prefix+"-":"")+parts.join("-");$("#key-message").textContent="GENERATED LOCALLY // NOT SERVER-VALIDATED"}
+let client=null,currentUser=null,authMode="signup";
+function showAuth(mode){authMode=mode;const signUp=mode==="signup";$("#key-auth-title").textContent=signUp?"CREATE ACCOUNT.":"WELCOME BACK.";$("#key-auth-subtitle").textContent=signUp?"Join the realm to unlock the Key Generator.":"Log in to unlock the Key Generator.";$("#key-auth-name-label").classList.toggle("hidden",!signUp);$("#key-auth-roblox-label").classList.toggle("hidden",!signUp);$("#key-auth-name").required=signUp;$("#key-auth-message").textContent="";$("#key-auth-submit").textContent=signUp?"CREATE ACCOUNT ↗":"LOG IN ↗";$("#key-auth-switch-copy").textContent=signUp?"Already have an account?":"New to the realm?";$("#key-auth-switch").textContent=signUp?"LOG IN":"CREATE ACCOUNT";$("#key-auth-modal").classList.remove("hidden");document.body.style.overflow="hidden";$("#key-auth-email").focus()}
+function closeAuth(){ $("#key-auth-modal").classList.add("hidden");document.body.style.overflow=""}
+function setMember(user){currentUser=user||null;const locked=!currentUser;$("#key-locked").classList.toggle("hidden",!locked);$("#generator-app").classList.toggle("hidden",locked);$("#key-logout").classList.toggle("hidden",locked);$("#key-user-status").textContent=locked?"MEMBERS ONLY":(currentUser.user_metadata?.display_name||currentUser.email?.split("@")[0]||"MEMBER").toUpperCase();if(locked)$("#key-user-status").textContent="KEY LAB / LOCKED";if(locked&& !$("#key-auth-modal").classList.contains("hidden"))closeAuth()}
+function generate(){if(!currentUser){setMember(null);return showAuth("signup")}const n=Math.max(3,Math.min(6,Number($("#key-groups").value)||4));const prefix=$("#key-prefix").value.replace(/[^a-z0-9]/gi,"").slice(0,10).toUpperCase();const alphabet="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";const bytes=new Uint8Array(n*4);if(!window.crypto||!crypto.getRandomValues){$("#key-message").textContent="SECURE RANDOM GENERATOR UNAVAILABLE";return}crypto.getRandomValues(bytes);const parts=[];for(let i=0;i<bytes.length;i+=4)parts.push([...bytes.slice(i,i+4)].map(b=>alphabet[b%alphabet.length]).join(""));$("#key-output").textContent=(prefix?prefix+"-":"")+parts.join("-");$("#key-message").textContent="GENERATED LOCALLY // NOT SERVER-VALIDATED"}
+$("#key-signup-open").addEventListener("click",()=>showAuth("signup"));
+$("#key-login-open").addEventListener("click",()=>showAuth("login"));
+$("#key-auth-switch").addEventListener("click",()=>showAuth(authMode==="signup"?"login":"signup"));
+$("#key-auth-modal").addEventListener("click",e=>{if(e.target.closest("[data-close-key-auth]"))closeAuth()});
+$("#key-auth-form").addEventListener("submit",async e=>{
+ e.preventDefault();if(!client)return;
+ const button=$("#key-auth-submit"),message=$("#key-auth-message");
+ button.disabled=true;message.textContent="CONTACTING AUTH SERVER…";
+ try{
+  const email=$("#key-auth-email").value.trim(),password=$("#key-auth-password").value;
+  let result;
+  if(authMode==="signup"){
+   result=await client.auth.signUp({email,password,options:{data:{display_name:$("#key-auth-name").value.trim(),roblox_username:$("#key-auth-roblox").value.trim()}}});
+   if(result.error)throw result.error;
+   if(!result.data.session){message.textContent="Account created. Check your email to confirm it, then log in here.";return}
+   setMember(result.data.user);closeAuth();
+  }else{
+   result=await client.auth.signInWithPassword({email,password});
+   if(result.error)throw result.error;
+   setMember(result.data.user);closeAuth();
+  }
+ }catch(error){
+  const m=error?.message||"Something went wrong.";
+  message.textContent=/Invalid login credentials/i.test(m)?"Email or password is incorrect.":/Email not confirmed/i.test(m)?"Confirm your email using the link we sent.":/User already registered/i.test(m)?"That email already has an account. Log in instead.":m;
+ }finally{button.disabled=false}
+});
 $("#generate-key").addEventListener("click",generate);
-$("#copy-key").addEventListener("click",async()=>{try{await navigator.clipboard.writeText($("#key-output").textContent);$("#key-message").textContent="COPIED TO CLIPBOARD"}catch{$("#key-message").textContent="CLIPBOARD ACCESS DENIED — SELECT AND COPY MANUALLY"}});
-generate();
+$("#copy-key").addEventListener("click",async()=>{if(!currentUser){setMember(null);return showAuth("signup")}try{await navigator.clipboard.writeText($("#key-output").textContent);$("#key-message").textContent="COPIED TO CLIPBOARD"}catch{$("#key-message").textContent="CLIPBOARD ACCESS DENIED — SELECT AND COPY MANUALLY"}});
+$("#key-logout").addEventListener("click",async()=>{if(client)await client.auth.signOut();setMember(null)});
+async function init(){
+ if(!window.supabase?.createClient){$("#key-user-status").textContent="AUTH UNAVAILABLE";$("#key-auth-message").textContent="Authentication could not load. Refresh the page and try again.";return}
+ client=window.supabase.createClient(URL,KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+ try{const{data,error}=await client.auth.getSession();if(error)throw error;setMember(data.session?.user||null)}
+ catch(error){setMember(null);$("#key-user-status").textContent="SESSION CHECK FAILED";$("#key-auth-message").textContent=error?.message||"Could not check your session."}
+ client.auth.onAuthStateChange((_event,session)=>setMember(session?.user||null));
+}
+document.addEventListener("DOMContentLoaded",init);
 })();
 </script>
-</body></html>
+</body>
+</html>
