@@ -64,3 +64,11 @@ on conflict (user_id) do update set role = 'creator';
 
 -- If the query above inserts 0 rows, make sure you have registered and confirmed
 -- that account on the website, then replace the email and run the INSERT again.
+
+-- OPTIONAL: give another registered account the Admin role.
+-- Uncomment the query below, replace the email, and run it separately.
+-- insert into public.site_roles (user_id, role)
+-- select id, 'admin'
+-- from auth.users
+-- where lower(email) = lower('ADMIN_ACCOUNT_EMAIL@example.com')
+-- on conflict (user_id) do update set role = 'admin';
