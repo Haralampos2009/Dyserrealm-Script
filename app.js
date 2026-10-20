@@ -73,7 +73,7 @@ async function saveSettingsProfile(){
     msg.textContent="AVATAR STORAGE UNAVAILABLE — TRYING DIRECT PROFILE SAVE…";
    }else{
     const publicResult=db.storage.from("profile-avatars").getPublicUrl(path);
-    avatarUrl=publicResult.data?.publicUrl||"";
+    avatarUrl=publicResult.data?.publicUrl||"";if(avatarUrl)avatarUrl+=(avatarUrl.includes("?")?"&":"?")+"v="+Date.now();
     if(!avatarUrl)throw new Error("Supabase did not return a public avatar URL.");
    }
   }
