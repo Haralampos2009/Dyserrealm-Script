@@ -8,8 +8,9 @@
 <title>Executors // Dyserrealm Script</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261020-executors1">
+<link rel="stylesheet" href="style.css?v=20261020-executor-roles1">
 <link rel="stylesheet" href="theme.css?v=20261020-schemafallback5">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>body.executors-page main{min-height:calc(100vh - 160px)}body.executors-page .site-tabs a[href="executors.html"]{color:#caff91;border-color:#b7f36b55;background:#b7f36b12}</style>
 </head>
 <body class="executors-page">
@@ -17,7 +18,7 @@
 <header class="topbar">
 <a class="brand" href="index.html"><b>D<span>_</span></b> DYSERREALM<small>/SCRIPT</small></a>
 <nav class="site-tabs" aria-label="Main navigation"><a href="index.html">HOME</a><a href="feed.html">FEED</a><a href="library.html">SCRIPT LIBRARY</a><a href="key-generator.html">KEY GENERATOR</a><a class="active-tab" aria-current="page" href="executors.html">EXECUTORS</a></nav>
-<div class="account"><a class="btn ghost" href="library.html">SCRIPT LIBRARY ↗</a><button id="mobile-menu" class="btn ghost menu" type="button" aria-label="Toggle navigation">☰</button></div>
+<div class="account"><a class="btn ghost" id="executor-login-link" href="index.html">LOG IN ↗</a><span id="executor-role-badge" class="executor-role-badge" hidden></span><button id="mobile-menu" class="btn ghost menu" type="button" aria-label="Toggle navigation">☰</button></div>
 </header>
 <main class="executor-page">
 <section class="executor-hero">
@@ -25,7 +26,7 @@
 <h1>EXECUTORS<span style="color:var(--purple)">.</span><br><em>RUN YOUR WORK.</em></h1>
 <p>A curated directory of Roblox development tools and Windows / PC script runtimes. Check each official project page for current versions, system requirements and installation instructions.</p>
 </section>
-<div class="section-head"><div><div class="kicker">01 / THE DIRECTORY</div><h2>Find your <em>tool.</em></h2><p>Official project pages only. Version details are maintained by each publisher.</p></div><span class="kicker">7 ENTRIES</span></div>
+<div class="section-head"><div><div class="kicker">01 / THE DIRECTORY</div><h2>Find your <em>tool.</em></h2><p>Official project pages only. Version details are maintained by each publisher.</p></div><span class="kicker" id="executor-total">7 ENTRIES</span></div>
 <div class="executor-toolbar">
 <input id="executor-search" class="executor-search" type="search" placeholder="SEARCH TOOLS..." aria-label="Search tools">
 <div class="executor-filters" role="group" aria-label="Filter by platform">
@@ -34,6 +35,18 @@
 <button class="executor-filter" data-filter="pc" type="button">WINDOWS / PC</button>
 </div>
 </div>
+<section id="executor-admin-panel" class="executor-admin-panel" hidden aria-labelledby="executor-admin-title">
+  <div class="kicker">CREATOR TOOLS / RESTRICTED ACCESS</div><h2 id="executor-admin-title">Add a new <em>entry.</em></h2><p>Only accounts with the Creator or Admin role can publish a tool to the directory.</p>
+  <form id="executor-add-form" class="executor-add-form">
+    <label>TOOL NAME<input id="new-executor-name" maxlength="80" required placeholder="e.g. My development tool"></label>
+    <label>PLATFORM<select id="new-executor-platform" required><option value="roblox">ROBLOX</option><option value="pc">WINDOWS / PC</option><option value="roblox pc">ROBLOX + PC</option></select></label>
+    <label>VERSION / STATUS<input id="new-executor-version" maxlength="80" placeholder="e.g. v1.2 or See official website"></label>
+    <label class="executor-add-wide">DESCRIPTION<textarea id="new-executor-description" rows="3" maxlength="600" required placeholder="What does this tool do?"></textarea></label>
+    <label class="executor-add-wide">OFFICIAL WEBSITE URL<input id="new-executor-url" type="url" maxlength="500" required placeholder="https://example.com"></label>
+    <p id="executor-add-message" class="executor-add-message executor-add-wide" role="status"></p>
+    <button id="executor-add-submit" class="btn primary executor-add-wide" type="submit">＋ PUBLISH TOOL</button>
+  </form>
+</section>
 <section id="executor-grid" class="executor-grid" aria-live="polite">
 <article class="executor-card" data-platform="roblox" data-search="roblox studio official roblox create test publish games luau">
 <div class="executor-card-top"><div class="executor-mark">RS</div><span class="executor-platform">ROBLOX</span></div><h2>Roblox Studio</h2><p>The official environment for creating, testing and publishing Roblox experiences, with built-in Luau scripting and playtesting tools.</p><div class="executor-meta"><span>OFFICIAL</span><span>FREE</span><span>EDITOR + RUNTIME</span></div><a class="executor-link" href="https://create.roblox.com/" target="_blank" rel="noopener noreferrer">OFFICIAL WEBSITE <span>↗</span></a>
@@ -61,7 +74,25 @@
 </main>
 <footer class="footer"><a class="brand" href="index.html"><b>D<span>_</span></b> DYSERREALM<small>/SCRIPT</small></a><span class="kicker">TOOLS FOR CREATORS // DYserrealm</span></footer>
 <script>
-(()=>{const search=document.querySelector("#executor-search"),cards=[...document.querySelectorAll(".executor-card")],filters=[...document.querySelectorAll(".executor-filter")];let filter="all";function render(){const q=search.value.trim().toLowerCase();let count=0;cards.forEach(card=>{const okPlatform=filter==="all"||card.dataset.platform.split(" ").includes(filter);const okText=(card.dataset.search+" "+card.innerText).toLowerCase().includes(q);card.hidden=!(okPlatform&&okText);if(!card.hidden)count++});let empty=document.querySelector(".executor-empty");if(!count&&!empty){empty=document.createElement("div");empty.className="executor-empty";empty.textContent="NO MATCHING TOOLS FOUND.";document.querySelector("#executor-grid").append(empty)}if(empty)empty.hidden=count>0}search.addEventListener("input",render);filters.forEach(btn=>btn.addEventListener("click",()=>{filter=btn.dataset.filter;filters.forEach(x=>x.classList.toggle("active",x===btn));render()}));const menu=document.querySelector("#mobile-menu");menu.addEventListener("click",()=>document.querySelector(".topbar nav").classList.toggle("open"));document.querySelectorAll(".topbar nav a").forEach(a=>a.addEventListener("click",()=>document.querySelector(".topbar nav").classList.remove("open")))})();
+(()=>{"use strict";
+const SUPABASE_URL="https://krractyhrblivsejrpdm.supabase.co";
+const SUPABASE_KEY="sb_publishable_tFu5Dd07GWrVAS7p6_rcFQ_rgKhNqSg";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const search=document.querySelector("#executor-search"),grid=document.querySelector("#executor-grid"),filters=[...document.querySelectorAll(".executor-filter")];
+const adminPanel=document.querySelector("#executor-admin-panel"),loginLink=document.querySelector("#executor-login-link"),roleBadge=document.querySelector("#executor-role-badge"),total=document.querySelector("#executor-total");
+let filter="all",added=[],sessionUser=null,canManage=false;
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function showMessage(message,error=false){const el=document.querySelector("#executor-add-message");el.textContent=message;el.classList.toggle("error",error)}
+function addedCard(item){const platformLabel=item.platform==="pc"?"WINDOWS / PC":item.platform==="roblox pc"?"ROBLOX + PC":"ROBLOX";return '<article class="executor-card executor-added-card" data-added="true" data-platform="'+esc(item.platform)+'" data-search="'+esc([item.name,item.description,item.version,platformLabel].join(" "))+'"><div class="executor-card-top"><div class="executor-mark">＋</div><span class="executor-platform">'+esc(platformLabel)+'</span></div><h2>'+esc(item.name)+'</h2><p>'+esc(item.description)+'</p><div class="executor-meta"><span>'+esc(item.version||"SEE WEBSITE")+'</span><span>COMMUNITY LISTING</span></div><a class="executor-link" href="'+esc(item.official_url)+'" target="_blank" rel="noopener noreferrer">OFFICIAL WEBSITE <span>↗</span></a></article>'}
+function render(){const q=search.value.trim().toLowerCase();let count=0;[...grid.querySelectorAll(".executor-card")].forEach(card=>{const okPlatform=filter==="all"||card.dataset.platform.split(" ").includes(filter);const okText=(card.dataset.search+" "+card.innerText).toLowerCase().includes(q);card.hidden=!(okPlatform&&okText);if(!card.hidden)count++});let empty=grid.querySelector(".executor-empty");if(!count&&!empty){empty=document.createElement("div");empty.className="executor-empty";empty.textContent="NO MATCHING TOOLS FOUND.";grid.append(empty)}if(empty)empty.hidden=count>0;total.textContent=grid.querySelectorAll(".executor-card").length+" ENTRIES"}
+function drawAdded(){grid.querySelectorAll(".executor-added-card").forEach(card=>card.remove());added.forEach(item=>grid.insertAdjacentHTML("beforeend",addedCard(item)));render()}
+async function loadAdded(){const{data,error}=await db.from("executors").select("id,name,platform,description,version,official_url,created_at").order("created_at",{ascending:false}).limit(100);if(error){console.warn("Could not load community tool listings:",error.message);return}added=data||[];drawAdded()}
+async function checkRole(user){sessionUser=user;canManage=false;adminPanel.hidden=true;roleBadge.hidden=true;loginLink.hidden=!!user;if(!user){loginLink.textContent="LOG IN ↗";loginLink.href="index.html";return}const{data,error}=await db.from("site_roles").select("role").eq("user_id",user.id).maybeSingle();if(error){console.warn("Role lookup failed. Run executors-access-setup.sql in Supabase SQL Editor.",error.message);return}if(data&&["creator","admin"].includes(data.role)){canManage=true;adminPanel.hidden=false;roleBadge.hidden=false;roleBadge.textContent=data.role==="creator"?"✦ CREATOR":"✦ ADMIN";loginLink.hidden=true}}
+search.addEventListener("input",render);filters.forEach(btn=>btn.addEventListener("click",()=>{filter=btn.dataset.filter;filters.forEach(x=>x.classList.toggle("active",x===btn));render()}));
+document.querySelector("#executor-add-form").addEventListener("submit",async event=>{event.preventDefault();if(!canManage||!sessionUser){showMessage("Access denied. Creator/Admin role required.",true);return}const button=document.querySelector("#executor-add-submit");const name=document.querySelector("#new-executor-name").value.trim(),platform=document.querySelector("#new-executor-platform").value,description=document.querySelector("#new-executor-description").value.trim(),version=document.querySelector("#new-executor-version").value.trim()||"See official website",official_url=document.querySelector("#new-executor-url").value.trim();let parsed;try{parsed=new URL(official_url)}catch{showMessage("Enter a valid official website URL.",true);return}if(!["https:","http:"].includes(parsed.protocol)){showMessage("The URL must start with http:// or https://.",true);return}button.disabled=true;showMessage("PUBLISHING TO THE DIRECTORY…");const{data,error}=await db.from("executors").insert({name,platform,description,version,official_url,created_by:sessionUser.id}).select("id,name,platform,description,version,official_url,created_at").single();button.disabled=false;if(error){console.error(error);showMessage(/row-level security|permission denied/i.test(error.message)?"Database denied this action. Check your role and run executors-access-setup.sql.":error.message,true);return}added.unshift(data);drawAdded();event.target.reset();showMessage("TOOL PUBLISHED SUCCESSFULLY.");});
+const menu=document.querySelector("#mobile-menu");menu.addEventListener("click",()=>document.querySelector(".topbar nav").classList.toggle("open"));document.querySelectorAll(".topbar nav a").forEach(a=>a.addEventListener("click",()=>document.querySelector(".topbar nav").classList.remove("open")));
+(async()=>{const{data,error}=await db.auth.getSession();if(error)console.warn(error.message);const user=data?.session?.user||null;await checkRole(user);await loadAdded();db.auth.onAuthStateChange((_event,newSession)=>{setTimeout(()=>checkRole(newSession?.user||null),0)})})();
+})();
 </script>
 </body>
 </html>
