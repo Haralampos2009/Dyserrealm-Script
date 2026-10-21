@@ -22,7 +22,7 @@ Deno.serve(async (req) => {
 
     if (req.method === "GET") {
       const url = new URL(req.url);
-      const search = (url.searchParams.get("search") || "").trim().slice(0, 80);
+      const search = (url.searchParams.get("search") || "").replace(/[^A-Za-z0-9-]/g, "").slice(0, 80);
       let query = admin.from("keys").select("id,key,created_at,expires_at,revoked,bound_roblox_id,use_count,last_used_at,created_by_user_id").order("created_at", { ascending: false }).limit(100);
       if (search) query = query.or("key.ilike.%"+search+"%,bound_roblox_id.eq."+(/^\\d+$/.test(search) ? search : "0"));
       const { data, error } = await query;
