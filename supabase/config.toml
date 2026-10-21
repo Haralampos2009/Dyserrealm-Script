@@ -1,0 +1,8 @@
+[functions.generate-key]
+verify_jwt = true
+
+[functions.check-key]
+verify_jwt = false
+
+[functions.owner-keys]
+verify_jwt = true
