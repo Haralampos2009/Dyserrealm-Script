@@ -69,10 +69,13 @@ create or replace function public.issue_realm_key(
 language plpgsql security definer set search_path = ''
 as $$
 declare
-  v_lock text := coalesce(p_user_id::text, '') || ':' || coalesce(p_ip_hash, '');
   v_id uuid;
 begin
-  perform pg_advisory_xact_lock(hashtextextended(v_lock, 0));
+  -- Separate locks serialize both same-account and same-IP issuance attempts.
+  perform pg_advisory_xact_lock(hashtextextended('ip:' || coalesce(p_ip_hash, ''), 0));
+  if p_user_id is not null then
+    perform pg_advisory_xact_lock(hashtextextended('user:' || p_user_id::text, 0));
+  end if;
   if exists (
     select 1 from public.keys k
     where k.revoked = false and k.expires_at > now()
