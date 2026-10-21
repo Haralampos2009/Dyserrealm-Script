@@ -14,7 +14,7 @@ function reply(body: unknown, status = 200) { return new Response(JSON.stringify
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
   try {
-    const token = (req.headers.get("Authorization") || "").replace(/^Bearer\\s+/i, "");
+        const token = (req.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "");
     if (!token) return reply({ error: "login_required" }, 401);
     const admin = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, { auth: { persistSession: false } });
     const { data: auth, error: authError } = await admin.auth.getUser(token);
@@ -24,7 +24,7 @@ Deno.serve(async (req) => {
       const url = new URL(req.url);
       const search = (url.searchParams.get("search") || "").replace(/[^A-Za-z0-9-]/g, "").slice(0, 80);
       let query = admin.from("keys").select("id,key,created_at,expires_at,revoked,bound_roblox_id,use_count,last_used_at,created_by_user_id").order("created_at", { ascending: false }).limit(100);
-      if (search) query = query.or("key.ilike.%"+search+"%,bound_roblox_id.eq."+(/^\\d+$/.test(search) ? search : "0"));
+            if (search) query = query.or("key.ilike.%"+search+"%,bound_roblox_id.eq."+(/^\d+$/.test(search) ? search : "0"));
       const { data, error } = await query;
       if (error) return reply({ error: "temporarily_unavailable" }, 503);
       return reply({ keys: data || [] });
