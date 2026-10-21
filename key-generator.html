@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="style.css?v=20261020-navfix2">
 <link rel="stylesheet" href="theme.css?v=20261019-scriptprice2">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <style>
 .site-tabs a[href="profiles.html"]{display:none!important}
 .generator-page{min-height:calc(100vh - 160px);display:grid;place-items:center;padding:45px 20px}
@@ -62,20 +63,18 @@
 </section>
 <div id="generator-app" class="generator-wrap hidden">
 <div class="generator-top"><div><div class="kicker"><span class="status-dot"></span> MEMBER TOOL / UNLOCKED</div><h1 style="margin:8px 0 0">KEY <em>GENERATOR.</em></h1></div><a href="index.html">← BACK TO DYSERREALM</a></div>
-<p class="generator-subtitle">Generate a random key directly in your browser. Generated keys are not registered or validated by a server.</p>
+<p class="generator-subtitle">Keys are generated and registered securely on the server. Each key follows the fixed DS-XXXX-XXXX-XXXX-XXXX format and expires automatically.</p>
 <section class="key-panel">
-<div class="kicker">SECURITY WORKBENCH / LOCAL MODE</div>
-<div class="key-controls">
-<label>GROUPS<select id="key-groups"><option value="3">3 × 4</option><option value="4" selected>4 × 4</option><option value="5">5 × 4</option><option value="6">6 × 4</option></select></label>
-<label>PREFIX<input id="key-prefix" maxlength="10" value="DS"></label>
-<button id="generate-key" class="btn primary" type="button">GENERATE KEY ↻</button>
-</div>
+<div class="kicker">SERVER SECURITY / VERIFIED GENERATION</div>
+<div style="margin:18px 0;display:flex;justify-content:center"><div class="cf-turnstile" data-sitekey="REPLACE_WITH_CLOUDFLARE_TURNSTILE_SITE_KEY" data-theme="dark"></div></div>
+<div class="key-controls"><button id="generate-key" class="btn primary" type="button">GENERATE KEY ↻</button></div>
 <div class="key-output"><code id="key-output">DS-XXXX-XXXX-XXXX-XXXX</code><button id="copy-key" class="btn outline" type="button">COPY KEY</button></div>
-<small id="key-message" role="status">LOCAL GENERATION // READY</small>
+<small id="key-expiry" role="status">VALID FOR 24 HOURS AFTER ISSUE</small><br>
+<small id="key-message" role="status">SERVER GENERATION // READY</small>
 </section>
 </div>
 </main>
-<footer><span class="brand"><b>D<span>_</span></b> DYSERREALM <small>/SCRIPT</small></span><span>© 2026 DYSERREALM SCRIPT</span><div class="footer-links"><span>GENERATED LOCALLY.</span></div></footer>
+<footer><span class="brand"><b>D<span>_</span></b> DYSERREALM <small>/SCRIPT</small></span><span>© 2026 DYSERREALM SCRIPT</span><div class="footer-links"><span>SERVER-VALIDATED KEYS.</span></div></footer>
 
 <div id="key-auth-modal" class="hidden" role="dialog" aria-modal="true" aria-labelledby="key-auth-title">
 <div class="key-auth-backdrop" data-close-key-auth></div>
@@ -102,7 +101,34 @@ let client=null,currentUser=null,authMode="signup";
 function showAuth(mode){authMode=mode;const signUp=mode==="signup";$("#key-auth-title").textContent=signUp?"CREATE ACCOUNT.":"WELCOME BACK.";$("#key-auth-subtitle").textContent=signUp?"Join the realm to unlock the Key Generator.":"Log in to unlock the Key Generator.";$("#key-auth-name-label").classList.toggle("hidden",!signUp);$("#key-auth-roblox-label").classList.toggle("hidden",!signUp);$("#key-auth-name").required=signUp;$("#key-auth-message").textContent="";$("#key-auth-submit").textContent=signUp?"CREATE ACCOUNT ↗":"LOG IN ↗";$("#key-auth-switch-copy").textContent=signUp?"Already have an account?":"New to the realm?";$("#key-auth-switch").textContent=signUp?"LOG IN":"CREATE ACCOUNT";$("#key-auth-modal").classList.remove("hidden");document.body.style.overflow="hidden";$("#key-auth-email").focus()}
 function closeAuth(){ $("#key-auth-modal").classList.add("hidden");document.body.style.overflow=""}
 function setMember(user){currentUser=user||null;const locked=!currentUser;$("#key-locked").classList.toggle("hidden",!locked);$("#generator-app").classList.toggle("hidden",locked);$("#key-logout").classList.toggle("hidden",locked);$("#key-user-status").textContent=locked?"MEMBERS ONLY":(currentUser.user_metadata?.display_name||currentUser.email?.split("@")[0]||"MEMBER").toUpperCase();if(locked)$("#key-user-status").textContent="KEY LAB / LOCKED";if(locked&& !$("#key-auth-modal").classList.contains("hidden"))closeAuth()}
-function generate(){if(!currentUser){setMember(null);return showAuth("signup")}const n=Math.max(3,Math.min(6,Number($("#key-groups").value)||4));const prefix=$("#key-prefix").value.replace(/[^a-z0-9]/gi,"").slice(0,10).toUpperCase();const alphabet="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";const bytes=new Uint8Array(n*4);if(!window.crypto||!crypto.getRandomValues){$("#key-message").textContent="SECURE RANDOM GENERATOR UNAVAILABLE";return}crypto.getRandomValues(bytes);const parts=[];for(let i=0;i<bytes.length;i+=4)parts.push([...bytes.slice(i,i+4)].map(b=>alphabet[b%alphabet.length]).join(""));$("#key-output").textContent=(prefix?prefix+"-":"")+parts.join("-");$("#key-message").textContent="GENERATED LOCALLY // NOT SERVER-VALIDATED"}
+function explainError(error){
+ const message=error?.message||"Request failed.";
+ if(/active_key_exists/i.test(message))return "You already have an active key. It expires before a new key can be generated.";
+ if(/daily_limit/i.test(message)||/429/.test(message))return "Daily generation limit reached. Try again later.";
+ if(/captcha_failed/i.test(message))return "Complete the CAPTCHA before generating a key.";
+ return message;
+}
+async function generate(){
+ if(!currentUser){setMember(null);return showAuth("signup")}
+ const message=$("#key-message"),button=$("#generate-key");
+ const captcha=window.turnstile?.getResponse();
+ if(!captcha){message.textContent="COMPLETE THE CAPTCHA FIRST.";return}
+ button.disabled=true;message.textContent="REQUESTING SERVER KEY…";
+ try{
+  const {data,error}=await client.functions.invoke("generate-key",{body:{turnstile_token:captcha}});
+  if(error)throw error;
+  if(!data?.key)throw new Error(data?.error||"Server did not return a key.");
+  $("#key-output").textContent=data.key;
+  const expiry=new Date(data.expires_at);
+  $("#key-expiry").textContent="EXPIRES: "+expiry.toLocaleString();
+  message.textContent="KEY CREATED AND REGISTERED ON SERVER.";
+  try{window.turnstile?.reset()}catch{}
+ }catch(error){
+  let detail=error?.message||"Request failed.";
+  try{const response=error?.context;if(response?.json){const body=await response.json();detail=body?.error||body?.message||detail}}catch{}
+  message.textContent=explainError({message:detail});
+ }finally{button.disabled=false}
+}
 $("#key-signup-open").addEventListener("click",()=>showAuth("signup"));
 $("#key-login-open").addEventListener("click",()=>showAuth("login"));
 $("#key-auth-switch").addEventListener("click",()=>showAuth(authMode==="signup"?"login":"signup"));
@@ -130,7 +156,7 @@ $("#key-auth-form").addEventListener("submit",async e=>{
  }finally{button.disabled=false}
 });
 $("#generate-key").addEventListener("click",generate);
-$("#copy-key").addEventListener("click",async()=>{if(!currentUser){setMember(null);return showAuth("signup")}try{await navigator.clipboard.writeText($("#key-output").textContent);$("#key-message").textContent="COPIED TO CLIPBOARD"}catch{$("#key-message").textContent="CLIPBOARD ACCESS DENIED — SELECT AND COPY MANUALLY"}});
+$("#copy-key").addEventListener("click",async()=>{if(!currentUser){setMember(null);return showAuth("signup")}try{const value=$("#key-output").textContent;if(!/^DS-[A-Z0-9]{4}(?:-[A-Z0-9]{4}){3}$/.test(value))throw new Error("No key to copy");await navigator.clipboard.writeText(value);$("#key-message").textContent="COPIED TO CLIPBOARD"}catch{$("#key-message").textContent="CLIPBOARD ACCESS DENIED — SELECT AND COPY MANUALLY"}});
 $("#key-logout").addEventListener("click",async()=>{if(client)await client.auth.signOut();setMember(null)});
 async function init(){
  if(!window.supabase?.createClient){$("#key-user-status").textContent="AUTH UNAVAILABLE";$("#key-auth-message").textContent="Authentication could not load. Refresh the page and try again.";return}
