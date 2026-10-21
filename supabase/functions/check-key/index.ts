@@ -17,7 +17,7 @@ Deno.serve(async (req) => {
     const url = new URL(req.url);
     const key = (url.searchParams.get("key") || "").trim().toUpperCase();
     const uidText = (url.searchParams.get("uid") || "").trim();
-    if (!/^DS-[A-Z0-9]{4}(?:-[A-Z0-9]{4}){3}$/.test(key) || !/^\\d{1,20}$/.test(uidText)) {
+        if (!/^DS-[A-Z0-9]{4}(?:-[A-Z0-9]{4}){3}$/.test(key) || !/^\d{1,20}$/.test(uidText)) {
       return reply(invalid("bad_format"));
     }
     const uid = Number(uidText);
