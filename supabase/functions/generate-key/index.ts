@@ -60,6 +60,18 @@ Deno.serve(async (req) => {
       return reply({ error: "captcha_failed", message: "Complete the CAPTCHA and try again." }, 400);
     }
 
+    // Return the signed-in user's own active key instead of issuing duplicates.
+    const { data: existing, error: existingError } = await admin.from("keys")
+      .select("key,expires_at")
+      .eq("created_by_user_id", authData.user.id)
+      .eq("revoked", false)
+      .gt("expires_at", new Date().toISOString())
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (existingError) return reply({ error: "temporarily_unavailable" }, 503);
+    if (existing) return reply({ key: existing.key, expires_at: existing.expires_at, format: "DS-XXXX-XXXX-XXXX-XXXX", existing: true });
+
     const ipLimit = await admin.rpc("consume_key_rate_limit", {
       p_bucket: "generate_ip_day", p_subject_hash: ipHash, p_limit: 3, p_window_seconds: 86400,
     });
