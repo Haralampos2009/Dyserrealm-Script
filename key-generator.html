@@ -83,6 +83,12 @@
 <div class="key-history-item" style="grid-column:1/-1"><span class="key-history-label">COUNTDOWN</span><span class="key-history-value" id="history-countdown">Waiting for a key…</span></div>
 </div>
 </section>
+<section id="issued-keys-panel" class="key-history" hidden aria-labelledby="issued-keys-title">
+ <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><h2 id="issued-keys-title">PLAYER KEYS / CREATOR VIEW.</h2><button id="issued-keys-refresh" class="btn outline" type="button">REFRESH LIST</button></div>
+ <p>Keys created for players in Creator Console. This section is shown only when the server confirms Creator/Admin access.</p>
+ <p id="issued-keys-status" class="key-history-value" role="status">Checking permissions…</p>
+ <div style="overflow:auto"><table style="width:100%;min-width:700px;border-collapse:collapse"><thead><tr><th style="text-align:left;padding:10px">KEY</th><th style="text-align:left;padding:10px">PLAYER UID</th><th style="text-align:left;padding:10px">CREATED</th><th style="text-align:left;padding:10px">EXPIRES</th><th style="text-align:left;padding:10px">STATUS</th></tr></thead><tbody id="issued-keys-rows"><tr><td colspan="5" style="padding:10px">Loading…</td></tr></tbody></table></div>
+</section>
 </div>
 </main>
 <footer><span class="brand"><b>D<span>_</span></b> DYSERREALM <small>/SCRIPT</small></span><span>© 2026 DYSERREALM SCRIPT</span><div class="footer-links"><span>SERVER-VALIDATED KEYS.</span></div></footer>
@@ -117,7 +123,33 @@ function restoreCachedKey(){stopKeyCountdown();if(!currentUser)return;try{const 
 function showAuth(mode){location.href="index.html?auth="+(mode==="login"?"login":"signup")+"&return=key-generator.html"}
 function closeAuth(){ $("#key-auth-modal").classList.add("hidden");document.body.style.overflow=""}
 function setMember(user){currentUser=user||null;const locked=!currentUser;$("#key-locked").classList.toggle("hidden",!locked);$("#generator-app").classList.toggle("hidden",locked);$("#key-user-status").textContent=locked?"MEMBERS ONLY":(currentUser.user_metadata?.display_name||currentUser.email?.split("@")[0]||"MEMBER").toUpperCase();if(locked){$("#key-user-status").textContent="KEY LAB / LOCKED";stopKeyCountdown();$("#key-output").textContent="DS-XXXX-XXXX-XXXX-XXXX";$("#key-expiry").textContent="TIME LEFT: LOG IN TO VIEW YOUR KEY";}else restoreCachedKey();}
-function explainError(error){
+ async function loadIssuedKeys(){
+  const panel=$("#issued-keys-panel"),status=$("#issued-keys-status"),rows=$("#issued-keys-rows");
+  if(!client||!currentUser)return;
+  status.textContent="CHECKING CREATOR/ADMIN PERMISSIONS…";
+  try{
+   const {data:{session}}=await client.auth.getSession();
+   if(!session)throw new Error("login_required");
+   const response=await fetch(URL+"/functions/v1/owner-keys",{method:"GET",headers:{"apikey":KEY,"Authorization":"Bearer "+session.access_token}});
+   const data=await response.json().catch(()=>({error:"invalid_response"}));
+   if(response.status===403||data.error==="forbidden"){panel.hidden=true;return}
+   if(!response.ok)throw new Error(data.error||"request_failed");
+   panel.hidden=false;
+   const list=data.keys||[];
+   const safe=v=>String(v??"—").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+   rows.innerHTML=list.length?list.map(k=>{
+    const expired=k.expires_at&&new Date(k.expires_at)<=new Date();
+    const state=k.revoked?"REVOKED":(expired?"EXPIRED":"ACTIVE");
+    const expiry=!k.expires_at?"Never":new Date(k.expires_at).toLocaleString();
+    return '<tr><td style="padding:10px;border-top:1px solid #26383a"><code>'+safe(k.key)+'</code></td><td style="padding:10px;border-top:1px solid #26383a">'+safe(k.bound_roblox_id)+'</td><td style="padding:10px;border-top:1px solid #26383a">'+safe(k.created_at?new Date(k.created_at).toLocaleString():"—")+'</td><td style="padding:10px;border-top:1px solid #26383a">'+safe(expiry)+'</td><td style="padding:10px;border-top:1px solid #26383a">'+state+'</td></tr>';
+   }).join(""):'<tr><td colspan="5" style="padding:10px">No player keys have been issued yet.</td></tr>';
+   status.textContent="LOADED "+list.length+" PLAYER KEY(S).";
+  }catch(error){
+   if(error.message==="login_required"){panel.hidden=true;return}
+   status.textContent="Could not load player keys: "+error.message;
+  }
+ }
+ function explainError(error){
  const message=error?.message||"Request failed.";
  if(/active_key_exists/i.test(message))return "You already have an active key. It expires before a new key can be generated.";
  if(/user_limit/i.test(message))return "Account limit reached: up to 3 key-generation attempts per 12 hours. Try again later.";
@@ -172,6 +204,7 @@ $("#key-auth-form").addEventListener("submit",async e=>{
  }finally{button.disabled=false}
 });
 $("#generate-key").addEventListener("click",generate);
+ $("#issued-keys-refresh").addEventListener("click",loadIssuedKeys);
 $("#copy-key").addEventListener("click",async()=>{if(!currentUser){setMember(null);return showAuth("signup")}try{const value=$("#key-output").textContent;if(!/^DS-[A-Z0-9]{4}(?:-[A-Z0-9]{4}){3}$/.test(value))throw new Error("No key to copy");await navigator.clipboard.writeText(value);$("#key-message").textContent="COPIED TO CLIPBOARD"}catch{$("#key-message").textContent="CLIPBOARD ACCESS DENIED — SELECT AND COPY MANUALLY"}});
 
 async function init(){
@@ -179,7 +212,7 @@ async function init(){
  client=window.supabase.createClient(URL,KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
  try{const{data,error}=await client.auth.getSession();if(error)throw error;setMember(data.session?.user||null)}
  catch(error){setMember(null);$("#key-user-status").textContent="SESSION CHECK FAILED";$("#key-auth-message").textContent=error?.message||"Could not check your session."}
- client.auth.onAuthStateChange((_event,session)=>setMember(session?.user||null));
+ client.auth.onAuthStateChange((_event,session)=>{setMember(session?.user||null);if(session?.user)loadIssuedKeys();else $("#issued-keys-panel").hidden=true;});if(data.session?.user)await loadIssuedKeys();
 }
 document.addEventListener("DOMContentLoaded",init);
 })();
