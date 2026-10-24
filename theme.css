@@ -533,3 +533,67 @@ html[data-season-theme="winter"] .site-tabs a::before,
 html[data-season-theme="summer"] .site-tabs a::before {
   border-color:var(--season-emphasis)!important;
 }
+
+
+/* Strong override: seasonal theme also recolors every top navigation tab,
+   including the current-page tab whose default color is set in page-level CSS. */
+html[data-season-theme="halloween"] body .site-tabs a,
+html[data-season-theme="halloween"] body .site-tabs a[href],
+html[data-season-theme="winter"] body .site-tabs a,
+html[data-season-theme="winter"] body .site-tabs a[href],
+html[data-season-theme="summer"] body .site-tabs a,
+html[data-season-theme="summer"] body .site-tabs a[href] {
+  color:var(--season-copy)!important;
+  -webkit-text-fill-color:var(--season-copy)!important;
+  border-color:color-mix(in srgb,var(--season-emphasis) 38%,transparent)!important;
+  background:color-mix(in srgb,var(--season-emphasis) 7%,transparent)!important;
+  box-shadow:none!important;
+}
+html[data-season-theme="halloween"] body .site-tabs a:hover,
+html[data-season-theme="halloween"] body .site-tabs a:focus-visible,
+html[data-season-theme="halloween"] body .site-tabs a:active,
+html[data-season-theme="winter"] body .site-tabs a:hover,
+html[data-season-theme="winter"] body .site-tabs a:focus-visible,
+html[data-season-theme="winter"] body .site-tabs a:active,
+html[data-season-theme="summer"] body .site-tabs a:hover,
+html[data-season-theme="summer"] body .site-tabs a:focus-visible,
+html[data-season-theme="summer"] body .site-tabs a:active {
+  color:var(--season-emphasis)!important;
+  -webkit-text-fill-color:var(--season-emphasis)!important;
+  border-color:var(--season-emphasis)!important;
+  background:color-mix(in srgb,var(--season-emphasis) 15%,transparent)!important;
+  box-shadow:0 0 18px color-mix(in srgb,var(--season-emphasis) 12%,transparent)!important;
+}
+html[data-season-theme="halloween"] body.feed-page .site-tabs a[href="feed.html"],
+html[data-season-theme="halloween"] body.library-page .site-tabs a[href="library.html"],
+html[data-season-theme="halloween"] body.executors-page .site-tabs a[href="executors.html"],
+html[data-season-theme="winter"] body.feed-page .site-tabs a[href="feed.html"],
+html[data-season-theme="winter"] body.library-page .site-tabs a[href="library.html"],
+html[data-season-theme="winter"] body.executors-page .site-tabs a[href="executors.html"],
+html[data-season-theme="summer"] body.feed-page .site-tabs a[href="feed.html"],
+html[data-season-theme="summer"] body.library-page .site-tabs a[href="library.html"],
+html[data-season-theme="summer"] body.executors-page .site-tabs a[href="executors.html"] {
+  color:var(--season-emphasis)!important;
+  -webkit-text-fill-color:var(--season-emphasis)!important;
+  border-color:var(--season-emphasis)!important;
+  background:color-mix(in srgb,var(--season-emphasis) 15%,transparent)!important;
+  box-shadow:0 0 18px color-mix(in srgb,var(--season-emphasis) 12%,transparent)!important;
+}
+
+/* Settings tabs/sidebar also follow the selected seasonal palette. */
+html[data-season-theme="halloween"] #settings-form .settings-nav-item,
+html[data-season-theme="winter"] #settings-form .settings-nav-item,
+html[data-season-theme="summer"] #settings-form .settings-nav-item {
+  color:var(--season-copy)!important;
+  border-color:color-mix(in srgb,var(--season-emphasis) 25%,transparent)!important;
+}
+html[data-season-theme="halloween"] #settings-form .settings-nav-item.active,
+html[data-season-theme="halloween"] #settings-form .settings-nav-item:hover,
+html[data-season-theme="winter"] #settings-form .settings-nav-item.active,
+html[data-season-theme="winter"] #settings-form .settings-nav-item:hover,
+html[data-season-theme="summer"] #settings-form .settings-nav-item.active,
+html[data-season-theme="summer"] #settings-form .settings-nav-item:hover {
+  color:var(--season-emphasis)!important;
+  border-color:var(--season-emphasis)!important;
+  background:color-mix(in srgb,var(--season-emphasis) 12%,transparent)!important;
+}
