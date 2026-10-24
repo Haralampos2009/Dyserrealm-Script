@@ -32,7 +32,39 @@ Deno.serve(async (req) => {
 
     if (req.method === "POST") {
       const body = await req.json().catch(() => ({}));
-      const id = typeof body.id === "string" ? body.id : "";
+      if (action === "issue") {
+        const username = String(body.roblox_username || "").trim();
+        const duration = String(body.duration || "24h");
+        const hours: Record<string, number> = { "1h": 1, "12h": 12, "24h": 24, "7d": 168, "30d": 720 };
+        if (!/^[A-Za-z0-9_]{3,20}$/.test(username) || !(duration === "forever" || duration in hours)) return reply({ error: "bad_request" }, 400);
+        const { data: profiles, error: profileError } = await admin.from("realm_profiles").select("user_id,roblox_username").ilike("roblox_username", username).limit(2);
+        if (profileError) return reply({ error: "profile_lookup_failed" }, 503);
+        const profile = (profiles || []).find((p: { roblox_username?: string }) => String(p.roblox_username || "").toLowerCase() === username.toLowerCase());
+        if (!profile) return reply({ error: "player_not_registered" }, 404);
+        let robloxId: number | null = null;
+        try {
+          const response = await fetch("https://users.roblox.com/v1/usernames/users", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ usernames: [username], excludeBannedUsers: false }) });
+          if (!response.ok) return reply({ error: "roblox_lookup_failed" }, 502);
+          const json = await response.json();
+          const found = Array.isArray(json.data) ? json.data[0] : null;
+          if (found && Number.isSafeInteger(found.id) && found.id > 0) robloxId = found.id;
+        } catch { return reply({ error: "roblox_lookup_failed" }, 502); }
+        if (!robloxId) return reply({ error: "roblox_user_not_found" }, 404);
+        if (!IP_HASH_SECRET) return reply({ error: "server_not_configured" }, 503);
+        const expiresAt = duration === "forever" ? "9999-12-31T23:59:59.000Z" : new Date(Date.now() + hours[duration] * 3600000).toISOString();
+        const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(IP_HASH_SECRET + ":creator:" + auth.user.id));
+        const creatorHash = [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2, "0")).join("");
+        const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+        for (let attempt = 0; attempt < 5; attempt++) {
+          const bytes = crypto.getRandomValues(new Uint8Array(16));
+          const key = "DS-" + Array.from({ length: 4 }, (_, i) => Array.from(bytes.slice(i * 4, i * 4 + 4), b => alphabet[b % alphabet.length]).join("")).join("-");
+          const { data: created, error: createError } = await admin.from("keys").insert({ key, expires_at: expiresAt, revoked: false, bound_roblox_id: robloxId, created_by_ip_hash: creatorHash, created_by_user_id: auth.user.id }).select("id,key,created_at,expires_at,revoked,bound_roblox_id,use_count,last_used_at,created_by_user_id").single();
+          if (!createError && created) return reply({ success: true, key: created, roblox_username: username });
+          if (createError?.code !== "23505") return reply({ error: "key_issue_failed" }, 503);
+        }
+        return reply({ error: "key_generation_failed" }, 503);
+      }
+\n      const id = typeof body.id === "string" ? body.id : "";
       const action = body.action;
       if (!id || !["revoke", "reset_binding"].includes(action)) return reply({ error: "bad_request" }, 400);
       const patch = action === "revoke" ? { revoked: true } : { bound_roblox_id: null };
