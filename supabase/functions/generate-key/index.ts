@@ -62,7 +62,7 @@ Deno.serve(async (req) => {
 
     // Return the signed-in user's own active key instead of issuing duplicates.
     const { data: existing, error: existingError } = await admin.from("keys")
-      .select("key,expires_at")
+      .select("key,created_at,expires_at")
       .eq("created_by_user_id", authData.user.id)
       .eq("revoked", false)
       .gt("expires_at", new Date().toISOString())
@@ -70,7 +70,7 @@ Deno.serve(async (req) => {
       .limit(1)
       .maybeSingle();
     if (existingError) return reply({ error: "temporarily_unavailable" }, 503);
-    if (existing) return reply({ key: existing.key, expires_at: existing.expires_at, format: "DS-XXXX-XXXX-XXXX-XXXX", existing: true });
+    if (existing) return reply({ key: existing.key, created_at: existing.created_at, expires_at: existing.expires_at, format: "DS-XXXX-XXXX-XXXX-XXXX", existing: true });
 
     const ipLimit = await admin.rpc("consume_key_rate_limit", {
       p_bucket: "generate_ip_day", p_subject_hash: ipHash, p_limit: 3, p_window_seconds: 86400,
@@ -93,7 +93,7 @@ Deno.serve(async (req) => {
       });
       if (error) return reply({ error: "temporarily_unavailable" }, 503);
       const result = data?.[0];
-      if (result?.issued) return reply({ key, expires_at: result.expires_at, format: "DS-XXXX-XXXX-XXXX-XXXX" });
+      if (result?.issued) return reply({ key, created_at: new Date().toISOString(), expires_at: result.expires_at, format: "DS-XXXX-XXXX-XXXX-XXXX" });
       if (result?.reason === "active_key_exists") return reply({ error: "active_key_exists" }, 409);
       if (result?.reason !== "collision") return reply({ error: "temporarily_unavailable" }, 503);
     }
