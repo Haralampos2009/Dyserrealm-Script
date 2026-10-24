@@ -231,12 +231,12 @@ html[data-season-theme="winter"] .topbar{border-bottom-color:#7ce7ff44}
 html[data-season-theme="winter"] .brand b{border-color:#7ce7ff;color:#7ce7ff;box-shadow:0 0 22px #7ce7ff18}
 html[data-season-theme="winter"] body::before{content:"❄️  ·  ❄️";position:fixed;z-index:29;pointer-events:none;top:88px;right:14px;font-size:clamp(20px,3vw,34px);opacity:.65;animation:season-snow 5s ease-in-out infinite alternate}
 html[data-season-theme="winter"] body::after{content:"❄  ❄  ❄";position:fixed;z-index:29;pointer-events:none;left:12px;bottom:10px;color:#a8eaff;font-size:24px;letter-spacing:10px;opacity:.7;animation:season-snow 6s ease-in-out infinite alternate-reverse}
-html[data-season-theme="spring"]{--bg:#09150f;--panel:#10251b;--line:#2c563e;--text:#f0fff4;--muted:#b0cdb8;--green:#8cf0a5;--purple:#ff9fd7;--button-primary-color:#8cf0a5;--button-secondary-color:#ff9fd7;--button-secondary-border:#ff9fd788;color-scheme:dark}
-html[data-season-theme="spring"] body{background-color:#09150f;color:#f0fff4}
-html[data-season-theme="spring"] .topbar{border-bottom-color:#8cf0a544}
-html[data-season-theme="spring"] .brand b{border-color:#8cf0a5;color:#8cf0a5}
-html[data-season-theme="spring"] body::before{content:"🌸  ✿";position:fixed;z-index:29;pointer-events:none;top:88px;right:16px;font-size:clamp(22px,3vw,36px);opacity:.62}
-html[data-season-theme="spring"] body::after{content:"🌿";position:fixed;z-index:29;pointer-events:none;left:14px;bottom:12px;font-size:32px;opacity:.7}
+html[data-season-theme="summer"]{--bg:#09150f;--panel:#10251b;--line:#2c563e;--text:#f0fff4;--muted:#b0cdb8;--green:#8cf0a5;--purple:#ff9fd7;--button-primary-color:#8cf0a5;--button-secondary-color:#ff9fd7;--button-secondary-border:#ff9fd788;color-scheme:dark}
+html[data-season-theme="summer"] body{background-color:#09150f;color:#f0fff4}
+html[data-season-theme="summer"] .topbar{border-bottom-color:#8cf0a544}
+html[data-season-theme="summer"] .brand b{border-color:#8cf0a5;color:#8cf0a5}
+html[data-season-theme="summer"] body::before{content:"🌸  ✿";position:fixed;z-index:29;pointer-events:none;top:88px;right:16px;font-size:clamp(22px,3vw,36px);opacity:.62}
+html[data-season-theme="summer"] body::after{content:"🌿";position:fixed;z-index:29;pointer-events:none;left:14px;bottom:12px;font-size:32px;opacity:.7}
 @keyframes season-snow{from{transform:translateY(-2px)}to{transform:translateY(10px)}}
 .season-theme-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0}
 .season-theme-option{position:relative;display:flex;flex-direction:column;gap:6px;padding:12px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.025);cursor:pointer;transition:border-color .2s,transform .2s}
@@ -246,6 +246,11 @@ html[data-season-theme="spring"] body::after{content:"🌿";position:fixed;z-ind
 .season-default-preview{background:linear-gradient(135deg,#080a0f,#302044);color:#b7f36b;font-family:monospace}
 .season-halloween-preview{background:linear-gradient(135deg,#17091f,#4c1d3f);color:#ff8b2c}
 .season-winter-preview{background:linear-gradient(135deg,#06111d,#1e4a68);color:#a8eaff}
-.season-spring-preview{background:linear-gradient(135deg,#09150f,#27563d);color:#ff9fd7}
+.season-spring-preview{background:linear-gradient(135deg,#103d28,#d88b27);color:#fff0a6}
 .season-theme-option strong{font-size:13px}.season-theme-option small{color:var(--muted);font-size:11px;line-height:1.5}
 @media(max-width:520px){.season-theme-grid{grid-template-columns:1fr}.season-theme-preview{height:56px}}
+
+/* Seasonal background images: upload each image to the matching folder using the exact filename below. */
+html[data-season-theme="winter"] body{background-image:linear-gradient(180deg,rgba(3,12,23,.25),rgba(3,12,23,.48)),url("./assets/themes/winter/winter.jpg")!important;background-position:center center!important;background-size:cover!important;background-attachment:fixed!important;background-repeat:no-repeat!important}
+html[data-season-theme="halloween"] body{background-image:linear-gradient(180deg,rgba(14,4,22,.25),rgba(14,4,22,.52)),url("./assets/themes/halloween/halloween.jpg")!important;background-position:center center!important;background-size:cover!important;background-attachment:fixed!important;background-repeat:no-repeat!important}
+html[data-season-theme="summer"] body{background-image:linear-gradient(180deg,rgba(3,28,20,.20),rgba(3,28,20,.40)),url("./assets/themes/summer/summer.jpg")!important;background-position:center center!important;background-size:cover!important;background-attachment:fixed!important;background-repeat:no-repeat!important}
