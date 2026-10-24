@@ -264,3 +264,13 @@ body{background:radial-gradient(ellipse at 12% 38%,#38204d16,transparent 30%),ra
 .button-color-preview>span{margin-right:auto;color:#8f879a;font:9px var(--mono);letter-spacing:1px}
 #button-colors-reset{margin-top:3px}
 @media(max-width:560px){#settings-form .settings-workspace .button-color-controls{grid-template-columns:1fr}.button-color-preview{align-items:stretch}.button-color-preview>span{width:100%}}
+
+
+/* Authentication controls are shown only on the Home page. */
+body.feed-page .account #login-open,
+body.feed-page .account #signup-open,
+body.library-page .account #login-open,
+body.library-page .account #signup-open,
+body.executors-page .account #executor-login-link,
+body.key-generator-page .account #key-user-status,
+body.key-generator-page .account #key-logout { display:none !important; }
