@@ -502,3 +502,34 @@ html[data-season-theme="summer"] body textarea::placeholder {
 html[data-season-theme="halloween"] body .btn.primary { background:#ff9b35!important;color:#210c25!important;-webkit-text-fill-color:#210c25!important; }
 html[data-season-theme="winter"] body .btn.primary { background:#7ce7ff!important;color:#071827!important;-webkit-text-fill-color:#071827!important; }
 html[data-season-theme="summer"] body .btn.primary { background:#8cf0a5!important;color:#082316!important;-webkit-text-fill-color:#082316!important; }
+
+
+/* Seasonal colors for the main navigation tabs on every page */
+html[data-season-theme="halloween"] .site-tabs a,
+html[data-season-theme="winter"] .site-tabs a,
+html[data-season-theme="summer"] .site-tabs a {
+  color:var(--season-copy)!important;
+  border-color:color-mix(in srgb,var(--season-emphasis) 32%,transparent)!important;
+  background:color-mix(in srgb,var(--season-emphasis) 5%,transparent)!important;
+  -webkit-text-fill-color:var(--season-copy)!important;
+}
+html[data-season-theme="halloween"] .site-tabs a:hover,
+html[data-season-theme="halloween"] .site-tabs a:focus-visible,
+html[data-season-theme="halloween"] .site-tabs a[aria-current="page"],
+html[data-season-theme="winter"] .site-tabs a:hover,
+html[data-season-theme="winter"] .site-tabs a:focus-visible,
+html[data-season-theme="winter"] .site-tabs a[aria-current="page"],
+html[data-season-theme="summer"] .site-tabs a:hover,
+html[data-season-theme="summer"] .site-tabs a:focus-visible,
+html[data-season-theme="summer"] .site-tabs a[aria-current="page"] {
+  color:var(--season-emphasis)!important;
+  border-color:var(--season-emphasis)!important;
+  background:color-mix(in srgb,var(--season-emphasis) 15%,transparent)!important;
+  box-shadow:0 0 18px color-mix(in srgb,var(--season-emphasis) 12%,transparent)!important;
+  -webkit-text-fill-color:var(--season-emphasis)!important;
+}
+html[data-season-theme="halloween"] .site-tabs a::before,
+html[data-season-theme="winter"] .site-tabs a::before,
+html[data-season-theme="summer"] .site-tabs a::before {
+  border-color:var(--season-emphasis)!important;
+}
