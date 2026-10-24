@@ -444,3 +444,61 @@ html[data-season-theme="summer"] .settings-security-card{
 html[data-season-theme="halloween"] .btn.primary{background:#ff9b35!important;color:#210c25!important}
 html[data-season-theme="winter"] .btn.primary{background:#7ce7ff!important;color:#071827!important}
 html[data-season-theme="summer"] .btn.primary{background:#8cf0a5!important;color:#082316!important}
+
+
+/* Global seasonal typography: apply the active palette to text across every page and component. */
+html[data-season-theme="halloween"] { --season-heading:#ffbd72; --season-emphasis:#ff9b35; --season-copy:#f1dffb; --season-link:#ffad4f; }
+html[data-season-theme="winter"] { --season-heading:#a8eaff; --season-emphasis:#7ce7ff; --season-copy:#e0f4ff; --season-link:#7ce7ff; }
+html[data-season-theme="summer"] { --season-heading:#a4ffb5; --season-emphasis:#ff9fd7; --season-copy:#e6ffec; --season-link:#8cf0a5; }
+
+html[data-season-theme="halloween"] body,
+html[data-season-theme="winter"] body,
+html[data-season-theme="summer"] body { color:var(--season-copy)!important; }
+
+html[data-season-theme="halloween"] body :is(p,span,small,label,li,dt,dd,blockquote,figcaption,summary,legend,caption,th,td,output,.kicker,.loading,.form-message,.settings-nav-label,.settings-sidebar-bottom,.settings-sidebar-brand small,.settings-avatar-file-name,.policy-updated,.policy-note,.stats,.hero-index,.button-color-preview>span),
+html[data-season-theme="winter"] body :is(p,span,small,label,li,dt,dd,blockquote,figcaption,summary,legend,caption,th,td,output,.kicker,.loading,.form-message,.settings-nav-label,.settings-sidebar-bottom,.settings-sidebar-brand small,.settings-avatar-file-name,.policy-updated,.policy-note,.stats,.hero-index,.button-color-preview>span),
+html[data-season-theme="summer"] body :is(p,span,small,label,li,dt,dd,blockquote,figcaption,summary,legend,caption,th,td,output,.kicker,.loading,.form-message,.settings-nav-label,.settings-sidebar-bottom,.settings-sidebar-brand small,.settings-avatar-file-name,.policy-updated,.policy-note,.stats,.hero-index,.button-color-preview>span) {
+  color:var(--season-copy)!important;
+  -webkit-text-fill-color:var(--season-copy)!important;
+}
+
+html[data-season-theme="halloween"] body :is(h1,h2,h3,h4,h5,h6,.brand,.settings-sidebar-brand strong,.settings-page-heading .kicker),
+html[data-season-theme="winter"] body :is(h1,h2,h3,h4,h5,h6,.brand,.settings-sidebar-brand strong,.settings-page-heading .kicker),
+html[data-season-theme="summer"] body :is(h1,h2,h3,h4,h5,h6,.brand,.settings-sidebar-brand strong,.settings-page-heading .kicker) {
+  color:var(--season-heading)!important;
+  -webkit-text-fill-color:var(--season-heading)!important;
+}
+
+html[data-season-theme="halloween"] body :is(em,strong,b,.site-tabs a,.settings-nav-item,.mini-btn,.contact-email,.policy-email),
+html[data-season-theme="winter"] body :is(em,strong,b,.site-tabs a,.settings-nav-item,.mini-btn,.contact-email,.policy-email),
+html[data-season-theme="summer"] body :is(em,strong,b,.site-tabs a,.settings-nav-item,.mini-btn,.contact-email,.policy-email) {
+  color:var(--season-emphasis)!important;
+  -webkit-text-fill-color:var(--season-emphasis)!important;
+}
+
+html[data-season-theme="halloween"] body a:not(.btn),
+html[data-season-theme="winter"] body a:not(.btn),
+html[data-season-theme="summer"] body a:not(.btn) {
+  color:var(--season-link)!important;
+  -webkit-text-fill-color:var(--season-link)!important;
+}
+
+html[data-season-theme="halloween"] body :is(input,textarea,select,option),
+html[data-season-theme="winter"] body :is(input,textarea,select,option),
+html[data-season-theme="summer"] body :is(input,textarea,select,option) {
+  color:var(--season-copy)!important;
+  caret-color:var(--season-emphasis)!important;
+}
+html[data-season-theme="halloween"] body input::placeholder,
+html[data-season-theme="halloween"] body textarea::placeholder,
+html[data-season-theme="winter"] body input::placeholder,
+html[data-season-theme="winter"] body textarea::placeholder,
+html[data-season-theme="summer"] body input::placeholder,
+html[data-season-theme="summer"] body textarea::placeholder {
+  color:color-mix(in srgb,var(--season-copy) 62%,transparent)!important;
+  -webkit-text-fill-color:color-mix(in srgb,var(--season-copy) 62%,transparent)!important;
+}
+
+html[data-season-theme="halloween"] body .btn.primary { background:#ff9b35!important;color:#210c25!important;-webkit-text-fill-color:#210c25!important; }
+html[data-season-theme="winter"] body .btn.primary { background:#7ce7ff!important;color:#071827!important;-webkit-text-fill-color:#071827!important; }
+html[data-season-theme="summer"] body .btn.primary { background:#8cf0a5!important;color:#082316!important;-webkit-text-fill-color:#082316!important; }
