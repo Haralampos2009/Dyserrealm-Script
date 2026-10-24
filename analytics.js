@@ -8,6 +8,15 @@
   const SIX_MONTHS = 60 * 60 * 24 * 180;
   let sentForThisPage = false;
 
+  // Apply the visitor's saved seasonal theme on every page, without touching page background images.
+  try {
+    const allowedThemes = ["default", "halloween", "winter", "spring"];
+    const savedTheme = localStorage.getItem("dyserrealm-season-theme") || "default";
+    document.documentElement.dataset.seasonTheme = allowedThemes.includes(savedTheme) ? savedTheme : "default";
+  } catch (_) {
+    document.documentElement.dataset.seasonTheme = "default";
+  }
+
   function readConsent() {
     const match = document.cookie.match(new RegExp("(?:^|;\\s*)" + CONSENT_COOKIE + "=([^;]*)"));
     return match ? decodeURIComponent(match[1]) : "";
