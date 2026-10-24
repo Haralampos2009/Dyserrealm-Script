@@ -84,10 +84,10 @@
 </div>
 </section>
 <section id="issued-keys-panel" class="key-history" hidden aria-labelledby="issued-keys-title">
- <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><h2 id="issued-keys-title">PLAYER KEYS / CREATOR VIEW.</h2><button id="issued-keys-refresh" class="btn outline" type="button">REFRESH LIST</button></div>
- <p>Keys created for players in Creator Console. This section is shown only when the server confirms Creator/Admin access.</p>
- <p id="issued-keys-status" class="key-history-value" role="status">Checking permissions…</p>
- <div style="overflow:auto"><table style="width:100%;min-width:700px;border-collapse:collapse"><thead><tr><th style="text-align:left;padding:10px">KEY</th><th style="text-align:left;padding:10px">PLAYER UID</th><th style="text-align:left;padding:10px">CREATED</th><th style="text-align:left;padding:10px">EXPIRES</th><th style="text-align:left;padding:10px">STATUS</th></tr></thead><tbody id="issued-keys-rows"><tr><td colspan="5" style="padding:10px">Loading…</td></tr></tbody></table></div>
+ <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><h2 id="issued-keys-title">KEYS ISSUED TO YOU.</h2><button id="issued-keys-refresh" class="btn outline" type="button">REFRESH</button></div>
+ <p>Keys issued to your linked Roblox account by the creator appear here. Only keys assigned to your account are returned.</p>
+ <p id="issued-keys-status" class="key-history-value" role="status">Loading your keys…</p>
+ <div id="issued-keys-rows" style="display:grid;gap:10px"></div>
 </section>
 </div>
 </main>
@@ -125,28 +125,28 @@ function closeAuth(){ $("#key-auth-modal").classList.add("hidden");document.body
 function setMember(user){currentUser=user||null;const locked=!currentUser;$("#key-locked").classList.toggle("hidden",!locked);$("#generator-app").classList.toggle("hidden",locked);$("#key-user-status").textContent=locked?"MEMBERS ONLY":(currentUser.user_metadata?.display_name||currentUser.email?.split("@")[0]||"MEMBER").toUpperCase();if(locked){$("#key-user-status").textContent="KEY LAB / LOCKED";stopKeyCountdown();$("#key-output").textContent="DS-XXXX-XXXX-XXXX-XXXX";$("#key-expiry").textContent="TIME LEFT: LOG IN TO VIEW YOUR KEY";}else restoreCachedKey();}
  async function loadIssuedKeys(){
   const panel=$("#issued-keys-panel"),status=$("#issued-keys-status"),rows=$("#issued-keys-rows");
-  if(!client||!currentUser)return;
-  status.textContent="CHECKING CREATOR/ADMIN PERMISSIONS…";
+  if(!client||!currentUser){panel.hidden=true;return}
+  status.textContent="LOADING KEYS LINKED TO YOUR ROBLOX ACCOUNT…";
   try{
    const {data:{session}}=await client.auth.getSession();
    if(!session)throw new Error("login_required");
-   const response=await fetch(URL+"/functions/v1/owner-keys",{method:"GET",headers:{"apikey":KEY,"Authorization":"Bearer "+session.access_token}});
+   const response=await fetch(URL+"/functions/v1/owner-keys?scope=mine",{method:"GET",headers:{"apikey":KEY,"Authorization":"Bearer "+session.access_token}});
    const data=await response.json().catch(()=>({error:"invalid_response"}));
-   if(response.status===403||data.error==="forbidden"){panel.hidden=true;return}
    if(!response.ok)throw new Error(data.error||"request_failed");
    panel.hidden=false;
    const list=data.keys||[];
    const safe=v=>String(v??"—").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
-   rows.innerHTML=list.length?list.map(k=>{
+   rows.innerHTML=list.length?list.map((k,i)=>{
     const expired=k.expires_at&&new Date(k.expires_at)<=new Date();
     const state=k.revoked?"REVOKED":(expired?"EXPIRED":"ACTIVE");
     const expiry=!k.expires_at?"Never":new Date(k.expires_at).toLocaleString();
-    return '<tr><td style="padding:10px;border-top:1px solid #26383a"><code>'+safe(k.key)+'</code></td><td style="padding:10px;border-top:1px solid #26383a">'+safe(k.bound_roblox_id)+'</td><td style="padding:10px;border-top:1px solid #26383a">'+safe(k.created_at?new Date(k.created_at).toLocaleString():"—")+'</td><td style="padding:10px;border-top:1px solid #26383a">'+safe(expiry)+'</td><td style="padding:10px;border-top:1px solid #26383a">'+state+'</td></tr>';
-   }).join(""):'<tr><td colspan="5" style="padding:10px">No player keys have been issued yet.</td></tr>';
-   status.textContent="LOADED "+list.length+" PLAYER KEY(S).";
+    return '<div class="key-history-item"><div style="display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap"><strong style="color:'+(state==="ACTIVE"?"#5cf3d7":"#ff9b9b")+'">'+state+'</strong><button class="btn outline issued-copy" type="button" data-key-index="'+i+'" '+(state!=="ACTIVE"?"disabled":"")+'>COPY KEY</button></div><div class="key-history-key">'+safe(k.key)+'</div><div class="key-history-grid" style="margin-top:12px"><div><span class="key-history-label">CREATED</span><span class="key-history-value">'+safe(k.created_at?new Date(k.created_at).toLocaleString():"—")+'</span></div><div><span class="key-history-label">EXPIRES</span><span class="key-history-value">'+safe(expiry)+'</span></div></div></div>';
+   }).join(""):'<p>No keys have been issued to your linked Roblox account yet. Make sure your Roblox username is saved in your profile.</p>';
+   rows.querySelectorAll(".issued-copy").forEach(button=>button.addEventListener("click",async()=>{const key=list[Number(button.dataset.keyIndex)]?.key;if(!key)return;try{await navigator.clipboard.writeText(key);status.textContent="KEY COPIED TO CLIPBOARD."}catch{status.textContent="Clipboard unavailable — select and copy the key manually."}}));
+   status.textContent=list.length?"FOUND "+list.length+" KEY(S) LINKED TO YOUR ACCOUNT.":"NO ISSUED KEYS FOUND.";
   }catch(error){
    if(error.message==="login_required"){panel.hidden=true;return}
-   status.textContent="Could not load player keys: "+error.message;
+   panel.hidden=false;status.textContent="Could not load your keys: "+error.message;
   }
  }
  function explainError(error){
@@ -212,7 +212,7 @@ async function init(){
  client=window.supabase.createClient(URL,KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
  try{const{data,error}=await client.auth.getSession();if(error)throw error;setMember(data.session?.user||null)}
  catch(error){setMember(null);$("#key-user-status").textContent="SESSION CHECK FAILED";$("#key-auth-message").textContent=error?.message||"Could not check your session."}
- client.auth.onAuthStateChange((_event,session)=>{setMember(session?.user||null);if(session?.user)loadIssuedKeys();else $("#issued-keys-panel").hidden=true;});if(data.session?.user)await loadIssuedKeys();
+ client.auth.onAuthStateChange((_event,session)=>{setMember(session?.user||null);if(session?.user)loadIssuedKeys();else $("#issued-keys-panel").hidden=true;});const{data:sessionData}=await client.auth.getSession();if(sessionData.session?.user)await loadIssuedKeys();
 }
 document.addEventListener("DOMContentLoaded",init);
 })();
