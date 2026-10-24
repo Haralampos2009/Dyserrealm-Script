@@ -254,3 +254,75 @@ html[data-season-theme="summer"] body::after{content:"🌿";position:fixed;z-ind
 html[data-season-theme="winter"] body{background-image:linear-gradient(180deg,rgba(3,12,23,.25),rgba(3,12,23,.48)),url("./assets/themes/winter/winter.jpg")!important;background-position:center center!important;background-size:cover!important;background-attachment:fixed!important;background-repeat:no-repeat!important}
 html[data-season-theme="halloween"] body{background-image:linear-gradient(180deg,rgba(14,4,22,.25),rgba(14,4,22,.52)),url("./assets/themes/halloween/halloween.jpg")!important;background-position:center center!important;background-size:cover!important;background-attachment:fixed!important;background-repeat:no-repeat!important}
 html[data-season-theme="summer"] body{background-image:linear-gradient(180deg,rgba(3,28,20,.20),rgba(3,28,20,.40)),url("./assets/themes/summer/summer.jpg")!important;background-position:center center!important;background-size:cover!important;background-attachment:fixed!important;background-repeat:no-repeat!important}
+
+
+/* Strong seasonal identity: readable themed typography, controls and decorative accents. */
+html[data-season-theme="halloween"]{
+  --text:#fff1ff;--muted:#d5b8e8;--green:#ff9b35;--purple:#d18cff;
+  --button-primary-color:#ff9b35;--button-secondary-color:#d18cff;--button-secondary-border:#d18cffaa;
+}
+html[data-season-theme="halloween"] body{color:#fff1ff}
+html[data-season-theme="halloween"] h1,html[data-season-theme="halloween"] h2,html[data-season-theme="halloween"] h3,html[data-season-theme="halloween"] h4,
+html[data-season-theme="halloween"] .hero h1,html[data-season-theme="halloween"] .settings-page-heading h2,
+html[data-season-theme="halloween"] .section-title,html[data-season-theme="halloween"] .brand,
+html[data-season-theme="halloween"] .kicker{color:#ffbd72}
+html[data-season-theme="halloween"] p,html[data-season-theme="halloween"] label,html[data-season-theme="halloween"] small,
+html[data-season-theme="halloween"] .topbar nav a,html[data-season-theme="halloween"] .settings-nav-item{color:#f1dffb}
+html[data-season-theme="halloween"] a:hover,html[data-season-theme="halloween"] .topbar nav a:hover{color:#ff9b35}
+html[data-season-theme="halloween"] .btn.primary{background:#ff9b35!important;color:#210c25!important;border-color:#ffb45e!important}
+html[data-season-theme="halloween"] .btn.outline,html[data-season-theme="halloween"] .btn.ghost{border-color:#d18cff88;color:#f3d9ff}
+html[data-season-theme="halloween"] .card,html[data-season-theme="halloween"] .panel,html[data-season-theme="halloween"] .modal-card,
+html[data-season-theme="halloween"] .script-card,html[data-season-theme="halloween"] .settings-account-card,
+html[data-season-theme="halloween"] .settings-profile-card,html[data-season-theme="halloween"] .settings-appearance-card,
+html[data-season-theme="halloween"] .settings-security-card{border-color:#a65bc655;box-shadow:0 8px 30px #13051e55}
+html[data-season-theme="halloween"] .season-theme-option:has(input[value="halloween"]:checked)::after{content:"🦇";position:absolute;right:12px;bottom:8px;font-size:20px}
+html[data-season-theme="halloween"] body::before{content:"🕸️  🦇";right:20px;top:90px;letter-spacing:8px;animation:season-haunt 4s ease-in-out infinite alternate}
+html[data-season-theme="halloween"] body::after{content:"🎃  🕯️";color:#ff9b35;letter-spacing:8px;animation:season-haunt 3s ease-in-out infinite alternate-reverse}
+@keyframes season-haunt{from{transform:translateY(-3px) rotate(-2deg)}to{transform:translateY(7px) rotate(2deg)}}
+
+html[data-season-theme="winter"]{
+  --text:#f0fbff;--muted:#b7d6e8;--green:#7ce7ff;--purple:#b4c9ff;
+  --button-primary-color:#7ce7ff;--button-secondary-color:#b4c9ff;--button-secondary-border:#b4c9ffaa;
+}
+html[data-season-theme="winter"] body{color:#f0fbff}
+html[data-season-theme="winter"] h1,html[data-season-theme="winter"] h2,html[data-season-theme="winter"] h3,html[data-season-theme="winter"] h4,
+html[data-season-theme="winter"] .hero h1,html[data-season-theme="winter"] .settings-page-heading h2,
+html[data-season-theme="winter"] .section-title,html[data-season-theme="winter"] .brand,
+html[data-season-theme="winter"] .kicker{color:#a8eaff}
+html[data-season-theme="winter"] p,html[data-season-theme="winter"] label,html[data-season-theme="winter"] small,
+html[data-season-theme="winter"] .topbar nav a,html[data-season-theme="winter"] .settings-nav-item{color:#e0f4ff}
+html[data-season-theme="winter"] a:hover,html[data-season-theme="winter"] .topbar nav a:hover{color:#7ce7ff}
+html[data-season-theme="winter"] .btn.primary{background:#7ce7ff!important;color:#071827!important;border-color:#a8eaff!important}
+html[data-season-theme="winter"] .btn.outline,html[data-season-theme="winter"] .btn.ghost{border-color:#a8eaff88;color:#e5f7ff}
+html[data-season-theme="winter"] .card,html[data-season-theme="winter"] .panel,html[data-season-theme="winter"] .modal-card,
+html[data-season-theme="winter"] .script-card,html[data-season-theme="winter"] .settings-account-card,
+html[data-season-theme="winter"] .settings-profile-card,html[data-season-theme="winter"] .settings-appearance-card,
+html[data-season-theme="winter"] .settings-security-card{border-color:#7ce7ff44;box-shadow:0 8px 30px #00152255}
+html[data-season-theme="winter"] .season-theme-option:has(input[value="winter"]:checked)::after{content:"☃️";position:absolute;right:12px;bottom:8px;font-size:20px}
+html[data-season-theme="winter"] body::before{content:"❄️  ✨  ❄️";right:20px;top:90px;letter-spacing:7px;animation:season-snow 4s ease-in-out infinite alternate}
+html[data-season-theme="winter"] body::after{content:"❄️  ⛄  ❄️";color:#a8eaff;letter-spacing:6px;animation:season-snow 5s ease-in-out infinite alternate-reverse}
+
+html[data-season-theme="summer"]{
+  --text:#f0fff4;--muted:#c1e5cb;--green:#8cf0a5;--purple:#ff9fd7;
+  --button-primary-color:#8cf0a5;--button-secondary-color:#ff9fd7;--button-secondary-border:#ff9fd7aa;
+}
+html[data-season-theme="summer"] body{color:#f0fff4}
+html[data-season-theme="summer"] h1,html[data-season-theme="summer"] h2,html[data-season-theme="summer"] h3,html[data-season-theme="summer"] h4,
+html[data-season-theme="summer"] .hero h1,html[data-season-theme="summer"] .settings-page-heading h2,
+html[data-season-theme="summer"] .section-title,html[data-season-theme="summer"] .brand,
+html[data-season-theme="summer"] .kicker{color:#a4ffb5}
+html[data-season-theme="summer"] p,html[data-season-theme="summer"] label,html[data-season-theme="summer"] small,
+html[data-season-theme="summer"] .topbar nav a,html[data-season-theme="summer"] .settings-nav-item{color:#e6ffec}
+html[data-season-theme="summer"] a:hover,html[data-season-theme="summer"] .topbar nav a:hover{color:#ff9fd7}
+html[data-season-theme="summer"] .btn.primary{background:#8cf0a5!important;color:#082316!important;border-color:#a4ffb5!important}
+html[data-season-theme="summer"] .btn.outline,html[data-season-theme="summer"] .btn.ghost{border-color:#ff9fd788;color:#ffe4f3}
+html[data-season-theme="summer"] .card,html[data-season-theme="summer"] .panel,html[data-season-theme="summer"] .modal-card,
+html[data-season-theme="summer"] .script-card,html[data-season-theme="summer"] .settings-account-card,
+html[data-season-theme="summer"] .settings-profile-card,html[data-season-theme="summer"] .settings-appearance-card,
+html[data-season-theme="summer"] .settings-security-card{border-color:#8cf0a544;box-shadow:0 8px 30px #001a0d55}
+html[data-season-theme="summer"] .season-theme-option:has(input[value="summer"]:checked)::after{content:"🌺";position:absolute;right:12px;bottom:8px;font-size:20px}
+html[data-season-theme="summer"] body::before{content:"☀️  🌴  🌺";right:18px;top:90px;letter-spacing:5px;animation:season-haunt 5s ease-in-out infinite alternate}
+html[data-season-theme="summer"] body::after{content:"🌿  🌼  🌿";color:#a4ffb5;letter-spacing:5px;animation:season-haunt 6s ease-in-out infinite alternate-reverse}
+
+/* The Summer preview uses its own green/pink palette. */
+.season-summer-preview{background:linear-gradient(135deg,#103d28,#d88b27);color:#fff0a6}
