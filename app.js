@@ -73,7 +73,7 @@ async function prepareAvatar(file){
 }
 
 async function loadSettingsProfile(){if(!user)return;if(!db?.auth){$("#settings-profile-message").textContent="Supabase is still loading. Refresh the page and try again.";return;}const msg=$("#settings-profile-message");msg.textContent="LOADING PROFILE…";const{data,error}=await db.from("realm_profiles").select("display_name,roblox_username,favorite_game,games,bio,avatar_url").eq("user_id",user.id).maybeSingle();if(error){msg.textContent=/avatar_url|column/i.test(error.message||"")?"Run the updated profiles-setup.sql in Supabase SQL Editor to enable avatar storage.":"Run profiles-setup.sql in Supabase SQL Editor if the profile table is not installed.";return}profileAvatarData=data?.avatar_url||user.user_metadata?.avatar_url||"";$("#settings-profile-display-name").value=data?.display_name||name();$("#settings-profile-roblox").value=data?.roblox_username||roblox();$("#settings-profile-favorite-game").value=data?.favorite_game||"";$("#settings-profile-games").value=data?.games||"";$("#settings-profile-bio").value=data?.bio||"";renderSettingsAvatar();msg.textContent=""}
-async function persistAvatarImmediately(prepared){
+async function persistAvatarImmediately(prepared){if(avatarSaving)throw new Error("An avatar update is already in progress. Please wait.");avatarSaving=true;const saveButton=$("#settings-profile-save"),fileInput=$("#settings-avatar-file"),removeButton=$("#settings-avatar-remove");if(saveButton)saveButton.disabled=true;if(fileInput)fileInput.disabled=true;if(removeButton)removeButton.disabled=true;try{
  if(!requireUser())throw new Error("Log in to save your avatar.");
  if(!db?.auth)throw new Error("Supabase is not ready. Refresh and try again.");
  const msg=$("#settings-profile-message");
@@ -102,8 +102,10 @@ async function persistAvatarImmediately(prepared){
  else msg.textContent=prepared?"AVATAR UPDATED AND SAVED AUTOMATICALLY.":"AVATAR REMOVED AND SAVED AUTOMATICALLY.";
  // Re-render current site data so avatar/name changes appear without a reload.
  await refresh();
+}finally{avatarSaving=false;if(saveButton)saveButton.disabled=false;if(fileInput)fileInput.disabled=false;if(removeButton)removeButton.disabled=false;}
 }
 async function saveSettingsProfile(){
+ if(avatarSaving){$("#settings-profile-message").textContent="Please wait until the avatar upload finishes.";return;}
  if(!requireUser())return;
  if(!db?.auth){$("#settings-profile-message").textContent="Supabase is not ready. Refresh and try again.";return}
  const btn=$("#settings-profile-save"),msg=$("#settings-profile-message");
