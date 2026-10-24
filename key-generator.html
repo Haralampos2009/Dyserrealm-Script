@@ -7,8 +7,8 @@
 <title>Key Generator // Dyserrealm Script</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261024-hideauth1">
-<link rel="stylesheet" href="theme.css?v=20261024-seasonal8">
+<link rel="stylesheet" href="style.css?v=20261024-sharedauth2">
+<link rel="stylesheet" href="theme.css?v=20261024-sharedauth2">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <style>
@@ -49,7 +49,7 @@
 <header class="topbar">
 <a class="brand" href="index.html"><b>D<span>_</span></b> DYSERREALM<small>/SCRIPT</small></a>
 <nav class="site-tabs"><a href="index.html">HOME</a><a href="feed.html">FEED</a><a href="library.html">SCRIPT LIBRARY</a><a href="key-generator.html">KEY GENERATOR</a><a href="executors.html">EXECUTORS</a></nav>
-<div class="account"><span id="key-user-status" class="kicker">CHECKING SESSION…</span><button id="key-logout" class="btn ghost hidden" type="button">LOG OUT</button></div>
+<div class="account"><span id="key-user-status" class="kicker">CHECKING SESSION…</span></div>
 </header>
 <main class="generator-page">
 <section id="key-locked" class="key-locked" aria-labelledby="key-lock-title">
@@ -114,9 +114,9 @@ function stopKeyCountdown(){if(keyCountdownInterval!==null){clearInterval(keyCou
 function renderHistory(record){if(!record||!record.key)return;const created=new Date(record.created_at||record.expires_at),expiry=new Date(record.expires_at);$("#history-key").textContent=record.key;$("#history-created").textContent=Number.isFinite(created.getTime())?created.toLocaleString():"—";$("#history-expires").textContent=Number.isFinite(expiry.getTime())?expiry.toLocaleString():"—";if(historyInterval!==null)clearInterval(historyInterval);const tick=()=>{const remaining=expiry.getTime()-Date.now();if(!Number.isFinite(remaining)){$("#history-countdown").textContent="Date unavailable";return}if(remaining<=0){$("#history-countdown").textContent="EXPIRED";return}const total=Math.floor(remaining/1000),days=Math.floor(total/86400),hours=Math.floor((total%86400)/3600),minutes=Math.floor((total%3600)/60),seconds=total%60;$("#history-countdown").textContent=(days?days+"d ":"")+hours+"h "+String(minutes).padStart(2,"0")+"m "+String(seconds).padStart(2,"0")+"s remaining"};tick();historyInterval=setInterval(tick,1000)}
 function showKey(key,expiresAt,save=false,createdAt=null){const expiry=new Date(expiresAt);if(!/^DS-[A-Z0-9]{4}(?:-[A-Z0-9]{4}){3}$/.test(key)||!Number.isFinite(expiry.getTime()))return false;const record={key,expires_at:expiry.toISOString(),created_at:createdAt||new Date(expiry.getTime()-86400000).toISOString()};renderHistory(record);if(expiry.getTime()<=Date.now()){$("#key-output").textContent="NO ACTIVE KEY";$("#key-expiry").textContent="KEY EXPIRED";if(save&&currentUser){try{localStorage.setItem(KEY_CACHE_PREFIX+currentUser.id,JSON.stringify(record))}catch{}}return false}$("#key-output").textContent=key;stopKeyCountdown();const render=()=>{const remaining=expiry.getTime()-Date.now();if(remaining<=0){stopKeyCountdown();$("#key-expiry").textContent="KEY EXPIRED";$("#key-output").textContent="NO ACTIVE KEY";$("#key-message").textContent="YOUR LAST KEY HAS EXPIRED. GENERATE A NEW KEY.";return}const total=Math.floor(remaining/1000),hours=Math.floor(total/3600),minutes=Math.floor((total%3600)/60),seconds=total%60;$("#key-expiry").textContent="TIME LEFT: "+hours+"h "+String(minutes).padStart(2,"0")+"m "+String(seconds).padStart(2,"0")+"s  •  EXPIRES "+expiry.toLocaleString()};render();keyCountdownInterval=setInterval(render,1000);if(save&&currentUser){try{localStorage.setItem(KEY_CACHE_PREFIX+currentUser.id,JSON.stringify(record))}catch{}}return true}
 function restoreCachedKey(){stopKeyCountdown();if(!currentUser)return;try{const raw=localStorage.getItem(KEY_CACHE_PREFIX+currentUser.id);if(!raw)return;const cached=JSON.parse(raw);renderHistory(cached);if(showKey(cached.key,cached.expires_at,false,cached.created_at))$("#key-message").textContent="YOUR SAVED KEY IS DISPLAYED BELOW.";else $("#key-message").textContent="YOUR LAST KEY IS SHOWN BELOW; IT MAY HAVE EXPIRED."}catch{}}
-function showAuth(mode){authMode=mode;const signUp=mode==="signup";$("#key-auth-title").textContent=signUp?"CREATE ACCOUNT.":"WELCOME BACK.";$("#key-auth-subtitle").textContent=signUp?"Join the realm to unlock the Key Generator.":"Log in to unlock the Key Generator.";$("#key-auth-name-label").classList.toggle("hidden",!signUp);$("#key-auth-roblox-label").classList.toggle("hidden",!signUp);$("#key-auth-name").required=signUp;$("#key-auth-message").textContent="";$("#key-auth-submit").textContent=signUp?"CREATE ACCOUNT ↗":"LOG IN ↗";$("#key-auth-switch-copy").textContent=signUp?"Already have an account?":"New to the realm?";$("#key-auth-switch").textContent=signUp?"LOG IN":"CREATE ACCOUNT";$("#key-auth-modal").classList.remove("hidden");document.body.style.overflow="hidden";$("#key-auth-email").focus()}
+function showAuth(mode){location.href="index.html?auth="+(mode==="login"?"login":"signup")+"&return=key-generator.html"}
 function closeAuth(){ $("#key-auth-modal").classList.add("hidden");document.body.style.overflow=""}
-function setMember(user){currentUser=user||null;const locked=!currentUser;$("#key-locked").classList.toggle("hidden",!locked);$("#generator-app").classList.toggle("hidden",locked);$("#key-logout").classList.toggle("hidden",locked);$("#key-user-status").textContent=locked?"MEMBERS ONLY":(currentUser.user_metadata?.display_name||currentUser.email?.split("@")[0]||"MEMBER").toUpperCase();if(locked){$("#key-user-status").textContent="KEY LAB / LOCKED";stopKeyCountdown();$("#key-output").textContent="DS-XXXX-XXXX-XXXX-XXXX";$("#key-expiry").textContent="TIME LEFT: LOG IN TO VIEW YOUR KEY";}else restoreCachedKey();if(locked&& !$("#key-auth-modal").classList.contains("hidden"))closeAuth()}
+function setMember(user){currentUser=user||null;const locked=!currentUser;$("#key-locked").classList.toggle("hidden",!locked);$("#generator-app").classList.toggle("hidden",locked);$("#key-user-status").textContent=locked?"MEMBERS ONLY":(currentUser.user_metadata?.display_name||currentUser.email?.split("@")[0]||"MEMBER").toUpperCase();if(locked){$("#key-user-status").textContent="KEY LAB / LOCKED";stopKeyCountdown();$("#key-output").textContent="DS-XXXX-XXXX-XXXX-XXXX";$("#key-expiry").textContent="TIME LEFT: LOG IN TO VIEW YOUR KEY";}else restoreCachedKey();}
 function explainError(error){
  const message=error?.message||"Request failed.";
  if(/active_key_exists/i.test(message))return "You already have an active key. It expires before a new key can be generated.";
@@ -173,7 +173,7 @@ $("#key-auth-form").addEventListener("submit",async e=>{
 });
 $("#generate-key").addEventListener("click",generate);
 $("#copy-key").addEventListener("click",async()=>{if(!currentUser){setMember(null);return showAuth("signup")}try{const value=$("#key-output").textContent;if(!/^DS-[A-Z0-9]{4}(?:-[A-Z0-9]{4}){3}$/.test(value))throw new Error("No key to copy");await navigator.clipboard.writeText(value);$("#key-message").textContent="COPIED TO CLIPBOARD"}catch{$("#key-message").textContent="CLIPBOARD ACCESS DENIED — SELECT AND COPY MANUALLY"}});
-$("#key-logout").addEventListener("click",async()=>{if(client)await client.auth.signOut();setMember(null)});
+
 async function init(){
  if(!window.supabase?.createClient){$("#key-user-status").textContent="AUTH UNAVAILABLE";$("#key-auth-message").textContent="Authentication could not load. Refresh the page and try again.";return}
  client=window.supabase.createClient(URL,KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
