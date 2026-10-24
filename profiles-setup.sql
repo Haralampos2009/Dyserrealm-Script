@@ -51,8 +51,8 @@ on conflict (user_id) do nothing;
 
 -- Public avatar storage. Profile images are stored here instead of as large base64 strings in the database.
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-values ('profile-avatars', 'profile-avatars', true, 2097152, array['image/jpeg','image/png','image/webp','image/gif'])
-on conflict (id) do update set public = true, file_size_limit = 2097152, allowed_mime_types = array['image/jpeg','image/png','image/webp','image/gif'];
+values ('profile-avatars', 'profile-avatars', true, 10485760, array['image/jpeg','image/png','image/webp','image/gif'])
+on conflict (id) do update set public = true, file_size_limit = 10485760, allowed_mime_types = array['image/jpeg','image/png','image/webp','image/gif'];
 
 drop policy if exists "Anyone can view profile avatars" on storage.objects;
 create policy "Anyone can view profile avatars" on storage.objects for select using (bucket_id = 'profile-avatars');
