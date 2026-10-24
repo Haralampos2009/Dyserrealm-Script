@@ -2,7 +2,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-const OWNER_USER_ID = Deno.env.get("OWNER_USER_ID") || "";\nconst IP_HASH_SECRET = Deno.env.get("IP_HASH_SECRET") || "";
+const OWNER_USER_ID = Deno.env.get("OWNER_USER_ID") || "";
+const IP_HASH_SECRET = Deno.env.get("IP_HASH_SECRET") || "";
 const cors = {
   "Access-Control-Allow-Origin": Deno.env.get("ALLOWED_SITE_ORIGIN") || "https://haralampos2009.github.io",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -18,7 +19,11 @@ Deno.serve(async (req) => {
     if (!token) return reply({ error: "login_required" }, 401);
     const admin = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, { auth: { persistSession: false } });
     const { data: auth, error: authError } = await admin.auth.getUser(token);
-    if (authError || !auth.user) return reply({ error: "invalid_session" }, 401);\n    let allowed = !!OWNER_USER_ID && auth.user.id === OWNER_USER_ID;\n    const { data: roleRows, error: roleError } = await admin.from("site_roles").select("role").eq("user_id", auth.user.id).limit(5);\n    if (!roleError && (roleRows || []).some((r: { role?: string }) => ["creator", "admin"].includes(String(r.role || "").toLowerCase()))) allowed = true;\n    if (!allowed) return reply({ error: "forbidden" }, 403);
+    if (authError || !auth.user) return reply({ error: "invalid_session" }, 401);
+    let allowed = !!OWNER_USER_ID && auth.user.id === OWNER_USER_ID;
+    const { data: roleRows, error: roleError } = await admin.from("site_roles").select("role").eq("user_id", auth.user.id).limit(5);
+    if (!roleError && (roleRows || []).some((r: { role?: string }) => ["creator", "admin"].includes(String(r.role || "").toLowerCase()))) allowed = true;
+    if (!allowed) return reply({ error: "forbidden" }, 403);
 
     if (req.method === "GET") {
       const url = new URL(req.url);
@@ -32,6 +37,7 @@ Deno.serve(async (req) => {
 
     if (req.method === "POST") {
       const body = await req.json().catch(() => ({}));
+      const action = body.action;
       if (action === "issue") {
         const username = String(body.roblox_username || "").trim();
         const duration = String(body.duration || "24h");
@@ -64,8 +70,8 @@ Deno.serve(async (req) => {
         }
         return reply({ error: "key_generation_failed" }, 503);
       }
-\n      const id = typeof body.id === "string" ? body.id : "";
-      const action = body.action;
+
+      const id = typeof body.id === "string" ? body.id : "";
       if (!id || !["revoke", "reset_binding"].includes(action)) return reply({ error: "bad_request" }, 400);
       const patch = action === "revoke" ? { revoked: true } : { bound_roblox_id: null };
       const { error } = await admin.from("keys").update(patch).eq("id", id);
