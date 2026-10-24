@@ -10,11 +10,26 @@
 
   // Apply the visitor's saved seasonal theme on every page, without touching page background images.
   try {
-    const allowedThemes = ["default", "halloween", "winter", "spring"];
+    const allowedThemes = ["default", "halloween", "winter", "summer"];
     const savedTheme = localStorage.getItem("dyserrealm-season-theme") || "default";
     document.documentElement.dataset.seasonTheme = allowedThemes.includes(savedTheme) ? savedTheme : "default";
   } catch (_) {
     document.documentElement.dataset.seasonTheme = "default";
+  }
+
+  async function loadSharedSeasonTheme() {
+    const allowed = ["default", "halloween", "winter", "summer"];
+    try {
+      const response = await fetch(SUPABASE_URL + "/rest/v1/site_settings?key=eq.season_theme&select=value&limit=1", {
+        headers: { apikey: SUPABASE_KEY, Authorization: "Bearer " + SUPABASE_KEY }
+      });
+      if (!response.ok) return;
+      const rows = await response.json();
+      const theme = rows && rows[0] && rows[0].value;
+      if (!allowed.includes(theme)) return;
+      document.documentElement.dataset.seasonTheme = theme;
+      try { localStorage.setItem("dyserrealm-season-theme", theme); } catch (_) {}
+    } catch (_) {}
   }
 
   function readConsent() {
@@ -219,6 +234,7 @@
   function start() {
     buildUI();
     startSeasonalEffects();
+    loadSharedSeasonTheme();
     if (readConsent() === "analytics") recordPageView();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start, { once: true });
