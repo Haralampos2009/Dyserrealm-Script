@@ -122,10 +122,8 @@ async function generate(){
   const {data,error}=await client.functions.invoke("generate-key",{body:{turnstile_token:captcha}});
   if(error)throw error;
   if(!data?.key)throw new Error(data?.error||"Server did not return a key.");
-  $("#key-output").textContent=data.key;
-  const expiry=new Date(data.expires_at);
-  $("#key-expiry").textContent="EXPIRES: "+expiry.toLocaleString();
-  message.textContent="KEY CREATED AND REGISTERED ON SERVER.";
+  showKey(data.key,data.expires_at,true);
+  message.textContent=data.existing?"YOUR ACTIVE KEY WAS RESTORED FROM THE SERVER.":"KEY CREATED AND REGISTERED ON SERVER.";
   try{window.turnstile?.reset()}catch{}
  }catch(error){
   let detail=error?.message||"Request failed.";
