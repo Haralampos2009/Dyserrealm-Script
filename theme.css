@@ -326,3 +326,121 @@ html[data-season-theme="summer"] body::after{content:"🌿  🌼  🌿";color:#a
 
 /* The Summer preview uses its own green/pink palette. */
 .season-summer-preview{background:linear-gradient(135deg,#103d28,#d88b27);color:#fff0a6}
+
+
+/* Final seasonal color overrides: also recolor hero emphasis and the Settings workspace. */
+html[data-season-theme="halloween"]{
+  --season-heading:#ffbd72;--season-emphasis:#ff9b35;--season-copy:#f1dffb;
+}
+html[data-season-theme="winter"]{
+  --season-heading:#a8eaff;--season-emphasis:#7ce7ff;--season-copy:#e0f4ff;
+}
+html[data-season-theme="summer"]{
+  --season-heading:#a4ffb5;--season-emphasis:#ff9fd7;--season-copy:#e6ffec;
+}
+html[data-season-theme="halloween"] .hero h1,
+html[data-season-theme="winter"] .hero h1,
+html[data-season-theme="summer"] .hero h1,
+html[data-season-theme="halloween"] .hero h1 em,
+html[data-season-theme="winter"] .hero h1 em,
+html[data-season-theme="summer"] .hero h1 em,
+html[data-season-theme="halloween"] .section h2,
+html[data-season-theme="winter"] .section h2,
+html[data-season-theme="summer"] .section h2,
+html[data-season-theme="halloween"] .section h2 em,
+html[data-season-theme="winter"] .section h2 em,
+html[data-season-theme="summer"] .section h2 em,
+html[data-season-theme="halloween"] .closing h2,
+html[data-season-theme="winter"] .closing h2,
+html[data-season-theme="summer"] .closing h2,
+html[data-season-theme="halloween"] .closing h2 em,
+html[data-season-theme="winter"] .closing h2 em,
+html[data-season-theme="summer"] .closing h2 em,
+html[data-season-theme="halloween"] .key-panel h2,
+html[data-season-theme="winter"] .key-panel h2,
+html[data-season-theme="summer"] .key-panel h2,
+html[data-season-theme="halloween"] .key-panel h2 em,
+html[data-season-theme="winter"] .key-panel h2 em,
+html[data-season-theme="summer"] .key-panel h2 em{
+  color:var(--season-heading)!important;
+  -webkit-text-fill-color:var(--season-heading)!important;
+  text-shadow:0 0 28px color-mix(in srgb,var(--season-heading) 20%,transparent)!important;
+}
+html[data-season-theme="halloween"] .hero h1 em,
+html[data-season-theme="halloween"] .section h2 em,
+html[data-season-theme="halloween"] .closing h2 em,
+html[data-season-theme="halloween"] .key-panel h2 em{color:#ff9b35!important;-webkit-text-fill-color:#ff9b35!important}
+html[data-season-theme="winter"] .hero h1 em,
+html[data-season-theme="winter"] .section h2 em,
+html[data-season-theme="winter"] .closing h2 em,
+html[data-season-theme="winter"] .key-panel h2 em{color:#7ce7ff!important;-webkit-text-fill-color:#7ce7ff!important}
+html[data-season-theme="summer"] .hero h1 em,
+html[data-season-theme="summer"] .section h2 em,
+html[data-season-theme="summer"] .closing h2 em,
+html[data-season-theme="summer"] .key-panel h2 em{color:#ff9fd7!important;-webkit-text-fill-color:#ff9fd7!important}
+
+html[data-season-theme="halloween"] .settings-workspace h2,
+html[data-season-theme="halloween"] .settings-workspace h3,
+html[data-season-theme="halloween"] .settings-workspace h4,
+html[data-season-theme="winter"] .settings-workspace h2,
+html[data-season-theme="winter"] .settings-workspace h3,
+html[data-season-theme="winter"] .settings-workspace h4,
+html[data-season-theme="summer"] .settings-workspace h2,
+html[data-season-theme="summer"] .settings-workspace h3,
+html[data-season-theme="summer"] .settings-workspace h4{
+  color:var(--season-heading)!important;-webkit-text-fill-color:var(--season-heading)!important;
+}
+html[data-season-theme="halloween"] .settings-workspace h2 em,
+html[data-season-theme="halloween"] .settings-workspace h3 em,
+html[data-season-theme="winter"] .settings-workspace h2 em,
+html[data-season-theme="winter"] .settings-workspace h3 em,
+html[data-season-theme="summer"] .settings-workspace h2 em,
+html[data-season-theme="summer"] .settings-workspace h3 em{
+  color:var(--season-emphasis)!important;-webkit-text-fill-color:var(--season-emphasis)!important;
+}
+html[data-season-theme="halloween"] .settings-workspace p,
+html[data-season-theme="halloween"] .settings-workspace label,
+html[data-season-theme="halloween"] .settings-workspace small,
+html[data-season-theme="halloween"] .settings-sidebar,
+html[data-season-theme="halloween"] .settings-nav-item,
+html[data-season-theme="winter"] .settings-workspace p,
+html[data-season-theme="winter"] .settings-workspace label,
+html[data-season-theme="winter"] .settings-workspace small,
+html[data-season-theme="winter"] .settings-sidebar,
+html[data-season-theme="winter"] .settings-nav-item,
+html[data-season-theme="summer"] .settings-workspace p,
+html[data-season-theme="summer"] .settings-workspace label,
+html[data-season-theme="summer"] .settings-workspace small,
+html[data-season-theme="summer"] .settings-sidebar,
+html[data-season-theme="summer"] .settings-nav-item{
+  color:var(--season-copy)!important;
+}
+html[data-season-theme="halloween"] .settings-nav-item.active,
+html[data-season-theme="halloween"] .settings-nav-item:hover{color:#ff9b35!important;border-color:#ff9b35!important}
+html[data-season-theme="winter"] .settings-nav-item.active,
+html[data-season-theme="winter"] .settings-nav-item:hover{color:#7ce7ff!important;border-color:#7ce7ff!important}
+html[data-season-theme="summer"] .settings-nav-item.active,
+html[data-season-theme="summer"] .settings-nav-item:hover{color:#8cf0a5!important;border-color:#8cf0a5!important}
+html[data-season-theme="halloween"] .settings-sidebar-brand strong,
+html[data-season-theme="halloween"] .settings-page-heading .kicker{color:#ff9b35!important}
+html[data-season-theme="winter"] .settings-sidebar-brand strong,
+html[data-season-theme="winter"] .settings-page-heading .kicker{color:#7ce7ff!important}
+html[data-season-theme="summer"] .settings-sidebar-brand strong,
+html[data-season-theme="summer"] .settings-page-heading .kicker{color:#8cf0a5!important}
+html[data-season-theme="halloween"] .settings-account-card,
+html[data-season-theme="halloween"] .settings-profile-card,
+html[data-season-theme="halloween"] .settings-appearance-card,
+html[data-season-theme="halloween"] .settings-security-card,
+html[data-season-theme="winter"] .settings-account-card,
+html[data-season-theme="winter"] .settings-profile-card,
+html[data-season-theme="winter"] .settings-appearance-card,
+html[data-season-theme="winter"] .settings-security-card,
+html[data-season-theme="summer"] .settings-account-card,
+html[data-season-theme="summer"] .settings-profile-card,
+html[data-season-theme="summer"] .settings-appearance-card,
+html[data-season-theme="summer"] .settings-security-card{
+  background:color-mix(in srgb,var(--panel) 86%,transparent)!important;
+}
+html[data-season-theme="halloween"] .btn.primary{background:#ff9b35!important;color:#210c25!important}
+html[data-season-theme="winter"] .btn.primary{background:#7ce7ff!important;color:#071827!important}
+html[data-season-theme="summer"] .btn.primary{background:#8cf0a5!important;color:#082316!important}
