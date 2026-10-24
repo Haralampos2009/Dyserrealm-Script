@@ -2,7 +2,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-const OWNER_USER_ID = Deno.env.get("OWNER_USER_ID")!;
+const OWNER_USER_ID = Deno.env.get("OWNER_USER_ID") || "";\nconst IP_HASH_SECRET = Deno.env.get("IP_HASH_SECRET") || "";
 const cors = {
   "Access-Control-Allow-Origin": Deno.env.get("ALLOWED_SITE_ORIGIN") || "https://haralampos2009.github.io",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -18,7 +18,7 @@ Deno.serve(async (req) => {
     if (!token) return reply({ error: "login_required" }, 401);
     const admin = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, { auth: { persistSession: false } });
     const { data: auth, error: authError } = await admin.auth.getUser(token);
-    if (authError || !auth.user || !OWNER_USER_ID || auth.user.id !== OWNER_USER_ID) return reply({ error: "forbidden" }, 403);
+    if (authError || !auth.user) return reply({ error: "invalid_session" }, 401);\n    let allowed = !!OWNER_USER_ID && auth.user.id === OWNER_USER_ID;\n    const { data: roleRows, error: roleError } = await admin.from("site_roles").select("role").eq("user_id", auth.user.id).limit(5);\n    if (!roleError && (roleRows || []).some((r: { role?: string }) => ["creator", "admin"].includes(String(r.role || "").toLowerCase()))) allowed = true;\n    if (!allowed) return reply({ error: "forbidden" }, 403);
 
     if (req.method === "GET") {
       const url = new URL(req.url);
