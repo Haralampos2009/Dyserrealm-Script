@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="style.css?v=20261024-sharedauth2">
 <link rel="stylesheet" href="theme.css?v=20261025-seasonalfix1">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&hl=en" async defer></script>
 <style>
 .site-tabs a[href="profiles.html"]{display:none!important}
 .generator-page{min-height:calc(100vh - 160px);display:grid;place-items:center;padding:45px 20px}
@@ -43,14 +43,10 @@
 .key-auth-switch button{border:0;background:none;color:#60f3d7;text-decoration:underline;cursor:pointer}
 @media(max-width:560px){.key-history-grid{grid-template-columns:1fr}.generator-wrap .key-controls{grid-template-columns:1fr}.generator-wrap .key-output{align-items:flex-start;flex-direction:column}.generator-wrap .key-output .btn{width:100%}.key-locked{padding:30px 20px}.key-auth-card{padding:25px 20px}.account{gap:6px}}
 </style>
-<script src="analytics.js?v=20261025-seasonalfix1" defer></script></head>
+<script src="header-auth.js?v=20261025-headerfix1" defer></script><script src="analytics.js?v=20261025-headerfix1" defer></script></head>
 <body class="key-generator-page">
 <div class="scanlines"></div>
-<header class="topbar">
-<a class="brand" href="index.html"><b>D<span>_</span></b> DYSERREALM<small>/SCRIPT</small></a>
-<nav class="site-tabs"><a href="index.html">HOME</a><a href="feed.html">FEED</a><a href="library.html">SCRIPT LIBRARY</a><a href="key-generator.html">KEY GENERATOR</a><a href="executors.html">EXECUTORS</a></nav>
-<div class="account"><span id="key-user-status" class="kicker">CHECKING SESSION…</span></div>
-</header>
+<header class="topbar"><a class="brand" href="index.html"><b>D<span>_</span></b> DYSERREALM<small>/SCRIPT</small></a><nav class="site-tabs" aria-label="Main navigation"><a href="index.html">HOME</a><a href="feed.html">FEED</a><a href="library.html">SCRIPT LIBRARY</a><a href="key-generator.html">KEY GENERATOR</a><a href="executors.html">EXECUTORS</a></nav><div class="account"><span id="user-label"></span><span id="key-user-status" class="kicker" hidden></span><a id="header-profile" class="header-profile hidden" href="profiles.html" aria-label="Your profile" title="Your profile"><span id="header-avatar-fallback">U</span><img id="header-avatar-image" alt="" hidden></a><a id="header-settings" class="btn ghost hidden" href="index.html#settings-profile">SETTINGS</a><a id="header-login" class="btn ghost" href="index.html?auth=login">LOG IN</a><a id="header-signup" class="btn primary" href="index.html?auth=signup">SIGN UP ↗</a><button id="header-logout" class="btn ghost hidden" type="button">LOG OUT</button><button id="mobile-menu" class="btn ghost menu" type="button" aria-label="Toggle navigation">☰</button></div></header>
 <main class="generator-page">
 <section id="key-locked" class="key-locked" aria-labelledby="key-lock-title">
 <div class="key-lock-icon" aria-hidden="true">🔒</div>
@@ -122,7 +118,7 @@ function showKey(key,expiresAt,save=false,createdAt=null){const expiry=new Date(
 function restoreCachedKey(){stopKeyCountdown();if(!currentUser)return;try{const raw=localStorage.getItem(KEY_CACHE_PREFIX+currentUser.id);if(!raw)return;const cached=JSON.parse(raw);renderHistory(cached);if(showKey(cached.key,cached.expires_at,false,cached.created_at))$("#key-message").textContent="YOUR SAVED KEY IS DISPLAYED BELOW.";else $("#key-message").textContent="YOUR LAST KEY IS SHOWN BELOW; IT MAY HAVE EXPIRED."}catch{}}
 function showAuth(mode){location.href="index.html?auth="+(mode==="login"?"login":"signup")+"&return=key-generator.html"}
 function closeAuth(){ $("#key-auth-modal").classList.add("hidden");document.body.style.overflow=""}
-function setMember(user){currentUser=user||null;const locked=!currentUser;$("#key-locked").classList.toggle("hidden",!locked);$("#generator-app").classList.toggle("hidden",locked);$("#key-user-status").textContent=locked?"MEMBERS ONLY":(currentUser.user_metadata?.display_name||currentUser.email?.split("@")[0]||"MEMBER").toUpperCase();if(locked){$("#key-user-status").textContent="KEY LAB / LOCKED";stopKeyCountdown();$("#key-output").textContent="DS-XXXX-XXXX-XXXX-XXXX";$("#key-expiry").textContent="TIME LEFT: LOG IN TO VIEW YOUR KEY";}else restoreCachedKey();}
+function setMember(user){currentUser=user||null;window.dispatchEvent(new CustomEvent("dyserrealm:header-user",{detail:{user:currentUser}}));const locked=!currentUser;$("#key-locked").classList.toggle("hidden",!locked);$("#generator-app").classList.toggle("hidden",locked);if($("#key-user-status"))$("#key-user-status").textContent=locked?"KEY LAB / LOCKED":(currentUser.user_metadata?.display_name||currentUser.email?.split("@")[0]||"MEMBER").toUpperCase();if(locked){stopKeyCountdown();$("#key-output").textContent="DS-XXXX-XXXX-XXXX-XXXX";$("#key-expiry").textContent="TIME LEFT: LOG IN TO VIEW YOUR KEY";}else restoreCachedKey();}
  async function loadIssuedKeys(){
   const panel=$("#issued-keys-panel"),status=$("#issued-keys-status"),rows=$("#issued-keys-rows");
   if(!client||!currentUser){panel.hidden=true;return}
