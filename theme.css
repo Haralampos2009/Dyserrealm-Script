@@ -210,3 +210,42 @@ body,body *{text-shadow:none}
 .executor-add-form input::placeholder,.executor-add-form textarea::placeholder,
 .executor-search::placeholder{color:#9eb9bb!important;opacity:1}
 .site-tabs a{color:#c3dfe0}
+
+
+/* Seasonal themes: colors and decorations only; existing background images stay untouched. */
+:root{--button-primary-color:var(--green);--button-secondary-color:var(--purple);--button-secondary-border:color-mix(in srgb,var(--purple) 55%,transparent)}
+.btn.primary{background:var(--button-primary-color);border-color:var(--button-primary-color);color:#080a0f}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.outline,.btn.ghost{border-color:var(--button-secondary-border)}
+.btn.outline:hover,.btn.ghost:hover{border-color:var(--button-secondary-color);color:var(--button-secondary-color)}
+html[data-season-theme="halloween"]{--bg:#100817;--panel:#1c1024;--line:#543052;--text:#fff2e5;--muted:#c0a7c7;--green:#ff8b2c;--purple:#c26bff;--button-primary-color:#ff8b2c;--button-secondary-color:#c26bff;--button-secondary-border:#c26bff88;color-scheme:dark}
+html[data-season-theme="halloween"] body{background-color:#100817;color:#fff2e5}
+html[data-season-theme="halloween"] .topbar{border-bottom-color:#ff8b2c55}
+html[data-season-theme="halloween"] .brand b{border-color:#ff8b2c;color:#ff8b2c;box-shadow:0 0 22px #ff8b2c20}
+html[data-season-theme="halloween"] .brand b span{color:#c26bff}
+html[data-season-theme="halloween"] body::before{content:"🕸️";position:fixed;z-index:29;pointer-events:none;top:86px;right:18px;font-size:clamp(30px,5vw,58px);opacity:.42;filter:drop-shadow(0 0 8px #c26bff66)}
+html[data-season-theme="halloween"] body::after{content:"🎃";position:fixed;z-index:29;pointer-events:none;left:16px;bottom:16px;font-size:clamp(26px,4vw,44px);opacity:.72;filter:drop-shadow(0 0 10px #ff8b2c66)}
+html[data-season-theme="winter"]{--bg:#06111d;--panel:#0d2031;--line:#24465e;--text:#edfaff;--muted:#a6c3d5;--green:#7ce7ff;--purple:#b4c9ff;--button-primary-color:#7ce7ff;--button-secondary-color:#b4c9ff;--button-secondary-border:#b4c9ff88;color-scheme:dark}
+html[data-season-theme="winter"] body{background-color:#06111d;color:#edfaff}
+html[data-season-theme="winter"] .topbar{border-bottom-color:#7ce7ff44}
+html[data-season-theme="winter"] .brand b{border-color:#7ce7ff;color:#7ce7ff;box-shadow:0 0 22px #7ce7ff18}
+html[data-season-theme="winter"] body::before{content:"❄️  ·  ❄️";position:fixed;z-index:29;pointer-events:none;top:88px;right:14px;font-size:clamp(20px,3vw,34px);opacity:.65;animation:season-snow 5s ease-in-out infinite alternate}
+html[data-season-theme="winter"] body::after{content:"❄  ❄  ❄";position:fixed;z-index:29;pointer-events:none;left:12px;bottom:10px;color:#a8eaff;font-size:24px;letter-spacing:10px;opacity:.7;animation:season-snow 6s ease-in-out infinite alternate-reverse}
+html[data-season-theme="spring"]{--bg:#09150f;--panel:#10251b;--line:#2c563e;--text:#f0fff4;--muted:#b0cdb8;--green:#8cf0a5;--purple:#ff9fd7;--button-primary-color:#8cf0a5;--button-secondary-color:#ff9fd7;--button-secondary-border:#ff9fd788;color-scheme:dark}
+html[data-season-theme="spring"] body{background-color:#09150f;color:#f0fff4}
+html[data-season-theme="spring"] .topbar{border-bottom-color:#8cf0a544}
+html[data-season-theme="spring"] .brand b{border-color:#8cf0a5;color:#8cf0a5}
+html[data-season-theme="spring"] body::before{content:"🌸  ✿";position:fixed;z-index:29;pointer-events:none;top:88px;right:16px;font-size:clamp(22px,3vw,36px);opacity:.62}
+html[data-season-theme="spring"] body::after{content:"🌿";position:fixed;z-index:29;pointer-events:none;left:14px;bottom:12px;font-size:32px;opacity:.7}
+@keyframes season-snow{from{transform:translateY(-2px)}to{transform:translateY(10px)}}
+.season-theme-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0}
+.season-theme-option{position:relative;display:flex;flex-direction:column;gap:6px;padding:12px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.025);cursor:pointer;transition:border-color .2s,transform .2s}
+.season-theme-option:has(input:checked){border-color:var(--green);box-shadow:0 0 0 1px color-mix(in srgb,var(--green) 35%,transparent),0 8px 24px #0002}
+.season-theme-option input{position:absolute;top:12px;right:12px;accent-color:var(--green)}
+.season-theme-preview{height:68px;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:23px;letter-spacing:5px}
+.season-default-preview{background:linear-gradient(135deg,#080a0f,#302044);color:#b7f36b;font-family:monospace}
+.season-halloween-preview{background:linear-gradient(135deg,#17091f,#4c1d3f);color:#ff8b2c}
+.season-winter-preview{background:linear-gradient(135deg,#06111d,#1e4a68);color:#a8eaff}
+.season-spring-preview{background:linear-gradient(135deg,#09150f,#27563d);color:#ff9fd7}
+.season-theme-option strong{font-size:13px}.season-theme-option small{color:var(--muted);font-size:11px;line-height:1.5}
+@media(max-width:520px){.season-theme-grid{grid-template-columns:1fr}.season-theme-preview{height:56px}}
