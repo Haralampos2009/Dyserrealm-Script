@@ -120,7 +120,9 @@ function setMember(user){currentUser=user||null;const locked=!currentUser;$("#ke
 function explainError(error){
  const message=error?.message||"Request failed.";
  if(/active_key_exists/i.test(message))return "You already have an active key. It expires before a new key can be generated.";
- if(/user_limit/i.test(message))return "Account limit reached: up to 3 key-generation attempts per 12 hours. Try again later.";\n if(/ip_limit/i.test(message))return "Network limit reached: too many key-generation attempts from this IP in 12 hours. Try again later.";\n if(/daily_limit/i.test(message)||/429/.test(message))return "Generation limit reached. Try again later.";
+ if(/user_limit/i.test(message))return "Account limit reached: up to 3 key-generation attempts per 12 hours. Try again later.";
+ if(/ip_limit/i.test(message))return "Network limit reached: too many key-generation attempts from this IP in 12 hours. Try again later.";
+ if(/daily_limit/i.test(message)||/429/.test(message))return "Generation limit reached. Try again later.";
  if(/captcha_failed/i.test(message))return "Complete the CAPTCHA before generating a key.";
  return message;
 }
