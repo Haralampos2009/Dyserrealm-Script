@@ -259,7 +259,14 @@ function initButtonColorSettings(){
  primary?.addEventListener("input",save);secondary?.addEventListener("input",save);
  $("#button-colors-reset")?.addEventListener("click",()=>{apply(defaults);try{localStorage.removeItem("dyserrealm-button-colors");if(message)message.textContent="DEFAULT COLORS RESTORED."}catch{save()}});
 }
-function events(){initButtonColorSettings();
+function initSeasonThemeSettings(){
+ const allowed=["default","halloween","winter","spring"],key="dyserrealm-season-theme";
+ const radios=$('input[name="season-theme"]'),message=$("#season-theme-message");
+ const current=()=>{const value=localStorage.getItem(key)||"default";return allowed.includes(value)?value:"default"};
+ const apply=value=>{const theme=allowed.includes(value)?value:"default";document.documentElement.dataset.seasonTheme=theme;radios.forEach(r=>r.checked=r.value===theme);try{localStorage.setItem(key,theme)}catch{}if(message)message.textContent=theme==="halloween"?"HALLOWEEN THEME ACTIVE — COBWEBS AND PUMPKINS ENABLED.":theme==="winter"?"WINTER THEME ACTIVE — SNOWFLAKES AND ICE COLORS ENABLED.":theme==="spring"?"SPRING THEME ACTIVE — FRESH SEASONAL COLORS ENABLED.":"ORIGINAL DYSERREALM THEME ACTIVE."};
+ apply(current());radios.forEach(r=>r.addEventListener("change",()=>{if(r.checked)apply(r.value)}));
+}
+function events(){initButtonColorSettings();initSeasonThemeSettings();
 /* Register close controls first so they still work if a later page-specific handler fails. */
 document.addEventListener("click",e=>{const button=e.target.closest("[data-close]");if(!button)return;const id=button.dataset.close;if(!id||!$("#"+id))return;e.preventDefault();e.stopImmediatePropagation();close(id)},true);
 document.addEventListener("keydown",e=>{if(e.key==="Escape")$$(".modal:not(.hidden)").forEach(m=>close(m.id))});
