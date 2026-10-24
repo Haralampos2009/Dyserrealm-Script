@@ -75,17 +75,17 @@ Deno.serve(async (req) => {
     // Enforce the per-account limit first so rejected attempts do not consume shared IP quota.
     const userHash = await sha256(IP_HASH_SECRET + ":user:" + authData.user.id);
     const userLimit = await admin.rpc("consume_key_rate_limit", {
-      p_bucket: "generate_user_day", p_subject_hash: userHash, p_limit: 3, p_window_seconds: 86400,
+      p_bucket: "generate_user_12h", p_subject_hash: userHash, p_limit: 3, p_window_seconds: 43200,
     });
     if (userLimit.error) return reply({ error: "temporarily_unavailable" }, 503);
-    if (!userLimit.data?.[0]?.allowed) return reply({ error: "daily_limit", retry_after: userLimit.data[0].retry_after }, 429);
+    if (!userLimit.data?.[0]?.allowed) return reply({ error: "user_limit", retry_after: userLimit.data[0].retry_after }, 429);
 
     // A higher shared-IP limit avoids blocking ordinary users on the same network.
     const ipLimit = await admin.rpc("consume_key_rate_limit", {
-      p_bucket: "generate_ip_day", p_subject_hash: ipHash, p_limit: 20, p_window_seconds: 86400,
+      p_bucket: "generate_ip_12h", p_subject_hash: ipHash, p_limit: 20, p_window_seconds: 43200,
     });
     if (ipLimit.error) return reply({ error: "temporarily_unavailable" }, 503);
-    if (!ipLimit.data?.[0]?.allowed) return reply({ error: "daily_limit", retry_after: ipLimit.data[0].retry_after }, 429);
+    if (!ipLimit.data?.[0]?.allowed) return reply({ error: "ip_limit", retry_after: ipLimit.data[0].retry_after }, 429);
 
     const expiresAt = new Date(Date.now() + KEY_TTL_HOURS * 3600_000).toISOString();
     for (let attempt = 0; attempt < 5; attempt++) {
