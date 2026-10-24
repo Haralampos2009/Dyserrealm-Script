@@ -173,8 +173,52 @@
     if (settings) settings.remove();
   }
 
+  function startSeasonalEffects() {
+    const root = document.documentElement;
+    let layer = document.querySelector(".seasonal-particles");
+    if (!layer) {
+      layer = document.createElement("div");
+      layer.className = "seasonal-particles";
+      layer.setAttribute("aria-hidden", "true");
+      document.body.appendChild(layer);
+    }
+    const render = () => {
+      const theme = root.dataset.seasonTheme || "default";
+      layer.replaceChildren();
+      if (theme === "default") { layer.hidden = true; return; }
+      const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduced) { layer.hidden = true; return; }
+      layer.hidden = false;
+      const mobile = window.matchMedia && window.matchMedia("(max-width: 600px)").matches;
+      const count = mobile ? 13 : 25;
+      const symbols = theme === "winter" ? ["❄","❅","❆","✦"] :
+        theme === "halloween" ? ["👻","🦇","✦","🎃"] : ["🌸","🌼","✿","✨"];
+      for (let i = 0; i < count; i++) {
+        const particle = document.createElement("span");
+        particle.className = "seasonal-particle";
+        particle.textContent = symbols[i % symbols.length];
+        particle.style.setProperty("--x", (Math.random() * 100) + "vw");
+        particle.style.setProperty("--size", (theme === "winter" ? 10 + Math.random() * 12 : 13 + Math.random() * 11) + "px");
+        particle.style.setProperty("--size-mobile", (9 + Math.random() * 7) + "px");
+        particle.style.setProperty("--opacity", (0.25 + Math.random() * 0.55).toFixed(2));
+        particle.style.setProperty("--duration", (theme === "winter" ? 8 + Math.random() * 10 : 12 + Math.random() * 12) + "s");
+        particle.style.setProperty("--delay", (-Math.random() * 20) + "s");
+        particle.style.setProperty("--drift", ((Math.random() - 0.5) * 120) + "px");
+        layer.appendChild(particle);
+      }
+    };
+    render();
+    let lastTheme = root.dataset.seasonTheme || "default";
+    new MutationObserver(() => {
+      const current = root.dataset.seasonTheme || "default";
+      if (current !== lastTheme) { lastTheme = current; render(); }
+    }).observe(root, { attributes: true, attributeFilter: ["data-season-theme"] });
+    window.addEventListener("resize", render, { passive: true });
+  }
+
   function start() {
     buildUI();
+    startSeasonalEffects();
     if (readConsent() === "analytics") recordPageView();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start, { once: true });
