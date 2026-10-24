@@ -96,7 +96,20 @@ Deno.serve(async (req) => {
       if (error) return reply({ error: "temporarily_unavailable" }, 503);
       const result = data?.[0];
       if (result?.issued) return reply({ key, created_at: new Date().toISOString(), expires_at: result.expires_at, format: "DS-XXXX-XXXX-XXXX-XXXX" });
-      if (result?.reason === "active_key_exists") return reply({ error: "active_key_exists" }, 409);
+      if (result?.reason === "active_key_exists") {
+        // A key may have been created by a parallel request; return it instead of an error.
+        const { data: activeKey, error: activeKeyError } = await admin.from("keys")
+          .select("key,created_at,expires_at")
+          .eq("created_by_user_id", authData.user.id)
+          .eq("revoked", false)
+          .gt("expires_at", new Date().toISOString())
+          .order("created_at", { ascending: false })
+          .limit(1)
+          .maybeSingle();
+        if (activeKeyError) return reply({ error: "temporarily_unavailable" }, 503);
+        if (activeKey) return reply({ key: activeKey.key, created_at: activeKey.created_at, expires_at: activeKey.expires_at, format: "DS-XXXX-XXXX-XXXX-XXXX", existing: true });
+        return reply({ error: "active_key_exists" }, 409);
+      }
       if (result?.reason !== "collision") return reply({ error: "temporarily_unavailable" }, 503);
     }
     return reply({ error: "key_generation_failed" }, 503);
