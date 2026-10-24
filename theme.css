@@ -653,3 +653,12 @@ html[data-season-theme="summer"] .seasonal-particle{filter:drop-shadow(0 0 5px #
 }
 @media(max-width:380px){.account #settings-open,.account #logout-button{font-size:9px!important;padding-inline:7px!important}.hero h1{font-size:43px!important}.stats{grid-template-columns:1fr!important}.key-controls{grid-template-columns:1fr!important}.key-controls button{grid-column:auto}}
 @media(prefers-reduced-motion:reduce){.seasonal-particle{animation:none!important;display:none!important}}
+
+/* Unified account header + seasonal styling for embedded verification */
+.header-profile{width:36px;height:36px;flex:0 0 36px;display:inline-grid;place-items:center;overflow:hidden;border:1px solid var(--season-emphasis,var(--green));border-radius:50%;background:var(--season-panel,#10141c);color:var(--season-heading,#fff)!important;text-decoration:none!important;font-weight:700}
+.header-profile[hidden],#header-avatar-image[hidden]{display:none!important}.header-profile img{width:100%;height:100%;object-fit:cover}
+#user-label{max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--season-copy,#e9edf4);font-size:11px}
+.turnstile-shell{display:flex;justify-content:center;align-items:center;width:max-content;max-width:100%;margin:18px auto;padding:10px;border:1px solid color-mix(in srgb,var(--season-emphasis,#ff8a2b) 45%,transparent);border-radius:12px;background:color-mix(in srgb,var(--season-panel,#17111e) 92%,transparent);box-shadow:0 0 24px color-mix(in srgb,var(--season-emphasis,#ff8a2b) 9%,transparent)}
+html[data-season-theme="halloween"] .turnstile-shell{border-color:#ff8a2b66;background:#1b1024;box-shadow:0 0 26px #ff8a2b18}html[data-season-theme="winter"] .turnstile-shell{border-color:#79e3ff66;background:#0b2132}html[data-season-theme="summer"] .turnstile-shell{border-color:#ff9fd766;background:#0c2b20}
+.key-generator-page #key-message[role="status"]{display:inline-block;margin-top:8px;padding:7px 11px;border:1px solid color-mix(in srgb,var(--season-emphasis,#ff8a2b) 35%,transparent);border-radius:8px;background:color-mix(in srgb,var(--season-panel,#17111e) 90%,transparent);color:var(--season-heading,#f4e4ff);font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.4px}
+@media(max-width:760px){.topbar .account{margin-left:auto}.header-profile{width:32px;height:32px;flex-basis:32px}#user-label{max-width:90px}}
