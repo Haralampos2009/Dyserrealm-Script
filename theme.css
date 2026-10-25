@@ -841,7 +841,7 @@ html[data-season-theme="summer"] body {
 .modal-card{background:rgba(2,25,31,.87)!important}
 
 /* Easter and New Year backgrounds: add images later at these paths */
-html[data-season-theme="easter"] body{background-color:#17301e!important;background-image:radial-gradient(ellipse at 15% 15%,#ffb7d833,transparent 42%),linear-gradient(180deg,#102b1710,#102b1735),url("./assets/themes/easter/assets/themes/easter/easter.jpg")!important;background-position:center,center,center!important;background-size:cover,cover,cover!important;background-attachment:fixed,fixed,fixed!important;background-repeat:no-repeat,no-repeat,no-repeat!important}
+html[data-season-theme="easter"] body{background-color:#17301e!important;background-image:radial-gradient(ellipse at 15% 15%,#ffb7d833,transparent 42%),linear-gradient(180deg,#102b1710,#102b1735),url("./assets/themes/easter/assets/themes/easter/assets/themes/easter/easter.jpg")!important;background-position:center,center,center!important;background-size:cover,cover,cover!important;background-attachment:fixed,fixed,fixed!important;background-repeat:no-repeat,no-repeat,no-repeat!important}
 html[data-season-theme="newyear"] body{background-color:#061827!important;background-image:radial-gradient(ellipse at 15% 15%,#ffd45b33,transparent 42%),linear-gradient(180deg,#06182710,#07111f35),url("./assets/themes/newyear/assets/themes/newyear/newyear.jpg")!important;background-position:center,center,center!important;background-size:cover,cover,cover!important;background-attachment:fixed,fixed,fixed!important;background-repeat:no-repeat,no-repeat,no-repeat!important}
 
 /* Video previews in Script Library */
@@ -853,3 +853,12 @@ html[data-season-theme="newyear"] body{background-color:#061827!important;backgr
 
 /* All remaining glass surfaces: another 5 percentage points of transparency */
 #settings-form .settings-sidebar,#settings-form .settings-workspace,.profile-card,.executor-card,.library-card{background-color:rgba(10,13,20,.53)!important}
+
+
+/* Unique emoji decorations for every theme, including Easter and New Year */
+html[data-season-theme="default"] body::before{content:"✨  🌌";position:fixed;z-index:29;pointer-events:none;top:90px;right:20px;font-size:clamp(22px,3vw,34px);opacity:.62}
+html[data-season-theme="default"] body::after{content:"💠";position:fixed;z-index:29;pointer-events:none;left:16px;bottom:14px;font-size:30px;opacity:.72}
+html[data-season-theme="easter"] body::before{content:"🐣  🌷  🐰";position:fixed;z-index:29;pointer-events:none;top:90px;right:18px;font-size:clamp(22px,3vw,36px);opacity:.85;filter:drop-shadow(0 0 8px #ffc0d888);animation:season-haunt 5s ease-in-out infinite alternate}
+html[data-season-theme="easter"] body::after{content:"🥚  🌼";position:fixed;z-index:29;pointer-events:none;left:16px;bottom:14px;font-size:30px;opacity:.85;filter:drop-shadow(0 0 8px #ffd6e888)}
+html[data-season-theme="newyear"] body::before{content:"🎆  ✨  🎇";position:fixed;z-index:29;pointer-events:none;top:90px;right:18px;font-size:clamp(22px,3vw,36px);opacity:.85;filter:drop-shadow(0 0 9px #ffd45b88);animation:season-haunt 4s ease-in-out infinite alternate}
+html[data-season-theme="newyear"] body::after{content:"🎄  🎁";position:fixed;z-index:29;pointer-events:none;left:16px;bottom:14px;font-size:30px;opacity:.85;filter:drop-shadow(0 0 9px #ffd45b88)}
