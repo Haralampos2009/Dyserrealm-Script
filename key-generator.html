@@ -7,8 +7,8 @@
 <title>Key Generator // Dyserrealm Script</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261024-sharedauth2">
-<link rel="stylesheet" href="theme.css?v=20261025-seasonalmedia1">
+<link rel="stylesheet" href="style.css?v=20261025-singleclientfix1">
+<link rel="stylesheet" href="theme.css?v=20261025-seasonalmediafix2">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&hl=en" async defer></script>
 <style>
@@ -205,7 +205,7 @@ $("#copy-key").addEventListener("click",async()=>{if(!currentUser){setMember(nul
 
 async function init(){
  if(!window.supabase?.createClient){$("#key-user-status").textContent="AUTH UNAVAILABLE";$("#key-auth-message").textContent="Authentication could not load. Refresh the page and try again.";return}
- client=window.supabase.createClient(URL,KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+ client=window.dyserrealmSupabaseClient||(window.dyserrealmSupabaseClient=window.supabase.createClient(URL,KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}));
  try{const{data,error}=await client.auth.getSession();if(error)throw error;setMember(data.session?.user||null)}
  catch(error){setMember(null);$("#key-user-status").textContent="SESSION CHECK FAILED";$("#key-auth-message").textContent=error?.message||"Could not check your session."}
  client.auth.onAuthStateChange((_event,session)=>{setMember(session?.user||null);if(session?.user)loadIssuedKeys();else $("#issued-keys-panel").hidden=true;});const{data:sessionData}=await client.auth.getSession();if(sessionData.session?.user)await loadIssuedKeys();
