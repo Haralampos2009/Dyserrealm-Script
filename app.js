@@ -259,16 +259,59 @@ function initButtonColorSettings(){
  $("#button-colors-reset")?.addEventListener("click",()=>{apply(defaults);try{localStorage.removeItem("dyserrealm-button-colors");if(message)message.textContent="DEFAULT COLORS RESTORED."}catch{save()}});
 }
 async function initSeasonThemeSettings(){
- const allowed=["default","halloween","winter","summer"],radios=Array.from(document.querySelectorAll('input[name="season-theme"]')),message=$("#season-theme-message"),grid=$(".season-theme-grid");
- const label=value=>value==="halloween"?"HALLOWEEN THEME ACTIVE — COBWEBS AND PUMPKINS ENABLED.":value==="winter"?"WINTER THEME ACTIVE — SNOWFLAKES AND ICE COLORS ENABLED.":value==="summer"?"SUMMER THEME ACTIVE — SUNNY COLORS ENABLED.":"ORIGINAL DYSERREALM THEME ACTIVE.";
- const apply=value=>{const theme=allowed.includes(value)?value:"default";document.documentElement.dataset.seasonTheme=theme;radios.forEach(r=>r.checked=r.value===theme);if(message)message.textContent=label(theme)};
+ const allowed=["default","halloween","winter","summer"];
+ const radios=Array.from(document.querySelectorAll('input[name="season-theme"]'));
+ const message=$("#season-theme-message"),grid=$(".season-theme-grid");
+ const root=document.documentElement;
+ const label=value=>value==="halloween"?"HALLOWEEN THEME ACTIVE — BACKGROUND IMAGE APPLIED.":value==="winter"?"WINTER THEME ACTIVE — BACKGROUND IMAGE APPLIED.":value==="summer"?"SUMMER THEME ACTIVE — BACKGROUND IMAGE APPLIED.":"ORIGINAL DYSERREALM THEME ACTIVE.";
+ const apply=value=>{
+   const theme=allowed.includes(value)?value:"default";
+   root.dataset.seasonTheme=theme;
+   const images={default:"",halloween:"assets/themes/halloween/halloween.jpg",winter:"assets/themes/winter/winter.jpg",summer:"assets/themes/summer/summer.jpg"};
+   if(theme==="default"){
+     root.style.removeProperty("--season-background-image");
+     document.body.style.backgroundImage="";
+   }else{
+     const imageUrl=new URL(images[theme],document.baseURI).href;
+     root.style.setProperty("--season-background-image",'url("'+imageUrl+'")');
+     document.body.style.setProperty("background-image",'linear-gradient(180deg,rgba(5,5,12,.25),rgba(5,5,12,.62)),url("'+imageUrl+'")',"important");
+     document.body.style.setProperty("background-size","cover","important");
+     document.body.style.setProperty("background-position","center center","important");
+     document.body.style.setProperty("background-attachment","fixed","important");
+     document.body.style.setProperty("background-repeat","no-repeat","important");
+   }
+   radios.forEach(r=>r.checked=r.value===theme);
+   if(message)message.textContent=label(theme);
+ };
  let theme="default";
- try{const{data,error}=await db.from("site_settings").select("value").eq("key","season_theme").maybeSingle();if(!error&&allowed.includes(data?.value))theme=data.value;else if(error)console.warn("Could not load shared site theme:",error.message)}catch(e){console.warn("Could not load shared site theme",e)}
+ try{
+   if(db?.from){
+     const {data,error}=await db.from("site_settings").select("value").eq("key","season_theme").maybeSingle();
+     if(!error&&allowed.includes(data?.value))theme=data.value;
+     else if(error)console.warn("Could not load shared site theme:",error.message);
+   }
+ }catch(e){console.warn("Could not load shared site theme",e)}
  apply(theme);
  let creator=false;
  if(user){try{const{data}=await db.from("site_roles").select("role").eq("user_id",user.id).maybeSingle();creator=data?.role==="creator"}catch{}}
  if(grid){grid.hidden=!creator;grid.style.display=creator?"":"none";if(!creator&&message)message.textContent=label(theme)+" THEME IS CONTROLLED BY THE SITE CREATOR."}
- radios.forEach(r=>{r.disabled=!creator;r.addEventListener("change",async()=>{if(!r.checked||!creator)return;radios.forEach(x=>x.disabled=true);if(message)message.textContent="SAVING SHARED SITE THEME…";const{error}=await db.from("site_settings").upsert({key:"season_theme",value:r.value,updated_at:new Date().toISOString(),updated_by:user.id},{onConflict:"key"});if(error){if(message)message.textContent="Could not save shared theme. Run site-theme-setup.sql in Supabase SQL Editor.";console.error(error);radios.forEach(x=>x.disabled=false);return}apply(r.value);radios.forEach(x=>x.disabled=false);if(message)message.textContent=label(r.value)+" — SHARED WITH ALL VISITORS."})});
+ radios.forEach(r=>{
+   r.disabled=!creator;
+   r.addEventListener("change",async()=>{
+     if(!r.checked||!creator)return;
+     radios.forEach(x=>x.disabled=true);
+     if(message)message.textContent="SAVING THEME…";
+     try{
+       const {error}=await db.from("site_settings").upsert({key:"season_theme",value:r.value,updated_at:new Date().toISOString(),updated_by:user.id},{onConflict:"key"});
+       if(error)throw error;
+       apply(r.value);
+       if(message)message.textContent=label(r.value)+" — SHARED WITH ALL VISITORS.";
+     }catch(error){
+       if(message)message.textContent="THEME SAVE FAILED: "+(error.message||"Check site-theme-setup.sql in Supabase.");
+       console.error("Theme save failed",error);
+     }finally{radios.forEach(x=>x.disabled=!creator)}
+   });
+ });
 }
 function events(){const avatarInput=$("#settings-avatar-file"),avatarFileName=$("#settings-avatar-file-name");if(avatarInput){avatarInput.addEventListener("click",()=>{avatarInput.value=""});avatarInput.addEventListener("change",async e=>{const file=e.target.files?.[0];if(!file)return;const msg=$("#settings-profile-message");const previousAvatar=profileAvatarData;if(avatarFileName)avatarFileName.textContent=file.name;let instantUrl="";try{instantUrl=URL.createObjectURL(file);profileAvatarData=instantUrl;renderSettingsAvatar();msg.textContent="AVATAR PREVIEW UPDATED — CHECKING AND SAVING…";const prepared=await prepareAvatar(file);await persistAvatarImmediately(prepared);if(instantUrl)URL.revokeObjectURL(instantUrl);toast("Avatar updated.")}catch(error){msg.textContent="AVATAR SHOWN IN PREVIEW, BUT NOT SAVED: "+(error.message||"Could not save avatar.");if(avatarFileName)avatarFileName.textContent=file.name;/* Keep the selected local preview visible so image processing or cloud errors do not make the avatar appear unselected. */}})}const removeAvatarButton=$("#settings-avatar-remove");if(removeAvatarButton)removeAvatarButton.onclick=async()=>{const previousAvatar=profileAvatarData;profileAvatarData="";if(avatarFileName)avatarFileName.textContent="No image selected";if(avatarInput)avatarInput.value="";renderSettingsAvatar();try{await persistAvatarImmediately(null);toast("Avatar removed.")}catch(error){profileAvatarData=previousAvatar;renderSettingsAvatar();$("#settings-profile-message").textContent="AVATAR NOT REMOVED: "+(error.message||"Could not save change.")}};
 initButtonColorSettings();initSeasonThemeSettings();
