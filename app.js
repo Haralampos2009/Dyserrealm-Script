@@ -270,7 +270,7 @@ async function initSeasonThemeSettings(){
  const apply=value=>{
    const theme=allowed.includes(value)?value:"default";
    root.dataset.seasonTheme=theme;
-   const images={default:"",halloween:"assets/themes/halloween/halloween.jpg",winter:"assets/themes/winter/winter.jpg",summer:"assets/themes/summer/summer.jpg",easter:"assets/themes/easter/assets/themes/easter/easter.jpg",newyear:"assets/themes/newyear/assets/themes/newyear/newyear.jpg"};
+   const images={default:"",halloween:"assets/themes/halloween/halloween.jpg",winter:"assets/themes/winter/winter.jpg",summer:"assets/themes/summer/summer.jpg",easter:"assets/themes/easter/assets/themes/easter/assets/themes/easter/easter.jpg",newyear:"assets/themes/newyear/assets/themes/newyear/newyear.jpg"};
    if(theme==="default"){
      root.style.removeProperty("--season-background-image");
      document.body.style.backgroundImage="";
