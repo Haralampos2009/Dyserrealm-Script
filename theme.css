@@ -810,3 +810,11 @@ html[data-season-theme="summer"] body {
 #settings-form .settings-workspace {
   background-image: none !important;
 }
+
+
+/* Community post author and Creator moderation controls */
+.post-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.post-author-name{font-weight:600;color:#d9e5f2}
+.post-footer-actions{display:inline-flex;align-items:center;gap:10px}
+.post-delete-btn{color:#ff9b9b!important;border-color:#ff777744!important}
+.post-delete-btn:hover{background:#ff55551a!important;border-color:#ff7777aa!important}
