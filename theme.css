@@ -754,7 +754,7 @@ html[data-season-theme="summer"] body {
 /* Final seasonal image backgrounds — keep real theme artwork visible */
 html[data-season-theme="default"] body {
   background-color:#080a0f!important;
-  background-image:radial-gradient(ellipse at 15% 10%,#7661ff26,transparent 38%),radial-gradient(ellipse at 85% 30%,#b7f36b14,transparent 35%),linear-gradient(180deg,#080a0f12,#080a0f35),url("./17510201291307.jpg")!important;
+  background-image:radial-gradient(ellipse at 15% 10%,#7661ff40,transparent 38%),radial-gradient(ellipse at 85% 30%,#b7f36b24,transparent 35%),linear-gradient(180deg,#080a0f20,#080a0f65)!important;
   background-position:center,center,center,center!important;
   background-size:cover,cover,cover,cover!important;
   background-attachment:fixed,fixed,fixed,fixed!important;
@@ -953,5 +953,14 @@ html[data-season-theme="newyear"] footer{
 }
 
 
-/* Force seasonal backgrounds to use the resolved available image */
-html[data-season-theme="newyear"] body,html[data-season-theme="easter"] body{background-color:#061827!important;background-image:linear-gradient(180deg,rgba(5,5,12,.22),rgba(5,5,12,.48)),url("./17510201291307.jpg")!important;background-position:center center!important;background-size:cover!important;background-attachment:fixed!important;background-repeat:no-repeat!important}
+/* Easter and New Year use distinct CSS artwork until dedicated image files are added. */
+html[data-season-theme="easter"] body {
+  background-color:#17301e!important;
+  background-image:radial-gradient(ellipse at 18% 18%,#ffb7d866,transparent 38%),radial-gradient(ellipse at 82% 28%,#ffeaa755,transparent 34%),radial-gradient(ellipse at 50% 80%,#8de5a044,transparent 42%),linear-gradient(145deg,#17301e,#2b2440 58%,#173c32)!important;
+  background-position:center!important;background-size:cover!important;background-attachment:fixed!important;background-repeat:no-repeat!important;
+}
+html[data-season-theme="newyear"] body {
+  background-color:#061827!important;
+  background-image:radial-gradient(ellipse at 18% 18%,#ffd45b66,transparent 36%),radial-gradient(ellipse at 82% 28%,#5bdcff55,transparent 34%),radial-gradient(ellipse at 50% 82%,#9a8cff55,transparent 42%),linear-gradient(145deg,#061827,#142448 58%,#07111d)!important;
+  background-position:center!important;background-size:cover!important;background-attachment:fixed!important;background-repeat:no-repeat!important;
+}
