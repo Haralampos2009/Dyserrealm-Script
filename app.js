@@ -271,7 +271,7 @@ async function initSeasonThemeSettings(){
    const theme=allowed.includes(value)?value:"default";
    root.dataset.seasonTheme=theme;
    try{localStorage.setItem("dyserrealm-season-theme-cache",theme)}catch{}
-   const images={default:"",halloween:"assets/themes/halloween/halloween.jpg",winter:"assets/themes/winter/winter.jpg",summer:"assets/themes/summer/summer.jpg",easter:"assets/themes/easter/easter.svg",newyear:"assets/themes/newyear/newyear.svg"};
+   const images={default:"",halloween:"assets/themes/halloween/halloween.jpg",winter:"assets/themes/winter/winter.jpg",summer:"assets/themes/summer/summer.jpg",easter:"assets/themes/easter/assets/themes/easter/easter.jpg",newyear:"assets/themes/newyear/assets/themes/newyear/newyear.jpg"};
    root.style.removeProperty("--season-background-image");
    ["background-image","background-size","background-position","background-attachment","background-repeat"].forEach(p=>document.body.style.removeProperty(p));
    if(images[theme]){
