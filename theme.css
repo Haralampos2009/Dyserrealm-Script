@@ -730,3 +730,22 @@ html[data-season-theme="summer"] #settings-form .settings-sidebar {
   background: linear-gradient(180deg, #103726f5, #082319f5) !important;
   border-color: #8cf0a555 !important;
 }
+
+
+/* FORCE visible background changes for each selected theme (placed last to override legacy body rules) */
+html[data-season-theme="default"] body {
+  background: radial-gradient(ellipse at 15% 10%, #7661ff26, transparent 38%), radial-gradient(ellipse at 85% 30%, #b7f36b14, transparent 35%), #080a0f !important;
+  background-image: radial-gradient(ellipse at 15% 10%, #7661ff26, transparent 38%), radial-gradient(ellipse at 85% 30%, #b7f36b14, transparent 35%), linear-gradient(180deg,#080a0f,#080a0f) !important;
+}
+html[data-season-theme="halloween"] body {
+  background-color: #170720 !important;
+  background-image: radial-gradient(ellipse at 15% 15%, #ff7a26a8, transparent 42%), radial-gradient(ellipse at 85% 35%, #a64dce70, transparent 42%), linear-gradient(135deg,#170720 0%,#29102d 48%,#100817 100%) !important;
+}
+html[data-season-theme="winter"] body {
+  background-color: #061827 !important;
+  background-image: radial-gradient(ellipse at 15% 15%, #39c9ff9c, transparent 42%), radial-gradient(ellipse at 85% 35%, #b7dfff70, transparent 42%), linear-gradient(135deg,#061827 0%,#0c2d49 48%,#07111f 100%) !important;
+}
+html[data-season-theme="summer"] body {
+  background-color: #082319 !important;
+  background-image: radial-gradient(ellipse at 15% 15%, #2ce47c85, transparent 42%), radial-gradient(ellipse at 85% 35%, #ff9fd75c, transparent 42%), linear-gradient(135deg,#082319 0%,#12482e 48%,#071a13 100%) !important;
+}
