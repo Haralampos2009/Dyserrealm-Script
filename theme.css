@@ -862,3 +862,84 @@ html[data-season-theme="easter"] body::before{content:"🐣  🌷  🐰";positio
 html[data-season-theme="easter"] body::after{content:"🥚  🌼";position:fixed;z-index:29;pointer-events:none;left:16px;bottom:14px;font-size:30px;opacity:.85;filter:drop-shadow(0 0 8px #ffd6e888)}
 html[data-season-theme="newyear"] body::before{content:"🎆  ✨  🎇";position:fixed;z-index:29;pointer-events:none;top:90px;right:18px;font-size:clamp(22px,3vw,36px);opacity:.85;filter:drop-shadow(0 0 9px #ffd45b88);animation:season-haunt 4s ease-in-out infinite alternate}
 html[data-season-theme="newyear"] body::after{content:"🎄  🎁";position:fixed;z-index:29;pointer-events:none;left:16px;bottom:14px;font-size:30px;opacity:.85;filter:drop-shadow(0 0 9px #ffd45b88)}
+
+
+/* ULTRA-TRANSPARENT SEASON THEMES — make uploaded background images fully visible */
+html[data-season-theme="halloween"] body,
+html[data-season-theme="winter"] body,
+html[data-season-theme="summer"] body,
+html[data-season-theme="easter"] body,
+html[data-season-theme="newyear"] body{
+  background-color:transparent!important;
+  background-image:var(--season-background-image)!important;
+  background-position:center center!important;
+  background-size:cover!important;
+  background-attachment:fixed!important;
+  background-repeat:no-repeat!important;
+}
+html[data-season-theme="halloween"] .hero,
+html[data-season-theme="winter"] .hero,
+html[data-season-theme="summer"] .hero,
+html[data-season-theme="easter"] .hero,
+html[data-season-theme="newyear"] .hero,
+html[data-season-theme="halloween"] .section,
+html[data-season-theme="winter"] .section,
+html[data-season-theme="summer"] .section,
+html[data-season-theme="easter"] .section,
+html[data-season-theme="newyear"] .section,
+html[data-season-theme="halloween"] .closing,
+html[data-season-theme="winter"] .closing,
+html[data-season-theme="summer"] .closing,
+html[data-season-theme="easter"] .closing,
+html[data-season-theme="newyear"] .closing{
+  background:transparent!important;
+  background-image:none!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+html[data-season-theme="halloween"] .post-card,
+html[data-season-theme="winter"] .post-card,
+html[data-season-theme="summer"] .post-card,
+html[data-season-theme="easter"] .post-card,
+html[data-season-theme="newyear"] .post-card,
+html[data-season-theme="halloween"] .script-card,
+html[data-season-theme="winter"] .script-card,
+html[data-season-theme="summer"] .script-card,
+html[data-season-theme="easter"] .script-card,
+html[data-season-theme="newyear"] .script-card,
+html[data-season-theme="halloween"] .pulse-card,
+html[data-season-theme="winter"] .pulse-card,
+html[data-season-theme="summer"] .pulse-card,
+html[data-season-theme="easter"] .pulse-card,
+html[data-season-theme="newyear"] .pulse-card,
+html[data-season-theme="halloween"] .key-panel,
+html[data-season-theme="winter"] .key-panel,
+html[data-season-theme="summer"] .key-panel,
+html[data-season-theme="easter"] .key-panel,
+html[data-season-theme="newyear"] .key-panel,
+html[data-season-theme="halloween"] .orb-area,
+html[data-season-theme="winter"] .orb-area,
+html[data-season-theme="summer"] .orb-area,
+html[data-season-theme="easter"] .orb-area,
+html[data-season-theme="newyear"] .orb-area{
+  background:rgba(3,10,15,.04)!important;
+  background-image:none!important;
+  box-shadow:0 8px 22px rgba(0,0,0,.025)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+html[data-season-theme="halloween"] .topbar,
+html[data-season-theme="winter"] .topbar,
+html[data-season-theme="summer"] .topbar,
+html[data-season-theme="easter"] .topbar,
+html[data-season-theme="newyear"] .topbar,
+html[data-season-theme="halloween"] footer,
+html[data-season-theme="winter"] footer,
+html[data-season-theme="summer"] footer,
+html[data-season-theme="easter"] footer,
+html[data-season-theme="newyear"] footer{
+  background:rgba(2,8,14,.10)!important;
+  backdrop-filter:blur(2px)!important;
+  -webkit-backdrop-filter:blur(2px)!important;
+}
