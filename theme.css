@@ -842,7 +842,7 @@ html[data-season-theme="summer"] body {
 
 /* Easter and New Year backgrounds: add images later at these paths */
 html[data-season-theme="easter"] body{background-color:#17301e!important;background-image:radial-gradient(ellipse at 15% 15%,#ffb7d833,transparent 42%),linear-gradient(180deg,#102b1710,#102b1735),url("./17510201291307.jpg")!important;background-position:center,center,center!important;background-size:cover,cover,cover!important;background-attachment:fixed,fixed,fixed!important;background-repeat:no-repeat,no-repeat,no-repeat!important}
-html[data-season-theme="newyear"] body{background-color:#061827!important;background-image:radial-gradient(ellipse at 15% 15%,#ffd45b33,transparent 42%),linear-gradient(180deg,#06182710,#07111f35),url("./assets/themes/newyear/newyear.jpg")!important;background-position:center,center,center!important;background-size:cover,cover,cover!important;background-attachment:fixed,fixed,fixed!important;background-repeat:no-repeat,no-repeat,no-repeat!important}
+html[data-season-theme="newyear"] body{background-color:#061827!important;background-image:radial-gradient(ellipse at 15% 15%,#ffd45b33,transparent 42%),linear-gradient(180deg,#06182710,#07111f35),url("./17510201291307.jpg")!important;background-position:center,center,center!important;background-size:cover,cover,cover!important;background-attachment:fixed,fixed,fixed!important;background-repeat:no-repeat,no-repeat,no-repeat!important}
 
 /* Video previews in Script Library */
 .script-card-image video,.image-preview-item video{display:block;width:100%;height:100%;max-height:220px;object-fit:cover;background:#001216}
