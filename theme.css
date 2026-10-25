@@ -828,3 +828,12 @@ html[data-season-theme="summer"] body {
 .search-row input,.filter,.key-output,.key-controls input,.key-controls select{background:rgba(0,22,28,.48)!important}
 .topbar,footer{background:rgba(1,22,27,.58)!important;backdrop-filter:blur(12px)!important}
 .modal-card{background:rgba(2,25,31,.92)!important}
+
+
+/* EXTRA TRANSPARENCY: background should remain clearly visible through panels */
+.hero{background:linear-gradient(110deg,rgba(0,24,28,.08),rgba(0,28,32,.04) 62%,rgba(0,25,30,.07))!important;backdrop-filter:none!important}
+.section,.closing{background:rgba(0,24,29,.10)!important;backdrop-filter:blur(1px)!important;box-shadow:0 10px 28px rgba(0,10,14,.08)!important}
+.key-panel{background:linear-gradient(135deg,rgba(0,24,29,.16),rgba(0,24,29,.10))!important;backdrop-filter:blur(2px)!important}
+.post-card,.script-card,.pulse-card,.policy-card,.contact-card,.empty{background:rgba(0,24,30,.20)!important;border-color:rgba(81,244,220,.25)!important;box-shadow:0 8px 22px rgba(0,10,14,.10)!important;backdrop-filter:blur(1px)!important}
+.orb-area{background:rgba(0,24,30,.08)!important;backdrop-filter:none!important}
+.search-row input,.filter,.key-output,.key-controls input,.key-controls select{background:rgba(0,22,28,.30)!important}
