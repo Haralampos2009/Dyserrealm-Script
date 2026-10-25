@@ -271,11 +271,10 @@ async function initSeasonThemeSettings(){
    const theme=allowed.includes(value)?value:"default";
    root.dataset.seasonTheme=theme;
    try{localStorage.setItem("dyserrealm-season-theme-cache",theme)}catch{}
-   const images={default:"",halloween:"assets/themes/halloween/halloween.jpg",winter:"assets/themes/winter/winter.jpg",summer:"assets/themes/summer/summer.jpg",easter:"17510201291307.jpg",newyear:"17510201291307.jpg"};
-   if(theme==="default"){
-     root.style.removeProperty("--season-background-image");
-     document.body.style.backgroundImage="";
-   }else{
+   const images={default:"",halloween:"assets/themes/halloween/halloween.jpg",winter:"assets/themes/winter/winter.jpg",summer:"assets/themes/summer/summer.jpg",easter:"",newyear:""};
+   root.style.removeProperty("--season-background-image");
+   ["background-image","background-size","background-position","background-attachment","background-repeat"].forEach(p=>document.body.style.removeProperty(p));
+   if(images[theme]){
      const imageUrl=new URL(images[theme],document.baseURI).href;
      root.style.setProperty("--season-background-image",'url("'+imageUrl+'")');
      document.body.style.setProperty("background-image",'linear-gradient(180deg,rgba(5,5,12,.25),rgba(5,5,12,.62)),url("'+imageUrl+'")',"important");
