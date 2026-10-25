@@ -662,3 +662,6 @@ html[data-season-theme="summer"] .seasonal-particle{filter:drop-shadow(0 0 5px #
 html[data-season-theme="halloween"] .turnstile-shell{border-color:#ff8a2b66;background:#1b1024;box-shadow:0 0 26px #ff8a2b18}html[data-season-theme="winter"] .turnstile-shell{border-color:#79e3ff66;background:#0b2132}html[data-season-theme="summer"] .turnstile-shell{border-color:#ff9fd766;background:#0c2b20}
 .key-generator-page #key-message[role="status"]{display:inline-block;margin-top:8px;padding:7px 11px;border:1px solid color-mix(in srgb,var(--season-emphasis,#ff8a2b) 35%,transparent);border-radius:8px;background:color-mix(in srgb,var(--season-panel,#17111e) 90%,transparent);color:var(--season-heading,#f4e4ff);font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.4px}
 @media(max-width:760px){.topbar .account{margin-left:auto}.header-profile{width:32px;height:32px;flex-basis:32px}#user-label{max-width:90px}}
+
+/* Dyserrealm uploaded brand image */
+.brand{display:inline-flex;align-items:center;gap:10px;white-space:nowrap}.brand-logo{display:block;width:38px;height:38px;flex:0 0 38px;object-fit:cover;object-position:center;border-radius:10px;border:1px solid #b7f36b66;box-shadow:0 0 22px #b7f36b13}.brand b{display:none!important}@media(max-width:560px){.brand{gap:7px}.brand-logo{width:32px;height:32px;flex-basis:32px}.brand{font-size:12px}}
