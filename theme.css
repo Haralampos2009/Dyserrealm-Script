@@ -951,3 +951,7 @@ html[data-season-theme="newyear"] footer{
   backdrop-filter:blur(2px)!important;
   -webkit-backdrop-filter:blur(2px)!important;
 }
+
+
+/* Force seasonal backgrounds to use the resolved available image */
+html[data-season-theme="newyear"] body,html[data-season-theme="easter"] body{background-color:#061827!important;background-image:linear-gradient(180deg,rgba(5,5,12,.22),rgba(5,5,12,.48)),url("./17510201291307.jpg")!important;background-position:center center!important;background-size:cover!important;background-attachment:fixed!important;background-repeat:no-repeat!important}
