@@ -270,6 +270,7 @@ async function initSeasonThemeSettings(){
  const apply=value=>{
    const theme=allowed.includes(value)?value:"default";
    root.dataset.seasonTheme=theme;
+   try{localStorage.setItem("dyserrealm-season-theme-cache",theme)}catch{}
    const images={default:"",halloween:"assets/themes/halloween/halloween.jpg",winter:"assets/themes/winter/winter.jpg",summer:"assets/themes/summer/summer.jpg",easter:"assets/themes/easter/easter.jpg",newyear:"assets/themes/newyear/newyear.jpg"};
    if(theme==="default"){
      root.style.removeProperty("--season-background-image");
@@ -287,10 +288,11 @@ async function initSeasonThemeSettings(){
    if(message)message.textContent=label(theme);
  };
  let theme="default";
+ try{const cached=localStorage.getItem("dyserrealm-season-theme-cache");if(allowed.includes(cached))theme=cached}catch{}
  try{
    if(db?.from){
      const {data,error}=await db.from("site_settings").select("value").eq("key","season_theme").maybeSingle();
-     if(!error&&allowed.includes(data?.value))theme=data.value;
+     if(!error&&allowed.includes(data?.value)){theme=data.value;try{localStorage.setItem("dyserrealm-season-theme-cache",theme)}catch{}}
      else if(error)console.warn("Could not load shared site theme:",error.message);
    }
  }catch(e){console.warn("Could not load shared site theme",e)}
