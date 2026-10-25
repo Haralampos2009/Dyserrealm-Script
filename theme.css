@@ -688,3 +688,45 @@ html[data-season-theme="halloween"] .turnstile-shell{border-color:#ff8a2b66;back
 #settings-form .settings-nav-item.active .icon {
   color: var(--season-emphasis, var(--green, #b7f36b)) !important;
 }
+
+
+/* Theme-reactive background: tint the whole page and settings backdrop to match the active season */
+html[data-season-theme="halloween"] body,
+html[data-season-theme="halloween"] #settings-form .settings-workspace {
+  background-color: #170d20 !important;
+  background-image:
+    radial-gradient(ellipse at 82% 8%, #ff8a2b35 0, transparent 38%),
+    radial-gradient(ellipse at 12% 36%, #a64dce2b 0, transparent 35%),
+    linear-gradient(180deg, #170d20a8, #100b18d9),
+    url("./17510201291307.jpg") !important;
+}
+html[data-season-theme="winter"] body,
+html[data-season-theme="winter"] #settings-form .settings-workspace {
+  background-color: #071827 !important;
+  background-image:
+    radial-gradient(ellipse at 82% 8%, #55d9ff35 0, transparent 38%),
+    radial-gradient(ellipse at 12% 36%, #b7dfff25 0, transparent 35%),
+    linear-gradient(180deg, #06162485, #061624c9),
+    url("./17510201291307.jpg") !important;
+}
+html[data-season-theme="summer"] body,
+html[data-season-theme="summer"] #settings-form .settings-workspace {
+  background-color: #082319 !important;
+  background-image:
+    radial-gradient(ellipse at 82% 8%, #ff9fd72b 0, transparent 38%),
+    radial-gradient(ellipse at 12% 36%, #64f59b35 0, transparent 35%),
+    linear-gradient(180deg, #06251b85, #06251bc9),
+    url("./17510201291307.jpg") !important;
+}
+html[data-season-theme="halloween"] #settings-form .settings-sidebar {
+  background: linear-gradient(180deg, #21132bf5, #170d20f5) !important;
+  border-color: #ff8a2b55 !important;
+}
+html[data-season-theme="winter"] #settings-form .settings-sidebar {
+  background: linear-gradient(180deg, #0d263bf5, #071827f5) !important;
+  border-color: #79e3ff55 !important;
+}
+html[data-season-theme="summer"] #settings-form .settings-sidebar {
+  background: linear-gradient(180deg, #103726f5, #082319f5) !important;
+  border-color: #8cf0a555 !important;
+}
