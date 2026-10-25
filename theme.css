@@ -668,3 +668,23 @@ html[data-season-theme="halloween"] .turnstile-shell{border-color:#ff8a2b66;back
 
 /* Uploaded logo in the user-settings sidebar */
 .settings-sidebar-brand{display:flex;align-items:center;gap:12px}.settings-brand-logo{display:block;width:42px;height:42px;flex:0 0 42px;object-fit:cover;object-position:center;border-radius:11px;border:1px solid #b7f36b66;box-shadow:0 0 22px #b7f36b13}.settings-sidebar-brand .settings-brand-mark{display:none!important}
+
+
+/* Settings sidebar active item follows the currently selected theme color */
+#settings-form .settings-nav-item.active,
+#settings-form .settings-nav-item:hover,
+.settings-nav-item.active,
+.settings-nav-item:hover {
+  border-color: var(--season-emphasis, var(--green, #b7f36b)) !important;
+}
+#settings-form .settings-nav-item.active {
+  border-left-color: var(--season-emphasis, var(--green, #b7f36b)) !important;
+  background: color-mix(in srgb, var(--season-emphasis, var(--green, #b7f36b)) 10%, var(--season-panel, #17111e)) !important;
+  color: var(--season-copy, #e9edf4) !important;
+  box-shadow: inset 3px 0 0 var(--season-emphasis, var(--green, #b7f36b)) !important;
+}
+#settings-form .settings-nav-item.active svg,
+#settings-form .settings-nav-item.active i,
+#settings-form .settings-nav-item.active .icon {
+  color: var(--season-emphasis, var(--green, #b7f36b)) !important;
+}
