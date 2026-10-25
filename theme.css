@@ -754,7 +754,7 @@ html[data-season-theme="summer"] body {
 /* Final seasonal image backgrounds — keep real theme artwork visible */
 html[data-season-theme="default"] body {
   background-color:#080a0f!important;
-  background-image:radial-gradient(ellipse at 15% 10%,#7661ff26,transparent 38%),radial-gradient(ellipse at 85% 30%,#b7f36b14,transparent 35%),linear-gradient(180deg,#080a0f55,#080a0f99),url("./17510201291307.jpg")!important;
+  background-image:radial-gradient(ellipse at 15% 10%,#7661ff26,transparent 38%),radial-gradient(ellipse at 85% 30%,#b7f36b14,transparent 35%),linear-gradient(180deg,#080a0f12,#080a0f35),url("./17510201291307.jpg")!important;
   background-position:center,center,center,center!important;
   background-size:cover,cover,cover,cover!important;
   background-attachment:fixed,fixed,fixed,fixed!important;
@@ -762,16 +762,16 @@ html[data-season-theme="default"] body {
 }
 html[data-season-theme="halloween"] body {
   background-color:#170720!important;
-  background-image:radial-gradient(ellipse at 15% 15%,#ff7a2633,transparent 42%),linear-gradient(180deg,#17072055,#100817a6),url("./assets/themes/halloween/halloween.jpg")!important;
+  background-image:radial-gradient(ellipse at 15% 15%,#ff7a2633,transparent 42%),linear-gradient(180deg,#17072010,#10081735),url("./assets/themes/halloween/halloween.jpg")!important;
   background-position:center,center,center!important;background-size:cover,cover,cover!important;background-attachment:fixed,fixed,fixed!important;background-repeat:no-repeat,no-repeat,no-repeat!important;
 }
 html[data-season-theme="winter"] body {
   background-color:#061827!important;
-  background-image:radial-gradient(ellipse at 15% 15%,#39c9ff33,transparent 42%),linear-gradient(180deg,#06182745,#07111f99),url("./assets/themes/winter/winter.jpg")!important;
+  background-image:radial-gradient(ellipse at 15% 15%,#39c9ff33,transparent 42%),linear-gradient(180deg,#06182710,#07111f35),url("./assets/themes/winter/winter.jpg")!important;
   background-position:center,center,center!important;background-size:cover,cover,cover!important;background-attachment:fixed,fixed,fixed!important;background-repeat:no-repeat,no-repeat,no-repeat!important;
 }
 html[data-season-theme="summer"] body {
   background-color:#082319!important;
-  background-image:radial-gradient(ellipse at 15% 15%,#2ce47c2e,transparent 42%),linear-gradient(180deg,#08231945,#071a1399),url("./assets/themes/summer/summer.jpg")!important;
+  background-image:radial-gradient(ellipse at 15% 15%,#2ce47c2e,transparent 42%),linear-gradient(180deg,#08231910,#071a1335),url("./assets/themes/summer/summer.jpg")!important;
   background-position:center,center,center!important;background-size:cover,cover,cover!important;background-attachment:fixed,fixed,fixed!important;background-repeat:no-repeat,no-repeat,no-repeat!important;
 }
