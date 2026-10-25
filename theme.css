@@ -851,6 +851,15 @@ html[data-season-theme="newyear"] body{background-color:#061827!important;backgr
 .detail-images .media-video{display:block;min-width:0}
 @media(max-width:520px){.detail-images video{height:120px}}
 
+/* Keep the Key Generator readable and solid; seasonal backgrounds must not make its panel transparent. */
+.key-generator-page .key-panel{background:linear-gradient(135deg,rgba(12,18,29,.97),rgba(7,12,20,.97))!important;background-color:#0b111b!important;backdrop-filter:blur(8px)!important;border:1px solid rgba(110,130,160,.65)!important;box-shadow:0 25px 80px rgba(0,0,0,.38)!important}
+.key-generator-page .key-output,.key-generator-page .key-controls input,.key-generator-page .key-controls select{background:rgba(4,9,16,.96)!important}
+html[data-season-theme="halloween"] .key-generator-page .key-panel{background:linear-gradient(135deg,rgba(25,12,31,.97),rgba(13,8,20,.97))!important}
+html[data-season-theme="winter"] .key-generator-page .key-panel{background:linear-gradient(135deg,rgba(7,24,39,.97),rgba(6,15,27,.97))!important}
+html[data-season-theme="summer"] .key-generator-page .key-panel{background:linear-gradient(135deg,rgba(7,34,24,.97),rgba(5,18,15,.97))!important}
+html[data-season-theme="easter"] .key-generator-page .key-panel{background:linear-gradient(135deg,rgba(19,37,25,.97),rgba(10,23,17,.97))!important}
+html[data-season-theme="newyear"] .key-generator-page .key-panel{background:linear-gradient(135deg,rgba(8,22,42,.97),rgba(5,13,28,.97))!important}
+
 /* All remaining glass surfaces: another 5 percentage points of transparency */
 #settings-form .settings-sidebar,#settings-form .settings-workspace,.profile-card,.executor-card,.library-card{background-color:rgba(10,13,20,.53)!important}
 
