@@ -51,7 +51,7 @@
   } catch (e) {}
   if (cached) apply(cached);
 
-  fetch(API_URL + "&_=" + Date.now(), {
+  fetch(API_URL, {
     cache: "no-store",
     headers: { apikey: API_KEY, Authorization: "Bearer " + API_KEY }
   }).then(async function (response) {
