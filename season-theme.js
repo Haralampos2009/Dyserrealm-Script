@@ -13,17 +13,34 @@
   var API_KEY = "sb_publishable_tFu5Dd07GWrVAS7p6_rcFQ_rgKhNqSg";
 
   function apply(theme) {
-    if (!ALLOWED.includes(theme)) return;
+    if (!ALLOWED.includes(theme)) theme = "default";
     document.documentElement.dataset.seasonTheme = theme;
     try { localStorage.setItem(CACHE_KEY, theme); } catch (e) {}
-    var old = document.getElementById("dyserrealm-theme-preload");
-    if (old) old.remove();
-    if (!IMAGES[theme]) return;
-    var imageUrl = new URL(IMAGES[theme], document.baseURI).href;
-    var style = document.createElement("style");
-    style.id = "dyserrealm-theme-preload";
-    style.textContent = 'html[data-season-theme="' + theme + '"] body{background-color:#080a0f!important;background-image:linear-gradient(180deg,rgba(5,5,12,.25),rgba(5,5,12,.62)),url("' + imageUrl + '")!important;background-position:center center!important;background-size:cover!important;background-attachment:fixed!important;background-repeat:no-repeat!important}';
-    document.head.appendChild(style);
+
+    var body = document.body;
+    if (!body) {
+      document.addEventListener("DOMContentLoaded", function () { apply(theme); }, { once: true });
+      return;
+    }
+
+    // Apply the background as an inline !important style so legacy theme.css
+    // rules cannot silently replace it with the old forest image.
+    if (IMAGES[theme]) {
+      var imageUrl = new URL(IMAGES[theme], document.baseURI).href;
+      body.style.setProperty("background-color", "#080a0f", "important");
+      body.style.setProperty(
+        "background-image",
+        'linear-gradient(180deg,rgba(5,5,12,.25),rgba(5,5,12,.62)),url("' + imageUrl + '")',
+        "important"
+      );
+      body.style.setProperty("background-position", "center center", "important");
+      body.style.setProperty("background-size", "cover", "important");
+      body.style.setProperty("background-attachment", "fixed", "important");
+      body.style.setProperty("background-repeat", "no-repeat", "important");
+    } else {
+      ["background-color", "background-image", "background-position", "background-size", "background-attachment", "background-repeat"]
+        .forEach(function (property) { body.style.removeProperty(property); });
+    }
   }
 
   window.DyserrealmSeasonTheme = { apply: apply, cacheKey: CACHE_KEY, allowed: ALLOWED.slice() };
