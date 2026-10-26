@@ -294,3 +294,7 @@ body.key-generator-page .account #key-logout { display:none !important; }
 .topbar .site-tabs a[aria-current="page"] {
   border-color: color-mix(in srgb,var(--green) 42%,transparent) !important;
 }
+
+
+/* Keep the viewport width constant between pages with different content heights. */
+html{scrollbar-gutter:stable}
