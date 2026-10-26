@@ -993,3 +993,43 @@ html[data-season-theme="newyear"] body {
 .key-history-item,.key-output,pre,.search-row input,.key-controls input,.key-controls select,.modal-card input,.modal-card select,.modal-card textarea{
   background:#080d13!important;
 }
+
+
+/* FINAL OVERRIDE: seasonal theme rules must not make cards/panels transparent */
+html[data-season-theme] body .post-card,
+html[data-season-theme] body .script-card,
+html[data-season-theme] body .key-panel,
+html[data-season-theme] body .executor-admin-panel,
+html[data-season-theme] body .executor-toolbar,
+html[data-season-theme] body .executor-card,
+html[data-season-theme] body .executor-entry,
+html[data-season-theme] body .key-history,
+html[data-season-theme] body .key-history-item,
+html[data-season-theme] body .empty,
+html[data-season-theme] body .notice,
+html[data-season-theme] body .modal-card,
+html[data-season-theme] body .settings-panel,
+html[data-season-theme] body .profile-card,
+html[data-season-theme] body .profile-panel,
+html[data-season-theme] body .settings-workspace,
+html[data-season-theme] body .settings-tab-panel {
+  background:#101720!important;
+  background-image:linear-gradient(145deg,#141c27,#0a0f16)!important;
+  border-color:#354252!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+html[data-season-theme] body .topbar,
+html[data-season-theme] body footer {
+  background:#080b10f7!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+html[data-season-theme] body .btn.ghost,
+html[data-season-theme] body .btn.outline,
+html[data-season-theme] body .filter,
+html[data-season-theme] body .executor-filter,
+html[data-season-theme] body .mini-btn {
+  background:#171f2a!important;
+  border-color:#3a4656!important;
+}
