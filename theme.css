@@ -964,3 +964,32 @@ html[data-season-theme="newyear"] body {
   background-image:radial-gradient(ellipse at 18% 18%,#ffd45b66,transparent 36%),radial-gradient(ellipse at 82% 28%,#5bdcff55,transparent 34%),radial-gradient(ellipse at 50% 82%,#9a8cff55,transparent 42%),linear-gradient(145deg,#061827,#142448 58%,#07111d)!important;
   background-position:center!important;background-size:cover!important;background-attachment:fixed!important;background-repeat:no-repeat!important;
 }
+
+
+/* CONTRAST PASS — make interactive surfaces nearly opaque while keeping the page background visible around them */
+:root{--panel-solid:#111720;--panel-solid-2:#0c1118}
+/* Main cards, search/filter controls, forms and navigation surfaces */
+.post-card,.script-card,.key-panel,.modal-card,.settings-modal,.settings-panel,.settings-workspace,.settings-tab-panel,.settings-nav,.profile-card,.profile-panel,.executor-card,.executor-entry,.executor-admin-panel,.executor-toolbar,.executor-filters,.executor-filter,.key-history,.key-history-item,.key-locked,.key-auth-card,.notice,.empty,.search-row input,.search-row select,.search-row textarea,.filters .filter,.key-controls input,.key-controls select,.key-output,pre,.toast{
+  background-color:#101720!important;
+  background-image:linear-gradient(145deg,rgba(20,28,39,.985),rgba(10,15,22,.985))!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  border-color:#354252;
+}
+/* Settings and other dialogs should be solid enough for readable text */
+.modal-card,.key-auth-card{background:#101720!important;box-shadow:0 30px 100px rgba(0,0,0,.82)!important}
+.modal .backdrop,.key-auth-backdrop{background:rgba(0,0,0,.78)!important;backdrop-filter:blur(5px)}
+/* Buttons and filter chips should not look like transparent glass */
+.btn.ghost,.btn.outline,.filter,.mini-btn,.executor-filter,.x,.settings-nav-item{
+  background-color:#171f2a!important;
+  border-color:#3a4656!important;
+}
+.btn.ghost:hover,.btn.outline:hover,.filter:hover,.filter.active,.mini-btn:hover,.mini-btn.saved,.executor-filter:hover,.executor-filter.active,.x:hover,.settings-nav-item.active{
+  background-color:#202b38!important;
+  border-color:#b7f36b88!important;
+}
+/* Keep the background image visible in open page areas, not through content panels */
+.topbar,footer{background:#080b10f7!important;backdrop-filter:none!important}
+.key-history-item,.key-output,pre,.search-row input,.key-controls input,.key-controls select,.modal-card input,.modal-card select,.modal-card textarea{
+  background:#080d13!important;
+}
