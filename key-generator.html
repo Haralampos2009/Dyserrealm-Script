@@ -43,11 +43,11 @@
 .key-auth-switch button{border:0;background:none;color:#60f3d7;text-decoration:underline;cursor:pointer}
 @media(max-width:560px){.key-history-grid{grid-template-columns:1fr}.generator-wrap .key-controls{grid-template-columns:1fr}.generator-wrap .key-output{align-items:flex-start;flex-direction:column}.generator-wrap .key-output .btn{width:100%}.key-locked{padding:30px 20px}.key-auth-card{padding:25px 20px}.account{gap:6px}}
 </style>
-<script src="header-auth.js?v=20261026-userbadge3" defer></script><script src="analytics.js?v=20261025-headerfix1" defer></script><script src="nav-active.js?v=20261026-nav1" defer></script>
+<script <script src="components/header.js?v=20261026-shared-header1" defer></script>src="header-auth.js?v=20261026-userbadge3" defer></script><script src="analytics.js?v=20261025-headerfix1" defer></script><script src="nav-active.js?v=20261026-nav1" defer></script>
 </head>
 <body class="key-generator-page">
 <div class="scanlines"></div>
-<header class="topbar"><a class="brand" href="index.html"><img class="brand-logo" src="Gemini_Generated_Image_3f7mq63f7mq63f7m.jpg" alt="Dyserrealm logo"><b>D<span>_</span></b> DYSERREALM<small>/SCRIPT</small></a><nav class="site-tabs" aria-label="Main navigation"><a href="index.html">HOME</a><a href="feed.html">FEED</a><a href="library.html">SCRIPT LIBRARY</a><a href="key-generator.html">KEY GENERATOR</a><a href="executors.html">EXECUTORS</a></nav><div class="account"><span id="user-label"></span><span id="key-user-status" class="kicker" hidden></span><a id="header-profile" class="header-profile hidden" href="profiles.html" aria-label="Your profile" title="Your profile"><span id="header-avatar-fallback">U</span><img id="header-avatar-image" alt="" hidden></a><a id="header-settings" class="btn ghost hidden" href="index.html#settings-profile">SETTINGS</a><a id="header-login" class="btn ghost" href="index.html?auth=login">LOG IN</a><a id="header-signup" class="btn primary" href="index.html?auth=signup">SIGN UP ↗</a><button id="header-logout" class="btn ghost hidden" type="button">LOG OUT</button><button id="mobile-menu" class="btn ghost menu" type="button" aria-label="Toggle navigation">☰</button></div></header>
+<div id="shared-header"></div>
 <main class="generator-page">
 <section id="key-locked" class="key-locked" aria-labelledby="key-lock-title">
 <div class="key-lock-icon" aria-hidden="true">🔒</div>
