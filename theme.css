@@ -1280,11 +1280,7 @@ html[data-season-theme] body footer{
   margin-left:2px;
   flex-shrink:0;
 }
-@media(max-width:680px){
-  .topbar .account #user-label{
-    display:none!important;
-  }
-}
+
 
 
 /* Shared account layout: visible nickname badge followed by avatar on Home, Feed, Library and other pages. */
@@ -1344,3 +1340,12 @@ html[data-season-theme] body footer{
   .topbar .account .user-profile-name{max-width:78px!important}
   .topbar .account .roblox-avatar-wrap{width:30px!important;height:30px!important;flex-basis:30px!important}
 }
+
+
+/* FINAL shared account badge override: keep the username visible on all pages. */
+.topbar .account #user-label{display:flex!important;width:auto!important;height:auto!important;flex:0 1 auto!important;max-width:200px!important;overflow:visible!important;border:0!important;border-radius:0!important;background:transparent!important;padding:0!important;margin:0!important}
+.topbar .account #user-label .user-profile{display:inline-flex!important;flex-direction:row!important;align-items:center!important;gap:8px!important;padding:5px 9px!important;border:1px solid color-mix(in srgb,var(--season-emphasis,var(--green)) 58%,transparent)!important;border-radius:5px!important;background:color-mix(in srgb,var(--season-emphasis,var(--green)) 9%,#090710)!important;max-width:200px!important}
+.topbar .account #user-label .user-profile-name{display:inline-block!important;order:1!important;max-width:125px!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;color:var(--season-copy,#f5f0ff)!important;font:600 11px/1.2 'IBM Plex Mono',monospace!important}
+.topbar .account #user-label .roblox-avatar-wrap{order:2!important;display:inline-grid!important;place-items:center!important;width:34px!important;height:34px!important;flex:0 0 34px!important;overflow:hidden!important;border:1px solid var(--season-emphasis,var(--green))!important;border-radius:50%!important}
+.topbar .account #user-label .roblox-avatar{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important}
+@media(max-width:680px){.topbar .account #user-label{display:flex!important;max-width:130px!important}.topbar .account #user-label .user-profile{gap:5px!important;padding:4px 6px!important}.topbar .account #user-label .user-profile-name{max-width:70px!important}.topbar .account #user-label .roblox-avatar-wrap{width:30px!important;height:30px!important;flex-basis:30px!important}}
