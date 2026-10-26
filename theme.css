@@ -1350,4 +1350,52 @@ html[data-season-theme] body footer{
 .topbar .account #user-label .roblox-avatar{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important}
 @media(max-width:680px){.topbar .account #user-label{display:flex!important;max-width:130px!important}.topbar .account #user-label .user-profile{gap:5px!important;padding:4px 6px!important}.topbar .account #user-label .user-profile-name{max-width:70px!important}.topbar .account #user-label .roblox-avatar-wrap{width:30px!important;height:30px!important;flex-basis:30px!important}}
 
-
+/* === GLOBAL HEADER CONSISTENCY: SETTINGS + NAV TYPOGRAPHY === */
+.topbar nav.site-tabs a,
+.topbar .account #settings-open,
+.topbar .account #header-settings,
+.topbar .account #profile-settings-link,
+.topbar .account #login-open,
+.topbar .account #signup-open,
+.topbar .account #profile-login-link,
+.topbar .account #logout-button {
+  box-sizing: border-box !important;
+  font-family: "Space Grotesk", sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  font-style: normal !important;
+  line-height: 1 !important;
+  letter-spacing: 1px !important;
+  text-transform: uppercase !important;
+}
+.topbar .account #settings-open,
+.topbar .account #header-settings,
+.topbar .account #profile-settings-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 104px !important;
+  width: 104px !important;
+  min-width: 104px !important;
+  max-width: 104px !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  padding: 0 10px !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+  text-align: center !important;
+}
+.topbar nav.site-tabs a {
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 1px !important;
+}
+.topbar .account { align-items: center !important; gap: 8px !important; }
+@media (max-width: 680px) {
+  .topbar .account #settings-open,
+  .topbar .account #header-settings,
+  .topbar .account #profile-settings-link {
+    flex-basis: 104px !important; width: 104px !important; min-width: 104px !important; max-width: 104px !important;
+    height: 36px !important; min-height: 36px !important; font-size: 11px !important; padding: 0 8px !important;
+  }
+}
