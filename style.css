@@ -274,3 +274,9 @@ body.library-page .account #signup-open,
 body.executors-page .account #executor-login-link,
 body.key-generator-page .account #key-user-status,
 body.key-generator-page .account #key-logout { display:none !important; }
+
+/* Shared active state for every top navigation tab */
+.topbar .site-tabs a.active-tab,
+.topbar .site-tabs a[aria-current="page"]{color:var(--green)!important;border:1px solid color-mix(in srgb,var(--green) 42%,transparent)!important;background:color-mix(in srgb,var(--green) 9%,transparent)!important;border-radius:7px!important;padding:8px 10px!important;box-shadow:0 0 16px color-mix(in srgb,var(--green) 8%,transparent)!important}
+.topbar .site-tabs a.active-tab:hover,
+.topbar .site-tabs a[aria-current="page"]:hover{color:#fff!important;border-color:var(--green)!important;background:color-mix(in srgb,var(--green) 14%,transparent)!important}
