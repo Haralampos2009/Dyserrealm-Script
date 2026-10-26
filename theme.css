@@ -1399,3 +1399,15 @@ html[data-season-theme] body footer{
     height: 36px !important; min-height: 36px !important; font-size: 11px !important; padding: 0 8px !important;
   }
 }
+
+
+/* Final page-specific override: the actual nickname text is .user-profile-name inside #user-label. */
+body.key-generator-page .topbar .account #user-label .user-profile-name,
+body.executors-page .topbar .account #user-label .user-profile-name {
+  font-family: "Space Grotesk", sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  font-style: normal !important;
+  letter-spacing: .2px !important;
+  line-height: 1.2 !important;
+}
