@@ -54,13 +54,25 @@
   fetch(API_URL + "&_=" + Date.now(), {
     cache: "no-store",
     headers: { apikey: API_KEY, Authorization: "Bearer " + API_KEY }
-  }).then(function (response) {
-    if (!response.ok) throw new Error("Could not load shared theme");
+  }).then(async function (response) {
+    if (!response.ok) {
+      var details = "";
+      try {
+        var body = await response.json();
+        details = body && (body.message || body.details || body.hint || body.code)
+          ? JSON.stringify(body)
+          : JSON.stringify(body);
+      } catch (e) {
+        try { details = await response.text(); } catch (ignored) {}
+      }
+      throw new Error("Shared theme request failed (" + response.status + "): " + details);
+    }
     return response.json();
   }).then(function (rows) {
     if (rows && rows[0] && ALLOWED.includes(rows[0].value)) apply(rows[0].value);
     else if (!cached) apply("default");
-  }).catch(function () {
+  }).catch(function (error) {
+    console.error("[Dyserrealm season theme]", error && error.message ? error.message : error);
     if (!cached) apply("default");
   });
 })();
