@@ -1253,3 +1253,35 @@ html[data-season-theme] body footer{
 /* Keep the signed-in account label first and the avatar at the far right on every page. */
 .topbar .account #user-label{order:1;display:inline-flex;align-items:center;min-height:32px;padding:5px 8px;border:1px solid color-mix(in srgb,var(--season-emphasis,var(--green)) 35%,transparent);background:color-mix(in srgb,var(--season-emphasis,var(--green)) 5%,transparent)}
 .topbar .account #header-profile{order:99}
+
+
+/* Make the account nickname clearly separate from the avatar on every page. */
+.topbar .account #user-label{
+  order:1;
+  display:inline-flex!important;
+  align-items:center;
+  justify-content:center;
+  min-height:36px;
+  max-width:150px;
+  padding:7px 12px!important;
+  margin-right:3px;
+  border:1px solid color-mix(in srgb,var(--season-emphasis,var(--green)) 58%,transparent)!important;
+  border-radius:5px;
+  background:color-mix(in srgb,var(--season-emphasis,var(--green)) 9%,#090710)!important;
+  color:var(--season-copy,#f5f0ff)!important;
+  font:600 11px/1.2 'IBM Plex Mono',monospace!important;
+  letter-spacing:.6px;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  overflow:hidden;
+}
+.topbar .account #header-profile{
+  order:99;
+  margin-left:2px;
+  flex-shrink:0;
+}
+@media(max-width:680px){
+  .topbar .account #user-label{
+    display:none!important;
+  }
+}
