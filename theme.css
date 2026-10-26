@@ -1148,3 +1148,32 @@ html body .hero .orb{
   border:2px solid #38f1d0!important;
   box-shadow:0 0 28px rgba(56,241,208,.13),inset 0 0 24px rgba(56,241,208,.06)!important;
 }
+
+
+/* SHARED SEASONAL BACKGROUND — identical theme image on every page */
+html[data-season-theme="halloween"] body,
+html[data-season-theme="winter"] body,
+html[data-season-theme="summer"] body,
+html[data-season-theme="easter"] body,
+html[data-season-theme="newyear"] body{
+  background-color:#080a0f!important;
+  background-position:center center!important;
+  background-size:cover!important;
+  background-attachment:fixed!important;
+  background-repeat:no-repeat!important;
+}
+html[data-season-theme="halloween"] body{
+  background-image:linear-gradient(180deg,rgba(5,5,12,.25),rgba(5,5,12,.62)),url("assets/themes/halloween/halloween.jpg")!important;
+}
+html[data-season-theme="winter"] body{
+  background-image:linear-gradient(180deg,rgba(5,5,12,.25),rgba(5,5,12,.62)),url("assets/themes/winter/winter.jpg")!important;
+}
+html[data-season-theme="summer"] body{
+  background-image:linear-gradient(180deg,rgba(5,5,12,.25),rgba(5,5,12,.62)),url("assets/themes/summer/summer.jpg")!important;
+}
+html[data-season-theme="easter"] body{
+  background-image:linear-gradient(180deg,rgba(5,5,12,.25),rgba(5,5,12,.62)),url("assets/themes/easter/easter.jpg")!important;
+}
+html[data-season-theme="newyear"] body{
+  background-image:linear-gradient(180deg,rgba(5,5,12,.25),rgba(5,5,12,.62)),url("assets/themes/newyear/newyear.jpg")!important;
+}
