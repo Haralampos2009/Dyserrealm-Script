@@ -269,20 +269,9 @@ async function initSeasonThemeSettings(){
  const label=value=>({"halloween":"HALLOWEEN THEME ACTIVE — BACKGROUND IMAGE APPLIED.","winter":"WINTER THEME ACTIVE — BACKGROUND IMAGE APPLIED.","summer":"SUMMER THEME ACTIVE — BACKGROUND IMAGE APPLIED.","easter":"EASTER THEME ACTIVE — BACKGROUND IMAGE APPLIED.","newyear":"NEW YEAR THEME ACTIVE — BACKGROUND IMAGE APPLIED.","default":"ORIGINAL DYSERREALM THEME ACTIVE."}[value]||"ORIGINAL DYSERREALM THEME ACTIVE.");
  const apply=value=>{
    const theme=allowed.includes(value)?value:"default";
-   root.dataset.seasonTheme=theme;
-   try{localStorage.setItem("dyserrealm-season-theme-cache",theme)}catch{}
-   const images={default:"",halloween:"assets/themes/halloween/halloween.jpg",winter:"assets/themes/winter/winter.jpg",summer:"assets/themes/summer/summer.jpg",easter:"assets/themes/easter/easter.jpg",newyear:"assets/themes/newyear/newyear.jpg"};
    root.style.removeProperty("--season-background-image");
-   ["background-image","background-size","background-position","background-attachment","background-repeat"].forEach(p=>document.body.style.removeProperty(p));
-   if(images[theme]){
-     const imageUrl=new URL(images[theme],document.baseURI).href;
-     root.style.setProperty("--season-background-image",'url("'+imageUrl+'")');
-     document.body.style.setProperty("background-image",'linear-gradient(180deg,rgba(5,5,12,.25),rgba(5,5,12,.62)),url("'+imageUrl+'")',"important");
-     document.body.style.setProperty("background-size","cover","important");
-     document.body.style.setProperty("background-position","center center","important");
-     document.body.style.setProperty("background-attachment","fixed","important");
-     document.body.style.setProperty("background-repeat","no-repeat","important");
-   }
+   if(window.DyserrealmSeasonTheme?.apply) window.DyserrealmSeasonTheme.apply(theme);
+   else root.dataset.seasonTheme=theme;
    radios.forEach(r=>r.checked=r.value===theme);
    if(message)message.textContent=label(theme);
  };
