@@ -1132,3 +1132,19 @@ html body.key-generator-page main.generator-page .generator-wrap .key-output{
   background:#080e15!important;
   border-color:#3a4656!important;
 }
+
+
+/* HOME: keep only the D/R circle opaque; surrounding area stays transparent */
+html body .hero .orb-area{
+  background:transparent!important;
+  background-image:none!important;
+  border-color:transparent!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+html body .hero .orb{
+  background:radial-gradient(circle at 45% 35%,rgba(44,235,213,.16),transparent 65%),#0b121a!important;
+  border:2px solid #38f1d0!important;
+  box-shadow:0 0 28px rgba(56,241,208,.13),inset 0 0 24px rgba(56,241,208,.06)!important;
+}
