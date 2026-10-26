@@ -1248,3 +1248,8 @@ html[data-season-theme] body footer{
   background:rgba(8,11,16,.94)!important;border-bottom-color:var(--season-border)!important;
 }
 
+
+
+/* Keep the signed-in account label first and the avatar at the far right on every page. */
+.topbar .account #user-label{order:1;display:inline-flex;align-items:center;min-height:32px;padding:5px 8px;border:1px solid color-mix(in srgb,var(--season-emphasis,var(--green)) 35%,transparent);background:color-mix(in srgb,var(--season-emphasis,var(--green)) 5%,transparent)}
+.topbar .account #header-profile{order:99}
