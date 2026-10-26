@@ -1412,3 +1412,16 @@ body.executors-page .topbar .account #user-label .user-profile-name {
   letter-spacing: .3px !important;
   line-height: 1.2 !important;
 }
+
+/* KEY GENERATOR + EXECUTORS use header-auth.js, which inserts the nickname as direct text
+   inside #user-label (not as .user-profile-name). Match Home/Feed/Library exactly. */
+body.key-generator-page .topbar .account #user-label,
+body.executors-page .topbar .account #user-label {
+  font-family: "IBM Plex Mono", monospace !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  font-style: normal !important;
+  letter-spacing: .3px !important;
+  line-height: 1.2 !important;
+  text-transform: uppercase !important;
+}
