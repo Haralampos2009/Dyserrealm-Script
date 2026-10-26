@@ -1404,10 +1404,11 @@ html[data-season-theme] body footer{
 /* Final page-specific override: the actual nickname text is .user-profile-name inside #user-label. */
 body.key-generator-page .topbar .account #user-label .user-profile-name,
 body.executors-page .topbar .account #user-label .user-profile-name {
-  font-family: "Space Grotesk", sans-serif !important;
+  /* Match the exact font used by the shared username badge on Home, Feed and Script Library. */
+  font-family: "IBM Plex Mono", monospace !important;
   font-size: 11px !important;
   font-weight: 600 !important;
   font-style: normal !important;
-  letter-spacing: .2px !important;
+  letter-spacing: .3px !important;
   line-height: 1.2 !important;
 }
