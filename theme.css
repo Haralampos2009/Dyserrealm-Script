@@ -1097,3 +1097,38 @@ html[data-season-theme] body :is(
   -webkit-backdrop-filter:none!important;
   border-color:#354252!important;
 }
+
+
+/* HOME D/R ORB + KEY GENERATOR: solid surfaces on both pages */
+html body .hero .orb-area{
+  background:#101720!important;
+  background-image:linear-gradient(145deg,#151e29 0%,#0d131b 100%)!important;
+  border:1px solid #354252!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  box-shadow:0 12px 32px rgba(0,0,0,.4)!important;
+}
+html body .hero .orb{
+  background:radial-gradient(circle at 45% 35%,rgba(44,235,213,.16),transparent 65%),#0b121a!important;
+  border-color:#38f1d0!important;
+}
+html body.key-generator-page main.generator-page .key-locked,
+html body.key-generator-page main.generator-page .generator-wrap .key-panel,
+html body.key-generator-page main.generator-page .generator-wrap .key-history,
+html body.key-generator-page main.generator-page .generator-wrap .key-history-item,
+html body.key-generator-page .key-auth-card{
+  background:#101720!important;
+  background-image:linear-gradient(145deg,#151e29 0%,#0d131b 100%)!important;
+  border-color:#354252!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  box-shadow:0 16px 40px rgba(0,0,0,.42)!important;
+}
+html body.key-generator-page main.generator-page .generator-wrap .key-history-key{
+  background:#080e15!important;
+  border-color:#3a4656!important;
+}
+html body.key-generator-page main.generator-page .generator-wrap .key-output{
+  background:#080e15!important;
+  border-color:#3a4656!important;
+}
