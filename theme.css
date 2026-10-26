@@ -1033,3 +1033,67 @@ html[data-season-theme] body .mini-btn {
   background:#171f2a!important;
   border-color:#3a4656!important;
 }
+
+
+/* 2026-10-26 GLOBAL OPAQUE SURFACES — shared across every site tab */
+html body :is(
+  .post-card,.script-card,.key-panel,.modal-card,.settings-modal,.settings-panel,
+  .settings-workspace,.settings-tab-panel,.settings-nav,.settings-nav-item,
+  .profile-card,.profile-panel,.realm-profile-card,.executor-card,.executor-entry,
+  .executor-admin-panel,.executor-toolbar,.executor-filters,.executor-filter,
+  .key-history,.key-history-item,.key-locked,.key-auth-card,.notice,.empty,
+  .profile-empty,.profile-detail-section,.executor-note,.script-image-upload,
+  .image-preview-item,.detail-images a,.policy-card,.contact-card,.pulse-card,
+  .key-generator-card,.key-form,.key-result,.key-result-card,.account-panel,
+  .auth-panel,.login-panel,.register-panel,.settings-card,.settings-section,
+  .settings-content,.settings-sidebar,.settings-tab-content,.profile-settings-card
+){
+  background-color:#101720!important;
+  background-image:linear-gradient(145deg,#151e29 0%,#0d131b 100%)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  border-color:#354252!important;
+}
+html body :is(.post-card,.script-card,.key-panel,.modal-card,.settings-modal,
+.settings-panel,.settings-workspace,.settings-tab-panel,.profile-panel,
+.realm-profile-card,.executor-card,.executor-admin-panel,.key-history,
+.key-auth-card,.notice,.empty,.profile-empty,.pulse-card){
+  box-shadow:0 12px 32px rgba(0,0,0,.36)!important;
+}
+html body :is(input,select,textarea,.search-row input,.profile-search,
+.key-controls input,.key-controls select,.modal-card input,.modal-card select,
+.modal-card textarea,.profile-form input,.profile-form textarea){
+  background:#080e15!important;
+  color:#f3f7fb!important;
+  border-color:#3a4656!important;
+  backdrop-filter:none!important;
+}
+html body :is(.btn.ghost,.btn.outline,.filter,.mini-btn,.executor-filter,
+.settings-nav-item,.x,.profile-tag,.executor-link){
+  background-color:#171f2a!important;
+  border-color:#3a4656!important;
+  backdrop-filter:none!important;
+}
+html body :is(.btn.ghost,.btn.outline,.filter,.mini-btn,.executor-filter,
+.settings-nav-item,.x):hover{
+  background-color:#202b38!important;
+  border-color:#52e9d0!important;
+}
+html[data-season-theme] body :is(
+  .post-card,.script-card,.key-panel,.modal-card,.settings-modal,.settings-panel,
+  .settings-workspace,.settings-tab-panel,.settings-nav,.settings-nav-item,
+  .profile-card,.profile-panel,.realm-profile-card,.executor-card,.executor-entry,
+  .executor-admin-panel,.executor-toolbar,.executor-filters,.executor-filter,
+  .key-history,.key-history-item,.key-locked,.key-auth-card,.notice,.empty,
+  .profile-empty,.profile-detail-section,.executor-note,.script-image-upload,
+  .image-preview-item,.policy-card,.contact-card,.pulse-card,.key-generator-card,
+  .key-form,.key-result,.key-result-card,.account-panel,.auth-panel,.login-panel,
+  .register-panel,.settings-card,.settings-section,.settings-content,
+  .settings-sidebar,.settings-tab-content,.profile-settings-card
+){
+  background-color:#101720!important;
+  background-image:linear-gradient(145deg,#151e29 0%,#0d131b 100%)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  border-color:#354252!important;
+}
